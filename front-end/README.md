@@ -1,0 +1,1 @@
+rnfe = new react views

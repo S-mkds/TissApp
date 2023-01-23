@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "Tiss-App",
+    "slug": "Tiss-App",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/NewLogo.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/NewLogo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0F1828"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/NewLogo.png",
+        "backgroundColor": "#FFFFFF"
+      }
+    },
+    "web": {
+      "favicon": "./assets/NewLogo.png"
+    }
+  }
+}
