@@ -1,3 +1,12 @@
+![alt text](TissApp_Readme.png)
+# TRELLO 
+
+https://trello.com/invite/tchessisamirismailsalim/ATTI9472e90e9d0b4861b4b1a72e24a8ecd3FCA49511
+
+# FIGMA 
+
+https://www.figma.com/file/pCwlYbexxiYcB8oRVCCwf5/Untitled?node-id=0%3A1&t=QOBwCJjSdCwnd9wU-0
+
  _____ _            _                                                                                                                 
 /__   (_)___ ___   /_\  _ __  _ __                                                                                                    
   / /\/ / __/ __| //_\\| '_ \| '_ \                                                                                                   
@@ -23,11 +32,4 @@
  \/   \___|_| |_|\___||___/___/_( ) \____/ |___/_| |_| |_|\__,_|_|_( ) \__/\__,_|_|_|_| |_| |_|  \___|\__| \__/\__,_|_| |_| |_|_|_|   
                                 |/                                 |/                                                                 
 
-# TRELLO 
-
-https://trello.com/invite/tchessisamirismailsalim/ATTI9472e90e9d0b4861b4b1a72e24a8ecd3FCA49511
-
-# FIGMA 
-
-https://www.figma.com/file/pCwlYbexxiYcB8oRVCCwf5/Untitled?node-id=0%3A1&t=QOBwCJjSdCwnd9wU-0
 
