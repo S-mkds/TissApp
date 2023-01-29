@@ -6,6 +6,7 @@ import axios from 'axios';
 
 // const token = await AsyncStorage.getItem('token'); // récupérer le token des données stockées en local (AsyncStorage) pour l'envoyer dans les headers de la requête axios
 const Login = ({ navigation }) => {
+    const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     // Vérifier si l'utilisateur est connecté ou pas 
@@ -16,44 +17,45 @@ const Login = ({ navigation }) => {
     const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#\$%\^&\*]).{8,}$/;
     // le password doit contenir au moins 8 Caractères, 1 Maj, 1 Min, 1 Chiffre, 1 Caractère spécial
 
-    const handleLogin = async()  => {
-        console.log( email, password );
+    const handleLogin = async () => {
+        console.log(email, password);
         if (!emailRegex.test(email)) {
-        alert("L'email n'est pas valide");
+            alert("L'email n'est pas valide");
         } else if (!passwordRegex.test(password)) {
-        alert('Le mot de passe n\'est pas valide');
-        }else {
-           // requête axios here localhost3000/login
-        try {
-            const response = await axios.post('http://10.10.51.3:3000/api/auth/login', {
-                email: email,
-                password: password,
-            });
-            if (response.status === 201) {
-                // Stocker le token
-                await AsyncStorage.setItem('token', response.data.token);
-                console.log('Voici le token de l\'utilisateur',response.data.token)
-                alert('Connexion reussi, vous êtes connecté🪙 ||Crée un loader ici ;)');
-                console.log("status: 201, request login successful");
-                navigation.navigate('Profil');
-            } else {
-                console.log("status: " + response.status + ", request unsuccessful");
-                alert('Connexion refusée, vérifié vos identifants');
+            alert('Le mot de passe n\'est pas valide');
+        } else {
+            // requête axios here localhost3000/login
+            try {
+                const response = await axios.post('http://10.10.60.75:3100/api/auth/login', {
+                    email: email,
+                    password: password,
+                });
+                if (response.status === 201) {
+                    // Stocker le token
+                    await AsyncStorage.setItem('token', response.data.token);
+                    console.log('Voici le token de l\'utilisateur', response.data.token)
+                    alert('Connexion reussi, vous êtes connecté🪙 ||Crée un loader ici ;)');
+                    console.log("status: 201, request login successful");
+                    navigation.navigate('Profil');
+                } else {
+                    console.log("status: " + response.status + ", request unsuccessful");
+
+                    setLoading(false);
+                }
+            } catch (error) {
+                // console.log(error);
+                // console.log(error.response);
+                alert('Erreur requête lors de la Connexion impossible.');
+                // console.log(JSON.stringify(error.response));
             }
-        }catch (error) {
-            // console.log(error);
-            // console.log(error.response);
-            alert('Erreur requête lors de la Connexion impossible.');
-            // console.log(JSON.stringify(error.response));
-        }
         }
     };
 
     const CustomButton = () => (
         <TouchableOpacity style={styles.button}
             onPress={() =>
-                    handleLogin()
-                    }>
+                handleLogin()
+            }>
             <Text style={styles.buttonText}>Se connecter</Text>
         </TouchableOpacity >
     );
@@ -62,7 +64,7 @@ const Login = ({ navigation }) => {
         <TouchableOpacity style={styles.buttonRegister}
             onPress={() =>
                 navigation.navigate('Register')
-                    }>
+            }>
             <Text style={styles.buttonText}>S'inscrire</Text>
         </TouchableOpacity >
     );
@@ -70,7 +72,7 @@ const Login = ({ navigation }) => {
     return (
         <View style={styles.container}>
             {/* Logo */}
-            <Image style={styles.logo} source={require('../assets/NewLogo.png')}/>
+            <Image style={styles.logo} source={require('../assets/NewLogo.png')} />
             <Text style={styles.companyName}>Connexion</Text>
             {/* Email */}
             <TextInput
@@ -93,14 +95,14 @@ const Login = ({ navigation }) => {
                 <Ionicons
                     style={styles.icon}
                     name={hidePass ? 'eye-off-outline' : 'eye-outline'}
-                    
+
                 />
-            Afficher le mot de passe ! 
+                Afficher le mot de passe !
             </Text>
             {/* Login Button */}
-            <CustomButton/>
+            <CustomButton />
             <Text style={styles.textRegister}>Vous n'avez pas de compte ?</Text>
-            <RegisterNavButton/>
+            <RegisterNavButton />
         </View>
     );
 };

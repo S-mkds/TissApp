@@ -60,6 +60,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+      isOnline: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
       admin: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,

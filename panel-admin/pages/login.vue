@@ -1,5 +1,66 @@
-<template>
 
+<script>
+import CustomSpinner from '../components/spinner.vue'
+export default {
+    components: { CustomSpinner },
+    data() {
+        return {
+            showSpinner: false, //Spinner
+            email: '',
+            password: '',
+            errorMessage: '',
+            isPasswordVisible: false,
+            mounted() {
+                this.getUsers()
+            },
+        }
+    },
+    methods: {
+        async submitLogin() {
+            const data = {
+                email: this.email,
+                password: this.password
+            };
+            await fetch('http://localhost:3100/api/auth/login', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(res => res.json())
+                .then(res => {
+                    if (res.user.admin === true) {
+                        console.log(res);
+                        console.log(res.user);
+                        localStorage.setItem('token', res.token);
+                        this.showSpinner = true;
+                        setTimeout(() => {
+                            this.showSpinner = false;
+                            this.$router.push({ path: '/admin' });
+                        }, 1000);
+                        console.log("sucess login");
+                    } else {
+                        this.errorMessage = "Vous n'êtes pas un administrateur";
+                        console.log("not admin");
+                    }
+                })
+                .catch(err => {
+                    this.errorMessage = "Email ou mot de passe incorrect";
+                    console.log(err);
+                });
+        },
+
+        togglePasswordVisibility() {
+            this.isPasswordVisible = !this.isPasswordVisible;
+            const input = document.getElementById("password");
+            input.type = this.isPasswordVisible ? "text" : "password";
+        },
+    }
+}
+</script>
+
+<template>
     <div class="main-container">
         <header class="header">
             <img class="logo-h" src="~/static/NewLogo.png" alt="Logo-h" />
@@ -7,7 +68,7 @@
         </header>
         <section>
             <div>
-                <form class="login-form" method="post" action="/admin">
+                <form class="login-form">
                     <img class="logo-img" src="~/static/NewLogo.png" alt="Logo" />
                     <h1 class="w-text login-text">Connexion Administration</h1>
                     <label class="w-text label-text" for="email">Email :</label>
@@ -16,28 +77,20 @@
                     <label class="w-text label-text" for="password">Mot de passe :</label>
                     <input class="input-text" id="password" type="password" v-model="password"
                         placeholder="Entrez votre mot de passe" />
-                    <button class="button1" @click="submitLogin">Connexion</button>
+                    <button class="toggle-password" @click="togglePasswordVisibility" type="button">
+                        <i class="fas fa-eye"></i>
+                    </button>
+
+                    <!-- Login Button -->
+                    <button class="button1" @click.prevent="submitLogin(); showSpinner = true">Connexion</button>
+                    <!-- spinner -->
+                    <custom-spinner v-if="showSpinner"></custom-spinner>
+                    <p class=" error-text">{{ errorMessage }}</p>
                 </form>
             </div>
         </section>
     </div>
 </template>
-
-<script>
-export default {
-    data() {
-        return {
-            email: '',
-            password: '',
-        }
-    },
-    methods: {
-        submitLogin() {
-            // Code pour soumettre les données de connexion
-        }
-    }
-}
-</script>
 
 <style scoped>
 .main-container {
@@ -46,13 +99,14 @@ export default {
     justify-content: center;
     height: 100vh;
     background-color: #0F1828;
+    background-image: linear-gradient(360deg, #0F1828, #272929);
 }
-
 
 .header {
     display: flex;
     align-items: center;
     background-color: #423f3f54;
+    background-image: linear-gradient(120deg, #155799, #159957);
     opacity: 0.8;
     padding-left: 20rem;
 }
@@ -143,5 +197,31 @@ export default {
     justify-content: center;
     text-shadow: 2px 2px 3px #7c7c7c;
     width: 60%;
+}
+
+.button1:hover {
+    background-color: #FF6B6B;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 10px;
+    width: 100px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    justify-content: center;
+    text-shadow: 2px 2px 3px #7c7c7c;
+    width: 60%;
+    opacity: 0.8;
+}
+
+.error-text {
+    color: red;
+    font-size: 0.8rem;
+    font-weight: 600;
+    justify-content: center;
+    text-shadow: 2px 2px 3px #7c7c7c;
+    padding: 5px;
 }
 </style>

@@ -37,7 +37,7 @@ app.use('/api/posts', postsRoutes);
 app.use('/api/auth', userRoutes);
 
 app.get('/api/users/:id', auth, userCtrl.getOneUser);
-app.get('/api/users',  userCtrl.getAllUsers); // avec authentification et methode search // sans authentification TEST 
+app.get('/api/users', auth, userCtrl.getAllUsers); // avec authentification et methode search // sans authentification TEST 
 app.get('/api/usersAll', userCtrl.FindAllUsers); // sans authentification // mettre authentification plus tard
 app.delete('/api/users/:id', auth, userCtrl.deleteUserAccount);
 

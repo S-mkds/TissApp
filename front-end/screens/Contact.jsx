@@ -6,118 +6,119 @@ import axios from 'axios';
 
 let timeoutId = null;
 const Contact = () => {
-const [search, setSearch] = useState('');
-const [usersSearch, setSearchUsers] = useState([]);
-const [status, setStatus] = useState('');
+    const [search, setSearch] = useState('');
+    const [usersSearch, setSearchUsers] = useState([]);
+    const [status, setStatus] = useState('');
 
-const handleSearch = async() => {
-    try {
-        const token = await AsyncStorage.getItem('token');
-        const response = await axios.get('http://10.10.51.3:3000/api/users/', {
-            params: { search: search },
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        });
-        if (response.status === 200) {
-        setSearchUsers(response.data);
-        setStatus(response.data.status); 
-        // console.log(JSON.stringify(response));
-        }
+    const handleSearch = async () => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            const response = await axios.get('http://10.10.60.75:3100/api/users/', {
+                params: { search: search },
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            if (response.status === 200) {
+                setSearchUsers(response.data);
+                setStatus(response.data.status);
+                // console.log(JSON.stringify(response));
+            }
         } catch (error) {
-        // console.log('request GETALL users, error !');
-        // console.log(error);
+            // console.log('request GETALL users, error !');
+            // console.log(error);
+        }
     }
-}
-useEffect(() => {
-    handleSearch();
-}, []);
+    useEffect(() => {
+        handleSearch();
+    }, []);
 
-const onSearchChange = (text) => {
-    setSearch(text);
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
-    handleSearch(text);
-    }, 200);
-};
+    const onSearchChange = (text) => {
+        setSearch(text);
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+            handleSearch(text);
+        }, 200);
+    };
 
-return (
-    <View style={styles.container}>
-        <View style={styles.searchContainer}>
-        <TextInput 
-            style={styles.searchInput} 
-            placeholder= "🔍 Rechercher un utilisateur" 
-            placeholderTextColor={'white'}
-            onChangeText={onSearchChange}
-            value={search}
-        />
+    return (
+        <View style={styles.container}>
+            <View style={styles.searchContainer}>
+                <TextInput
+                    style={styles.searchInput}
+                    placeholder="Rechercher un utilisateur..."
+                    placeholderTextColor={'white'}
+                    color={'white'}
+                    onChangeText={onSearchChange}
+                    value={search}
+                />
+            </View>
+            <FlatList
+                style={styles.listContainer}
+                data={usersSearch.users}
+                onEndReachedThreshold={0.5}
+                keyExtractor={item => item.id.toString()}
+                renderItem={({ item }) => (
+                    <TouchableOpacity style={styles.userContainer} >
+                        {/* mettre l'image de l'utilisateur */}
+                        <Image style={styles.listItemAvatar} source={item.imageUrl || require('../assets/DefaultUser.png')} />
+                        <Text style={styles.userName}>{item.firstName}  {item.lastName}</Text>
+                        {/* mettre le status hors ligne ou en ligne */}
+                        <Text style={styles.userStatus}>{status === 'online' ? 'En ligne 🟢' : 'Hors ligne 🔴'}</Text>
+                        <Text style={styles.userCreatedAt}>{item.createdAt}</Text>
+                    </TouchableOpacity>
+                )}
+            />
         </View>
-        <FlatList
-            style={styles.listContainer}
-            data={usersSearch.users}
-            onEndReachedThreshold={0.5}
-            keyExtractor={item => item.id.toString()}
-            renderItem={({ item }) => (
-            <TouchableOpacity style={styles.userContainer} onPress={() => alert('User selected')}>
-            {/* mettre l'image de l'utilisateur */}
-            <Image style={styles.listItemAvatar} source={item.imageUrl || require('../assets/DefaultUser.png')} />
-            <Text style={styles.userName}>{item.firstName}  {item.lastName}</Text>
-            {/* mettre le status hors ligne ou en ligne */}
-            <Text style={styles.userStatus}>{status === 'online' ? 'En ligne 🟢' : 'Hors ligne 🔴'}</Text>
-            <Text style={styles.userCreatedAt}>{item.createdAt}</Text>
-            </TouchableOpacity>
-            )}
-        />
-    </View>
-); 
+    );
 }
 
 const styles = StyleSheet.create({
     // container
     container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#0F1828',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#0F1828',
     },
 
     // search
     searchBar: {
-    width: '90%',
-    height: 40,
-    borderWidth: 1,
-    borderColor: 'white',
-    padding: 10,
-    marginTop: 20,
-    marginBottom: 20,
+        width: '90%',
+        height: 40,
+        borderWidth: 1,
+        borderColor: 'white',
+        padding: 10,
+        marginTop: 20,
+        marginBottom: 20,
     },
     searchButton: {
-    backgroundColor: 'black',
-    padding: 7,
-    borderRadius: 10,
+        backgroundColor: 'black',
+        padding: 7,
+        borderRadius: 10,
     },
     searchInput: {
-    width: '95%',
-    height: 40,
-    borderWidth: 1,
-    borderColor: 'black',
-    boxShadow: '0 0 5px black',
-    padding: 8,
-    borderRadius: 10,
-    backgroundColor: 'gray',
-    opacity: 0.5,
-    margin: 10,
+        width: '95%',
+        height: 40,
+        borderWidth: 1,
+        borderColor: 'black',
+        boxShadow: '0 0 5px black',
+        padding: 8,
+        borderRadius: 10,
+        backgroundColor: 'gray',
+        opacity: 0.5,
+        margin: 10,
     },
     searchContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '90%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '90%',
     },
     // list users Containers
     listContainer: {
         width: '100%',
-        },
+    },
     userContainer: {
         width: '100%',
         flex: 1,
@@ -144,10 +145,10 @@ const styles = StyleSheet.create({
     userName: {
         color: 'white',
         marginRight: 10,
-        fontSize: 16,
+        fontSize: 13,
         flex: 1,
         alignSelf: 'flex-start',
-        marginTop: 20,
+        marginTop: 15,
     },
     userStatus: {
         color: 'white',

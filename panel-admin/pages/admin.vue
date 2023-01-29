@@ -1,77 +1,207 @@
 <script>
-
+import CustomSpinner from '../components/spinner.vue'
+import CustomModal from '../components/modal.vue'
+import Swal from 'sweetalert2'
 export default {
+    components: { CustomSpinner, CustomModal },
+
     data() {
         return {
-            search: '',
-            users: [],
+            showSpinner: false, //Spinner
+            showModal: false, //
+            setOneUser: {}, //GetOneUser
+            setAllUsers: [], //GetAllUser
+            lastFourUsers: [],// Get 4 last users
+            setAllPosts: [], //GetAllPost
+            lastFourPosts: [],// Get 4 last messages
+            totalUsers: 0, //Count nb users
+            totalPosts: 0, //Count nb Posts
+            errorMessage: '', //Text Err Msge
         }
     },
     methods: {
-        async getUsers() {
+        // REQUEST GET ONE USER
+        async getOneUser(userId) {
             try {
-                // const token = await this.$store.state.token
-                const { data } = await axios.get('http://10.10.54.141:3100/api/users/', {
-                    params: { search: this.search },
-                    // headers: {
-                    //     'Authorization': `Bearer ${token}`,
-                    // },
-                })
-                this.users = data
+                const data = await fetch(`http://localhost:3100/api/users/${userId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                const response = await data.json();
+                this.setOneUser = response.user;
+                console.log(response);
+                console.log("success get one user");
             } catch (error) {
-                console.log(error)
+                console.log(error);
+                console.log("catch get one user");
             }
         },
-        editUser(id) {
-            // implement edit user logic here
-            console.log(`Editing user with ID: ${id}`)
+
+        // REQUEST GET ALL USER
+        async getUsers() {
+            try {
+                const data = await fetch(`http://localhost:3100/api/users?search=`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                const response = await data.json();
+                this.setAllUsers = response.users;
+                this.totalUsers = this.setAllUsers.length;
+                this.lastFourUsers = this.setAllUsers.slice(-4).reverse();
+                console.log(response);
+                console.log("success get all user");
+            } catch (error) {
+                console.log(error);
+                console.log("catch get all user");
+            }
         },
-        banUser(id) {
-            // implement ban user logic here
-            console.log(`Banning user with ID: ${id}`)
+
+        // GET ALL POSTS
+        async getPosts() {
+            try {
+                const response = await fetch(`http://localhost:3100/api/posts`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                const data = await response.json();
+                console.log(data);
+                this.setAllPosts = data.posts;
+                this.totalPosts = this.setAllPosts.length;
+                this.lastFourPosts = this.setAllPosts.reverse().slice(-4).reverse();
+                console.log("success get all posts");
+            } catch (error) {
+                console.log(error);
+                console.log("catch get all posts");
+            }
+        },
+
+        // user PANEL
+        userPanel() {
+            setTimeout(() => {
+                this.showSpinner = false;
+                this.$router.push({ path: '/admin-user' });
+            }, 1000);
+        },
+
+        // CHAT PANEL
+        chatPanel() {
+            setTimeout(() => {
+                this.showSpinner = false;
+                this.$router.push({ path: '/admin-chat' });
+            }, 1000);
+        },
+
+        // LOGOUT
+        // LOGOUT
+        logout() {
+            this.showSpinner = true;
+            fetch(`http://localhost:3100/api/auth/edit`, {
+                method: "PUT",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({
+                    isOnline: false
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Success logout:", data);
+                    localStorage.removeItem('token');
+                    setTimeout(() => {
+                        this.showSpinner = false;
+                        this.$router.push({ path: "/login" });
+                    }, 1000);
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
         },
     },
-    logout() {
-        action = "/login"
-        // Perform logout logic here
-    }
+
+    // CREATED
+    created() {
+        this.getPosts()
+        this.getUsers()
+        //Decode token and get user connected
+        if (typeof (Storage) !== "undefined") {
+            // Code for localStorage/sessionStorage.
+            const token = localStorage.getItem('token');
+            const decodedToken = JSON.parse(atob(token.split('.')[1]));
+            const userId = decodedToken.userId;
+            this.getOneUser(userId);
+        }
+    },
 }
 </script>
-
 <template>
     <section class="main-container">
+        <!-- HEADER -->
         <header class="header">
             <img class="logo-h" src="~/static/NewLogo.png" alt="Logo-h" />
-            <h1 class="w-text h-text">TISSAPP Admin panel</h1>
-            <button id="logout-button" @click="logout" class="logout-button">Déconnexion</button>
-        </header>
-
-        <div>
-            <div class="form-group">
-                <label class="w-text label-text" for="search">Rechercher un utilisateur</label>
-                <input v-model="search" type="text" class="form-control" id="search"
-                    placeholder="Entrer un nom d'utilisateur" @input="getUsers" />
+            <h1 class="w-text h-text">TISSAPP Admin panel
+            </h1>
+            <div class="button-header">
+                <!-- user button -->
+                <button id="user-button" @click="userPanel(); showSpinner = true">User-panel</button>
+                <!-- chat button -->
+                <button id="chat-button" @click="chatPanel(); showSpinner = true">Chat-panel</button>
+                <!-- logout button -->
+                <button id="logout-button" @click="logout(); showSpinner = true">Déconnexion</button>
+                <!-- spinner -->
+                <custom-spinner v-if="showSpinner"></custom-spinner>
             </div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th class="w-text">Nom d'utilisateur</th>
-                        <th class="w-text">Date de création</th>
-                        <th class="w-text">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(user, index) in users" :key="user.id">
-                        <td>{{ user.firstName }}</td>
-                        <td>{{ user.createdAt }}</td>
-                        <td>
-                            <button class="btn btn-primary" @click="editUser(user.id)">Modifier</button>
-                            <button class="btn btn-danger" @click="banUser(user.id)">Bannir</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        </header>
+        <!-- -->
+        <div>
+            <h2 class="title-admin">Administrateur: {{ setOneUser.firstName }} {{ setOneUser.lastName }}</h2>
         </div>
+        <!-- first square -->
+        <div class="container">
+            <div class="container-square-left">
+                <div class="square">
+                    <h4 class="w-text">Nombre d'utilisateurs: {{ totalUsers }}</h4>
+                </div>
+            </div>
+            <div class="container-square">
+                <div class="square">
+                    <h4 class="context">Dernier utilisateur: </h4>
+                    <div class="context" v-for="users in lastFourUsers" :key="users._id">
+                        {{ users.email }} -
+                        {{ users.firstName }}
+                        {{ users.lastName }}
+                    </div>
+                </div>
+            </div>
+            <div class="container-square-left">
+                <div class="square">
+                    <h4 class="w-text">Nombre de messages: {{ totalPosts }}</h4>
+                </div>
+            </div>
+            <div class="container-square">
+                <div class="square">
+                    <h4 class="context">Dernier messages:</h4>
+                    <div class="context" v-for="post in lastFourPosts" :key="post._id">
+                        {{ post.User.email }} -
+                        {{ post.User.firstName }}
+                        {{ post.User.lastName }}
+                        <br>
+                        {{ post.content }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </section>
 </template>
 
@@ -80,14 +210,17 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
     background-color: #0F1828;
+    background-image: linear-gradient(360deg, #0F1828, #272929);
+    height: 100vh;
 }
 
+/* HEADER */
 .header {
     display: flex;
     align-items: center;
     background-color: #423f3f54;
+    background-image: linear-gradient(120deg, #155799, #159957);
     opacity: 0.8;
     padding-left: 20rem;
 }
@@ -101,34 +234,128 @@ export default {
     display: block;
 }
 
+.button-header {
+    display: flex;
+    justify-content: flex-end;
+    align-self: flex-end;
+    margin-left: 45rem;
+}
+
 #logout-button {
     color: white;
     background-color: red;
+    background-image: linear-gradient(120deg, #fd3737, #813c2796);
     border: none;
     padding: 10px 15px;
     font-size: 1rem;
-    margin-left: auto;
-    margin-right: 20px;
+    margin: 20px;
+    border-radius: 5px;
+}
+
+#logout-button:hover {
+    background-color: rgb(233, 52, 52);
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+#chat-button,
+#user-button {
+    color: white;
+    background-color: rgb(96, 52, 177);
+    background-image: linear-gradient(120deg, #8637fd, #0f7074);
+    border: none;
+    padding: 10px 15px;
+    font-size: 1rem;
+    margin: 20px;
+    border-radius: 5px;
+    align-self: flex-end;
+}
+
+#chat-button:hover,
+#user-button:hover {
+    background-color: rgb(52, 124, 233);
+    opacity: 0.8;
+    cursor: pointer;
 }
 
 .h-text {
+    padding-top: 20px;
     font-size: 1.5rem;
     font-weight: 600;
-    justify-content: center;
-    font-family: 'Sigmar One', cursive;
     text-shadow: 2px 2px 3px #7c7c7c;
-}
-
-.label-text {
-    float: left;
-    font-size: 1rem;
-    font-weight: 600;
-    justify-content: center;
-    text-shadow: 2px 2px 3px #7c7c7c;
-    margin-left: 20px;
 }
 
 .w-text {
     color: white;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.text-sucess {
+    color: green;
+    font-weight: 600;
+}
+
+.text-info {
+    color: rgb(52, 124, 233);
+    font-weight: 600;
+}
+
+/* BODY */
+.title-admin {
+    margin: 20px;
+    margin-bottom: 20px;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    opacity: 0.8;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-shadow: 2px 2px 3px #7c7c7c;
+}
+
+.container {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    grid-template-columns: repeat(2, 2fr);
+    max-width: 50%;
+    opacity: 0.8;
+}
+
+.container-square {
+    max-width: 100%;
+}
+
+.container-square-left {
+    max-width: 55%;
+}
+
+
+.square {
+    background-color: #242323;
+    background-image: linear-gradient(360deg, #202f49, #245050);
+    border: 1px solid rgb(46, 42, 42);
+    border-radius: 5%;
+    opacity: 0.9;
+    box-shadow: 10px 10px #0F1828;
+    padding: 1rem;
+    margin: 10px;
+    overflow-y: auto;
+    word-wrap: break-word;
+    word-break: break-all;
+    max-height: 35vh;
+    min-height: 10vh;
+    transition: all 0.5s;
+}
+
+.context {
+    border-bottom: 1px solid rgb(134, 133, 133);
+    opacity: 0.9;
+    margin: 2px;
+    padding: 5px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #fff;
 }
 </style>

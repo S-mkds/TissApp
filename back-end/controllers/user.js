@@ -41,14 +41,20 @@ exports.login = async (req, res, next) => {
     const response = await User.authenticate(req.body.email, req.body.password);
 
     if (response.valid) {
+      // Logique de isOnline lors d'une connexion celui passe en true, (lors d'une deconnexion penser à rajouter la methode PUT isOnline False)
+      await User.update({ isOnline: true }, { where: { id: response.user.id } });
+      const updatedUser = await User.findByPk(response.user.id);
+      console.log('User updated: ', updatedUser);
       res.status(201).json(newToken(response.user));
     } else {
       res.status(401).json({ error: response.message });
     }
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: error.message });
   }
 };
+
 
 exports.editUser = (req, res, next) => {
   try {
@@ -89,7 +95,7 @@ exports.getAllUsers = (req, res, next) => {
       },
 
     ), { deleted: false }],
-    limit: 10,
+    // limit: 10,
   };
 
   User.findAll(options)
@@ -113,6 +119,8 @@ exports.FindAllUsers = (req, res, next) => {
     });
 };
 
+// ROUTE ADMIN
+
 exports.deleteUserAccount = async (req, res, next) => {
   try {
     const user = req.user.admin
@@ -124,3 +132,28 @@ exports.deleteUserAccount = async (req, res, next) => {
     res.status(400).json({ error });
   }
 };
+
+exports.editUserAdmin = async (req, res, next) => {
+  try {
+    const userObject = req.file
+      ? {
+        ...JSON.parse(req.body.user),
+        imageUrl: `${req.protocol}://${req.get('host')}/public/${req.file.filename}`,
+      }
+      : { ...req.body };
+
+    console.log(userObject);
+
+    const user = req.params.id
+      ? await User.findOne({ where: { id: req.params.id } })
+      : req.user;
+
+    user.update(userObject).then((user) => res.status(200).json({ user }));
+  } catch (error) {
+    res.status(400).json({ error });
+    console.log(error);
+    console.log(response.error);
+  }
+};
+
+
