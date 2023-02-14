@@ -12,7 +12,7 @@ const Contact = () => {
     const handleSearch = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
-            const response = await axios.get('http://192.168.1.13:3100/api/users/', {
+            const response = await axios.get('http://10.10.22.199:3100/api/users/', {
                 params: { search: search },
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -20,7 +20,6 @@ const Contact = () => {
             });
             if (response.status === 200) {
                 setSearchUsers(response.data);
-
                 // console.log(JSON.stringify(response));
             }
         } catch (error) {
@@ -28,6 +27,7 @@ const Contact = () => {
             console.log(error);
         }
     }
+
     useEffect(() => {
         handleSearch();
     }, []);

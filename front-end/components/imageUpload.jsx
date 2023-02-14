@@ -59,7 +59,7 @@ export default function UploadImage() {
             const fileName = `${Date.now()}_${image.split('/').pop()}`;
             data.append('user', JSON.stringify({ imageUrl: fileName }));
             const token = await AsyncStorage.getItem('token');
-            const response = await axios.put('http://192.168.1.13:3100/api/auth/edit', data, {
+            const response = await axios.put('http://10.10.22.199:3100/api/auth/edit', data, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${token}`,
@@ -94,7 +94,7 @@ export default function UploadImage() {
             const decodedToken = jwt_decode(token);
             const userId = decodedToken.userId;
             // console.log(userId);
-            let response = await axios.get(`http://192.168.1.13:3100/api/users/${userId}`, {
+            let response = await axios.get(`http://10.10.22.199:3100/api/users/${userId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -111,6 +111,7 @@ export default function UploadImage() {
         }
 
     };
+
     useEffect(() => {
         getUser()
     }, []);

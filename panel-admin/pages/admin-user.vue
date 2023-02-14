@@ -322,7 +322,7 @@ export default {
                     <thead>
                         <tr>
                             <th class="w-text">ID</th>
-                            <!-- <th class="w-text">Avatar</th> -->
+                            <th class="w-text">Avatar</th>
                             <th class="w-text">Nom d'utilisateur</th>
                             <th class="w-text">Email</th>
                             <th class="w-text">Rôle</th>
@@ -335,7 +335,9 @@ export default {
                         <!-- USER DATA -->
                         <tr v-for="user in setAllUsers" :key="user.id">
                             <td class="w-text">{{ user.id }}</td>
-                            <!-- <td class="w-text">{{ user.imageUrl }}</td> -->
+                            <td class="w-text">
+                                <img class="img-user" :src="user.imageUrl">
+                            </td>
                             <td class="w-text">{{ user.firstName }} {{ user.lastName }}</td>
                             <td class="w-text">{{ user.email }} </td>
                             <td>
@@ -511,5 +513,21 @@ export default {
 .text-info {
     color: rgb(52, 124, 233);
     font-weight: 600;
+}
+
+.text-danger {
+    color: red;
+    font-weight: 600;
+}
+
+.img-user {
+    max-width: 200px;
+    max-height: 100px;
+    margin: 10px;
+    opacity: 1;
+    object-fit: contain;
+    display: block;
+    cursor: pointer;
+    border-radius: 20%;
 }
 </style>

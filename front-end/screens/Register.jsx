@@ -42,7 +42,7 @@ const InscriptionScreen = ({ navigation }) => {
     } else {
       // requête axios here localhost3000/signup
       try {
-        const response = await axios.post('http://192.168.1.13:3100/api/auth/signup', {
+        const response = await axios.post('http://10.10.22.199:3100/api/auth/signup', {
           firstName: firstName,
           lastName: lastName,
           email: email,
@@ -50,7 +50,6 @@ const InscriptionScreen = ({ navigation }) => {
         });
         if (response.status === 201) {
           console.log("status: 201, request signup successful");
-          alert('Inscription réussie', 'Votre compte à bien été crée.', 'success');
           navigation.navigate('Home');
         }
       } catch (error) {

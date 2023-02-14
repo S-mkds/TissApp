@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, SafeAreaView, TextInput, View, Text, Image, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from 'jwt-decode';
-import { ImagePicker, Permissions } from 'expo';
 import UploadImage from '../components/imageUpload';
 import axios from 'axios';
 
@@ -33,7 +32,7 @@ const Profil = ({ navigation }) => {
             const decodedToken = jwt_decode(token);
             const userId = decodedToken.userId;
             // console.log(userId);
-            let response = await axios.get(`http://192.168.1.13:3100/api/users/${userId}`, {
+            let response = await axios.get(`http://10.10.22.199:3100/api/users/${userId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -61,7 +60,7 @@ const Profil = ({ navigation }) => {
             // requête axios here localhost3000/edit
             try {
                 const token = await AsyncStorage.getItem('token');
-                let response = await axios.put('http://192.168.1.13:3100/api/auth/edit', {
+                let response = await axios.put('http://10.10.22.199:3100/api/auth/edit', {
                     firstName: firstName, lastName: lastName
                 }, {
                     headers: {
@@ -114,7 +113,7 @@ const Profil = ({ navigation }) => {
     const handleLogout = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
-            let response = await axios.put('http://192.168.1.13:3100/api/auth/edit', {
+            let response = await axios.put('http://10.10.22.199:3100/api/auth/edit', {
                 isOnline: false
             }, {
                 headers: {

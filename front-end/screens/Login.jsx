@@ -32,7 +32,7 @@ const Login = ({ navigation }) => {
         } else {
             // requête axios here localhost3000/login
             try {
-                const response = await axios.post('http://192.168.1.13:3100/api/auth/login', {
+                const response = await axios.post('http://10.10.22.199:3100/api/auth/login', {
                     email: email,
                     password: password,
                 });
