@@ -46,7 +46,7 @@ sequelize
     console.log('Connexion à la base de données établie avec succès. ✅');
   })
   .catch(err => {
-    console.error('Impossible de se connecter à la base de données :', err);
+    console.error('Impossible de se connecter à la base de données :', err, '❌');
   });
 
 db.sequelize = sequelize;

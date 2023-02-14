@@ -29,20 +29,7 @@ export default {
   <section class="main-container">
 
     <div class="stars">
-      <div class="star"></div>
-      <div class="star"></div>
-      <div class="star"></div>
-      <div class="star"></div>
-      <div class="star"></div>
-      <div class="star"></div>
-      <div class="star"></div>
-      <div class="star"></div>
-      <div class="star"></div>
-      <div class="star"></div>
-      <div class="star"></div>
-      <div class="star"></div>
-
-      <!-- etc... -->
+      <div class="star" v-for="n in 12"></div>
     </div>
 
     <div class="title-container animate__animated animate__fadeInLeft">

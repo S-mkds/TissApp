@@ -344,8 +344,8 @@ export default {
                             </td>
                             <td class="w-text">{{ user.createdAt }}</td>
                             <td>
-                                <p class="text-sucess" v-if="user.isOnline === true">En-ligne</p>
-                                <p class="text-danger" v-if="user.isOnline === false">Hors-ligne</p>
+                                <p class="text-sucess" v-if="user.isOnline === true">En-ligne 🟢</p>
+                                <p class="text-danger" v-if="user.isOnline === false">Hors-ligne 🔴</p>
                             </td>
                             <td v-if="user.admin === false">
                                 <!-- EDIT USER -->

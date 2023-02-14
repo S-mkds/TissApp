@@ -3,20 +3,27 @@ import { StyleSheet, SafeAreaView, TextInput, View, Text, Image, TouchableOpacit
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from 'jwt-decode';
 import { ImagePicker, Permissions } from 'expo';
+import UploadImage from '../components/imageUpload';
 import axios from 'axios';
 
 const Profil = ({ navigation }) => {
     // Récupération state du Pseudo et du Prénom et l'email
     const [userfirstName, setUserfirstName] = useState('');
     const [userlastName, setUserlastName] = useState('');
-    const [image, setImage] = useState();
     const [userEmail, setUserEmail] = useState('');
     // Modification state FirnstName et LastName
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
+
+    // Check textError
+    const [firstNameError, setFirstNameError] = useState('');
+    const [lastNameError, setLastNameError] = useState('');
+    const [editUserError, setEditUserError] = useState('');
+    const [editUserSuccess, setEditUserSuccess] = useState('');
+
     // Regex for user
     const nameRegex = /^[a-zA-Zéè'çà"-_]{1,12}$/;
-    // le nom doit contenir entre 1 et 12 caractères, les caractères spéciaux autorisés sont éè'çà"-_
+    // Le nom doit contenir entre 1 et 12 caractères, les caractères spéciaux autorisés sont éè'çà"-_
 
     // Get user Request
     const getUser = async () => {
@@ -26,7 +33,7 @@ const Profil = ({ navigation }) => {
             const decodedToken = jwt_decode(token);
             const userId = decodedToken.userId;
             // console.log(userId);
-            let response = await axios.get(`http://10.10.60.75:3100/api/users/${userId}`, {
+            let response = await axios.get(`http://192.168.1.13:3100/api/users/${userId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -35,31 +42,26 @@ const Profil = ({ navigation }) => {
                 setUserfirstName(response.data.user.firstName);
                 setUserlastName(response.data.user.lastName);
                 setUserEmail(response.data.user.email);
-                // console.log('SUCCESS GETONE REQUEST');
-                // console.log('🪙 Token:' + token + ' Prénom:' + userfirstName + ' Nom:' + userlastName + ' Email:' + userEmail);
             }
         } catch (error) {
             // console.log('catch GET REQUEST');
-            // console.log(JSON.stringify(error.response)); // Log the entire response object
+            setEditUserError("Erreur lors de la récupération de l'utilisateur");
         }
     };
-    useEffect(() => {
-        getUser();
-    }, []);
 
     // Edit profil Request
     const handleEdit = async () => {
         if (firstName === "" || lastName === "") {
-            alert('Les champs nom ou prénom ne peuvent pas être vide');
+            setEditUserError("Les champs prénoms et noms ne doivent pas être vide");
         } else if (!nameRegex.test(firstName)) {
-            alert('Le prénom n\'est pas valide');
+            setFirstNameError("Le prénom n'est pas valide");
         } else if (!nameRegex.test(lastName)) {
-            alert('Le nom n\'est pas valide');
+            setLastNameError("Le nom n'est pas valide");
         } else {
             // requête axios here localhost3000/edit
             try {
                 const token = await AsyncStorage.getItem('token');
-                let response = await axios.put('http://10.10.60.75:3100/api/auth/edit', {
+                let response = await axios.put('http://192.168.1.13:3100/api/auth/edit', {
                     firstName: firstName, lastName: lastName
                 }, {
                     headers: {
@@ -67,9 +69,7 @@ const Profil = ({ navigation }) => {
                     },
                 });
                 if (response.status === 200) {
-                    console.log('SUCCESS PUT REQUEST');
-                    alert('Modification réussie !');
-
+                    setEditUserSuccess("Modification validé");
                     try {
                         useEffect(() => {
                             handleEdit();
@@ -79,15 +79,27 @@ const Profil = ({ navigation }) => {
                     }
                 }
                 else {
-                    console.log('error PUT REQUEST');
+                    // console.log('error PUT REQUEST');
+                    setEditUserError("Modification non valide");
                 }
             } catch (error) {
-                console.log('Catch PUT REQUEST');
-                console.log(error.AsyncStorage);
-                console.log(JSON.stringify(error.response));
+                // console.log(error.AsyncStorage);
+                setEditUserError("Modification non valide, erreur network");
             }
         }
-    }
+    };
+
+    useEffect(() => {
+        getUser()
+        if (editUserError !== '' || editUserSuccess !== '' || firstNameError !== '' || lastNameError !== '') {
+            setTimeout(() => {
+                setEditUserSuccess('');
+                setEditUserError('');
+                setFirstNameError('');
+                setLastNameError('');
+            }, 2000);
+        }
+    }, [editUserError, editUserSuccess, firstNameError, lastNameError]);
 
     const EditButton = () => (
         <TouchableOpacity style={styles.button}
@@ -101,18 +113,32 @@ const Profil = ({ navigation }) => {
     // Logout Button 
     const handleLogout = async () => {
         try {
-            // Clear the token from storage
-            await AsyncStorage.removeItem('token');
-            // Redirect the user to the Home screen
-            console.log('Déconnexion réussie, 🪙 jetons supprimés 🪙 !');
-            alert('Déconnexion réussie, jetons supprimés !');
-            navigation.navigate('Home');
-            useEffect(() => {
-                handleLogout();
-            }, []);
+            const token = await AsyncStorage.getItem('token');
+            let response = await axios.put('http://192.168.1.13:3100/api/auth/edit', {
+                isOnline: false
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            if (response.status === 200) {
+                console.log('SUCCESS PUT REQUEST');
+                // Clear the token from storage
+                await AsyncStorage.removeItem('token');
+                // Redirect the user to the Home screen
+                console.log('Déconnexion réussie !');
+                navigation.navigate('Home');
+            }
+            else {
+                console.log('error Logout REQUEST');
+            }
         } catch (error) {
             console.log(error);
+            console.log('error Logout REQUEST');
         }
+        useEffect(() => {
+            handleLogout();
+        }, []);
     }
 
     const LogoutButton = () => (
@@ -124,30 +150,11 @@ const Profil = ({ navigation }) => {
         </TouchableOpacity >
     );
 
-    // Image Picker function
-    const pickImage = async () => {
-        const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-        if (status === 'granted') {
-            const result = await ImagePicker.launchImageLibraryAsync({
-                allowsEditing: true,
-                aspect: [4, 3],
-            });
-            if (!result.cancelled) {
-                setImage(result.uri);
-            }
-        }
-    };
-
     return (
         <SafeAreaView style={styles.container}>
             {/* ADD IMAGE USER */}
             <View>
-                <TouchableOpacity style={styles.imageArea} onPress={pickImage}>
-                    <Image
-                        source={require('../assets/avatar.png')}
-                        style={styles.image}
-                    />
-                </TouchableOpacity>
+                <UploadImage />
             </View>
             {/* ID User */}
             <View>
@@ -164,6 +171,8 @@ const Profil = ({ navigation }) => {
                 onChange={text => setFirstName(text)}
                 onChangeText={text => setFirstName(text)}
             />
+            {firstNameError !== '' && <Text style={styles.errorText}>{firstNameError}</Text>}
+
             {/* Lastname */}
             <TextInput
                 style={styles.input}
@@ -174,9 +183,12 @@ const Profil = ({ navigation }) => {
                 onChange={text => setLastName(text)}
                 onChangeText={text => setLastName(text)}
             />
+            {lastNameError !== '' && <Text style={styles.errorText}>{lastNameError}</Text>}
             <View>
                 {/* Button Edit & logout */}
                 <EditButton />
+                {editUserError !== '' && <Text style={styles.errorText}>{editUserError}</Text>}
+                {editUserSuccess !== '' && <Text style={styles.successText}>{editUserSuccess}</Text>}
                 <LogoutButton />
             </View>
         </SafeAreaView>
@@ -247,6 +259,20 @@ const styles = StyleSheet.create({
         boxShadow: '0 0 5px black',
         backgroundColor: 'black',
         opacity: 0.8,
+    },
+    errorText: {
+        color: 'red',
+        fontSize: 12,
+        fontWeight: 'bold',
+        fontStyle: 'italic',
+        textAlign: 'center',
+    },
+    successText: {
+        color: 'green',
+        fontSize: 12,
+        fontWeight: 'bold',
+        fontStyle: 'italic',
+        textAlign: 'center',
     },
 })
 export default Profil;

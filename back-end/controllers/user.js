@@ -55,8 +55,8 @@ exports.login = async (req, res, next) => {
   }
 };
 
-
-exports.editUser = (req, res, next) => {
+exports.editUser = async (req, res, next) => {
+  console.log("Received request to edit user: ", req.body);
   try {
     const userObject = req.file
       ? {
@@ -67,11 +67,12 @@ exports.editUser = (req, res, next) => {
       : { ...req.body };
 
     console.log(userObject);
-    req.user.update(userObject).then((user) => res.status(200).json({ user }));
+    const updatedUser = await req.user.update(userObject);
+    return res.status(200).json({ user: updatedUser });
   } catch (error) {
-    res.status(400).json({ error });
-    console.log(error);
-    console.log(response.error);
+    console.error(error);
+    console.log("Received request body: ", req.body);
+    return res.status(400).json({ error: error.message });
   }
 };
 
@@ -155,5 +156,6 @@ exports.editUserAdmin = async (req, res, next) => {
     console.log(response.error);
   }
 };
+
 
 

@@ -22,10 +22,7 @@ exports.createPost = async (req, res, next) => {
     });
     
     const msg = {
-      "User": {
-        firstname: "Test",
-        lastname: "toto",
-      },
+
       id: post.id,
       content: post.content,
       createAt: post.createdAt,

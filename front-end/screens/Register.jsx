@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, SafeAreaView, TextInput, View, TouchableHighlight, Text, Image, TouchableOpacity, Icon } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
@@ -12,6 +12,14 @@ const InscriptionScreen = ({ navigation }) => {
   // Permission to show the password
   const [hidePass, setHidePass] = useState(true);
 
+  // Error text check 
+  const [firstNameError, setFirstNameError] = useState('');
+  const [lastNameError, setLastNameError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
+  const [registerError, setRegisterError] = useState('')
+
   const nameRegex = /^[a-zA-Zéè'çà"-_]{1,12}$/;
   // le nom doit contenir entre 1 et 12 caractères, les caractères spéciaux autorisés sont éè'çà"-_
   const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
@@ -22,19 +30,19 @@ const InscriptionScreen = ({ navigation }) => {
   const handleSubmit = async () => {
     console.log(firstName, lastName, email, password, confirmPassword);
     if (!nameRegex.test(firstName)) {
-      alert('Le prénom n\'est pas valide', 'alertType');
+      setFirstNameError("Le prénom n'est pas valide");
     } else if (!nameRegex.test(lastName)) {
-      alert('Le nom n\'est pas valide', 'alertType');
+      setLastNameError("Le nom n'est pas valide");
     } else if (!emailRegex.test(email)) {
-      alert('L\'email n\'est pas valide', 'alertType');
+      setEmailError("L'Email' n'est pas valide");
     } else if (!passwordRegex.test(password)) {
-      alert('Le mot de passe n\'est pas valide', + 'le password doit contenir au moins 8 Caractères, 1 Maj, 1 Min, 1 Chiffre, 1 Caractère spécial', 'alertType');
+      setPasswordError("Le mot de passe n\'est pas valide, il doit contenir au moins 8 Caractères, 1 Maj, 1 Min, 1 Chiffre, 1 Caractère spécial");
     } else if (password !== confirmPassword) {
-      alert('Les mots de passe ne correspondent pas', 'alertType');
+      setConfirmPasswordError("Les mots de passe ne correspondent pas");
     } else {
       // requête axios here localhost3000/signup
       try {
-        const response = await axios.post('http://10.10.60.75:3100/api/auth/signup', {
+        const response = await axios.post('http://192.168.1.13:3100/api/auth/signup', {
           firstName: firstName,
           lastName: lastName,
           email: email,
@@ -47,15 +55,25 @@ const InscriptionScreen = ({ navigation }) => {
         }
       } catch (error) {
         if (error.response.status === 409) {
-          alert('Email déjà utilisé', 'Veuillez utiliser une autre adresse email.', 'error');
+          setRegisterError("Email déjà utilisé, Veuillez utiliser une autre adresse email.");
         } else {
-          console.log(error);
-          console.log(error.response);
-          alert('Erreur lors de l\'inscription.', 'error');
+          setRegisterError("Erreur lors de l\'inscription. Veuillez réessayer.");
         }
       }
     }
   }
+  useEffect(() => {
+    if (firstNameError !== '' || lastNameError !== '' || emailError !== '' || passwordError !== '' || confirmPasswordError !== '' || registerError !== '') {
+      setTimeout(() => {
+        setFirstNameError('');
+        setLastNameError('');
+        setEmailError('');
+        setPasswordError('');
+        setConfirmPasswordError('');
+        setRegisterError('');
+      }, 3000);
+    }
+  }, [firstNameError, lastNameError, emailError, passwordError, confirmPasswordError, registerError]);
 
   const CustomButton = () => (
     <TouchableOpacity style={styles.button}
@@ -82,6 +100,7 @@ const InscriptionScreen = ({ navigation }) => {
         value={firstName}
         onChangeText={text => setFirstName(text)}
       />
+      {firstNameError !== '' && <Text style={styles.errorText}>{firstNameError}</Text>}
       {/* Lastname */}
       <TextInput
         style={styles.input}
@@ -91,6 +110,7 @@ const InscriptionScreen = ({ navigation }) => {
         value={lastName}
         onChangeText={text => setLastName(text)}
       />
+      {lastNameError !== '' && <Text style={styles.errorText}>{lastNameError}</Text>}
       {/* Email */}
       <TextInput
         style={styles.input}
@@ -100,6 +120,7 @@ const InscriptionScreen = ({ navigation }) => {
         value={email}
         onChangeText={text => setEmail(text)}
       />
+      {emailError !== '' && <Text style={styles.errorText}>{emailError}</Text>}
       {/* Password */}
       <TextInput
         style={styles.input}
@@ -110,6 +131,7 @@ const InscriptionScreen = ({ navigation }) => {
         value={password}
         onChangeText={text => setPassword(text)}
       />
+      {passwordError !== '' && <Text style={styles.errorText}>{passwordError}</Text>}
       {/* C-Password */}
       <TextInput
         style={styles.input}
@@ -120,6 +142,7 @@ const InscriptionScreen = ({ navigation }) => {
         value={confirmPassword}
         onChangeText={text => setConfirmPassword(text)}
       />
+      {confirmPasswordError !== '' && <Text style={styles.errorText}>{confirmPasswordError}</Text>}
       <Text style={styles.textHidePass} onPress={() => setHidePass(!hidePass)} >
         <Ionicons
           style={styles.icon}
@@ -129,6 +152,7 @@ const InscriptionScreen = ({ navigation }) => {
       </Text>
       <View>
         {/* Button Register */}
+        {registerError !== '' && <Text style={styles.errorText}>{registerError}</Text>}
         <CustomButton />
       </View>
     </SafeAreaView>
@@ -188,6 +212,13 @@ const styles = StyleSheet.create({
   },
   textHidePass: {
     color: 'white',
+    textAlign: 'center',
+    fontSize: 13,
+    marginRight: 10,
+    paddingBottom: 10,
+  },
+  errorText: {
+    color: 'red',
     textAlign: 'center',
     fontSize: 13,
     marginRight: 10,

@@ -8,12 +8,11 @@ let timeoutId = null;
 const Contact = () => {
     const [search, setSearch] = useState('');
     const [usersSearch, setSearchUsers] = useState([]);
-    const [status, setStatus] = useState('');
 
     const handleSearch = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
-            const response = await axios.get('http://10.10.60.75:3100/api/users/', {
+            const response = await axios.get('http://192.168.1.13:3100/api/users/', {
                 params: { search: search },
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -21,12 +20,12 @@ const Contact = () => {
             });
             if (response.status === 200) {
                 setSearchUsers(response.data);
-                setStatus(response.data.status);
+
                 // console.log(JSON.stringify(response));
             }
         } catch (error) {
             // console.log('request GETALL users, error !');
-            // console.log(error);
+            console.log(error);
         }
     }
     useEffect(() => {
@@ -61,10 +60,10 @@ const Contact = () => {
                 renderItem={({ item }) => (
                     <TouchableOpacity style={styles.userContainer} >
                         {/* mettre l'image de l'utilisateur */}
-                        <Image style={styles.listItemAvatar} source={item.imageUrl || require('../assets/DefaultUser.png')} />
+                        <Image style={styles.listItemAvatar} source={item.imageUrl ? { uri: item.imageUrl, } : require('../assets/DefaultUser.png')} />
                         <Text style={styles.userName}>{item.firstName}  {item.lastName}</Text>
                         {/* mettre le status hors ligne ou en ligne */}
-                        <Text style={styles.userStatus}>{status === 'online' ? 'En ligne 🟢' : 'Hors ligne 🔴'}</Text>
+                        <Text style={styles.userStatus}>{item.isOnline === true ? 'En ligne 🟢' : 'Hors ligne 🔴'}</Text>
                         <Text style={styles.userCreatedAt}>{item.createdAt}</Text>
                     </TouchableOpacity>
                 )}

@@ -79,8 +79,10 @@ for (let i = 0; i < 100; i++) {
         const randomEmail = `John-Doe${Math.floor(Math.random() * 100000)}@gmail.com`;
         const randomImageUrl = imageUrls[Math.floor(Math.random() * imageUrls.length)];
         const user = {
-        firstName: randomName.split(" ")[0],
-        lastName: randomName.split(" ")[1],
+        // firstName: randomName.split(" ")[0],
+        // lastName: randomName.split(" ")[1],
+        firstName: 'John',
+        lastName: 'Doe',
         email: randomEmail,
         password: 'Password123!',
         imageUrl: randomImageUrl

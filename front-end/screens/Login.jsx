@@ -7,8 +7,14 @@ import axios from 'axios';
 // const token = await AsyncStorage.getItem('token'); // récupérer le token des données stockées en local (AsyncStorage) pour l'envoyer dans les headers de la requête axios
 const Login = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
+    //Error check
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [loginError, setLoginError] = useState('')
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
     // Vérifier si l'utilisateur est connecté ou pas 
     // Permission to show the password
     const [hidePass, setHidePass] = useState(true);
@@ -20,13 +26,13 @@ const Login = ({ navigation }) => {
     const handleLogin = async () => {
         console.log(email, password);
         if (!emailRegex.test(email)) {
-            alert("L'email n'est pas valide");
+            setEmailError("L'adresse e-mail n'est pas valide");
         } else if (!passwordRegex.test(password)) {
-            alert('Le mot de passe n\'est pas valide');
+            setPasswordError("Le mot de passe n'est pas valide");
         } else {
             // requête axios here localhost3000/login
             try {
-                const response = await axios.post('http://10.10.60.75:3100/api/auth/login', {
+                const response = await axios.post('http://192.168.1.13:3100/api/auth/login', {
                     email: email,
                     password: password,
                 });
@@ -34,22 +40,29 @@ const Login = ({ navigation }) => {
                     // Stocker le token
                     await AsyncStorage.setItem('token', response.data.token);
                     console.log('Voici le token de l\'utilisateur', response.data.token)
-                    alert('Connexion reussi, vous êtes connecté🪙 ||Crée un loader ici ;)');
                     console.log("status: 201, request login successful");
                     navigation.navigate('Profil');
                 } else {
                     console.log("status: " + response.status + ", request unsuccessful");
+                    setLoginError("Vérifier vos identifiants")
 
-                    setLoading(false);
                 }
             } catch (error) {
-                // console.log(error);
-                // console.log(error.response);
-                alert('Erreur requête lors de la Connexion impossible.');
-                // console.log(JSON.stringify(error.response));
+                // alert('Erreur requête lors de la Connexion impossible.');
+                console.log(JSON.stringify(error.response));
+                setLoginError("Vérifier vos identifiants")
             }
         }
     };
+    useEffect(() => {
+        if (emailError !== '' || passwordError !== '' || loginError != '') {
+            setTimeout(() => {
+                setEmailError('');
+                setPasswordError('');
+                setLoginError('');
+            }, 2000);
+        }
+    }, [passwordError, emailError, loginError]);
 
     const CustomButton = () => (
         <TouchableOpacity style={styles.button}
@@ -82,6 +95,7 @@ const Login = ({ navigation }) => {
                 onChangeText={setEmail}
                 style={styles.input}
             />
+            {emailError !== '' && <Text style={styles.errorText}>{emailError}</Text>}
             {/* Mot de passe */}
             <TextInput
                 placeholder='Mot de passe'
@@ -91,6 +105,7 @@ const Login = ({ navigation }) => {
                 secureTextEntry={hidePass ? true : false}
                 style={styles.input}
             />
+            {passwordError !== '' && <Text style={styles.errorText}>{passwordError}</Text>}
             <Text style={styles.textHidePass} onPress={() => setHidePass(!hidePass)} >
                 <Ionicons
                     style={styles.icon}
@@ -100,6 +115,7 @@ const Login = ({ navigation }) => {
                 Afficher le mot de passe !
             </Text>
             {/* Login Button */}
+            {loginError !== '' && <Text style={styles.errorText}>{loginError}</Text>}
             <CustomButton />
             <Text style={styles.textRegister}>Vous n'avez pas de compte ?</Text>
             <RegisterNavButton />
@@ -169,6 +185,12 @@ const styles = StyleSheet.create({
         fontSize: 13,
         marginRight: 10,
         paddingBottom: 10,
+    },
+    errorText: {
+        color: 'red',
+        fontSize: 12,
+        paddingLeft: 10,
+        paddingTop: 5,
     },
 });
 
