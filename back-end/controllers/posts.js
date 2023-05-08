@@ -1,5 +1,5 @@
 const fs = require('fs');
-const db = require('../models');
+const db = require('../database');
 const { Post } = db.sequelize.models;
 const io = require('../app');
 
@@ -7,34 +7,31 @@ const io = require('../app');
 
 exports.createPost = async (req, res, next) => {
   let postObject = req.body;
-
   if (req.file) {
     postObject = JSON.parse(req.body.post);
     postObject.imageUrl = `${req.protocol}://${req.get('host')}/public/${
       req.file.filename
     }`;
   }
-
   try {
     let post = await Post.create({
       ...postObject,
       userId: req.user.id,
     });
-    
-    const msg = {
-
-      id: post.id,
-      content: post.content,
-      createAt: post.createdAt,
-      updatedAt: post.updatedAt,
-      imageUrl: post.imageUrl
-    }
-    console.log(msg)
-
-    io.emit('newPost', msg);
-
     post = await Post.findOne({ where: { id: post.id }, include: db.User });
-
+    const msgSocket = {
+      id: post.id,
+      userId: post.userId,
+      content: post.content,
+      createdAt: post.createdAt,
+      updatedAt: post.updatedAt,
+      imageUrl: post.imageUrl,
+      userImageUrl: post.User.imageUrl,
+      userFirstName: post.User.firstName,
+      userLastName: post.User.lastName
+    };
+    io.emit('socketPost', msgSocket);
+    // console.log('io emit log here :', msgSocket);
     res.status(201).json({ post });
   } catch (error) {
     console.log(error);
@@ -81,27 +78,7 @@ exports.getAllPosts = (req, res, next) => {
     .catch((error) => res.status(400).json({ error }));
 };
 
-// exports.modifyPost = (req, res, next) => {
-//   const postObject = req.file
-//     ? {
-//         ...JSON.parse(req.body.post),
-//         imageUrl: `${req.protocol}://${req.get('host')}/public/${
-//           req.file.filename
-//         }`,
-//       }
-//     : { ...req.body };
 
-//   Post.findOne({
-//     where: { id: req.params.id, userId: req.user.id },
-//     include: db.User,
-//   }).then((post) => {
-//     if (!post) {
-//       res.status(400).json({ error: "Vous n'avez pas l'autorisation" });
-//     } else {
-//       post.update(postObject).then((post) => res.status(200).json({ post }));
-//     }
-//   });
-// };
 
 exports.modifyPost = (req, res, next) => {
   const postObject = req.file

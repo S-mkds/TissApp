@@ -2,6 +2,7 @@
 import CustomSpinner from '../components/spinner.vue'
 import CustomModal from '../components/modal.vue'
 import Swal from 'sweetalert2'
+import moment from 'moment'
 export default {
     components: { CustomSpinner, CustomModal },
 
@@ -26,7 +27,7 @@ export default {
         // REQUEST GET ONE USER
         async getOneUser(userId) {
             try {
-                const data = await fetch(`http://localhost:3100/api/users/${userId}`, {
+                const data = await fetch(`http://localhost:3100/api/auth/users/${userId}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -46,7 +47,7 @@ export default {
         // REQUEST GET ALL USER
         async getUsers() {
             try {
-                const data = await fetch(`http://localhost:3100/api/users?search=${this.search}`, {
+                const data = await fetch(`http://localhost:3100/api/auth/users?search=${this.search}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -93,7 +94,7 @@ export default {
         // REQUEST DELETE USER
         async deleteUser(userId) {
             try {
-                const data = await fetch(`http://localhost:3100/api/users/${userId}`, {
+                const data = await fetch(`http://localhost:3100/api/auth/users-delete/${userId}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -272,6 +273,10 @@ export default {
                 }
             })
         },
+        // Formatage de la date
+        formatDate(date) {
+            return moment(date).locale('fr').format('dddd D MMMM, HH:mm:ss');
+        },
     },
 
     // CREATED
@@ -344,7 +349,7 @@ export default {
                                 <p class="text-sucess" v-if="user.admin === true">Administrateur</p>
                                 <p class="text-info" v-if="user.admin === false">Utilisateur</p>
                             </td>
-                            <td class="w-text">{{ user.createdAt }}</td>
+                            <td class="w-text">{{ formatDate(user.createdAt) }}</td>
                             <td>
                                 <p class="text-sucess" v-if="user.isOnline === true">En-ligne 🟢</p>
                                 <p class="text-danger" v-if="user.isOnline === false">Hors-ligne 🔴</p>
@@ -521,11 +526,10 @@ export default {
 }
 
 .img-user {
-    max-width: 200px;
+    width: 100px;
     max-height: 100px;
     margin: 10px;
     opacity: 1;
-    object-fit: contain;
     display: block;
     cursor: pointer;
     border-radius: 20%;

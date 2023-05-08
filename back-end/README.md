@@ -20,7 +20,6 @@ Pour des tests spécifiques (avec postman par exemple), le backend répond à l'
 
 ```
 ## Base de données
-
 ```
 cd back-end
 npm i mysql -g 
@@ -30,11 +29,21 @@ npm i mysql -g
 npx sequelize-cli db:create
 npx sequelize-cli db:migrate
 
+// Faire attention à la date de migration. Assurez-vous que la table parente existe (Primary Key, Foreign Key)
+
+```
+# Example: Génerer les models et les migrations
+```
+User:
+npx sequelize-cli model:generate --name User --attributes firstName:string,lastName:string,email:string,password:string,imageUrl:string,deleted:boolean,isOnline:boolean,admin:boolean
+
+Migrations uniquement : 
+npx sequelize-cli migration:generate --name migration_name_here --model User --generate-migration
+```
+
 # Pour installer sequilize CLI
-
+```
 npm install --save-dev sequelize-cli
-
-
 ```
 
 ## Technologies utilisées

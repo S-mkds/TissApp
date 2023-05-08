@@ -6,7 +6,8 @@ import * as Permissions from 'expo-permissions';
 import jwt_decode from 'jwt-decode';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import BaseUrl from '../services/BaseUrl';
+const API_URL = BaseUrl
 
 export default function UploadImage() {
     const [image, setImage] = useState(null);
@@ -59,7 +60,7 @@ export default function UploadImage() {
             const fileName = `${Date.now()}_${image.split('/').pop()}`;
             data.append('user', JSON.stringify({ imageUrl: fileName }));
             const token = await AsyncStorage.getItem('token');
-            const response = await axios.put('http://10.10.22.199:3100/api/auth/edit', data, {
+            const response = await axios.put(`${API_URL}/api/auth/edit`, data, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${token}`,
@@ -94,7 +95,7 @@ export default function UploadImage() {
             const decodedToken = jwt_decode(token);
             const userId = decodedToken.userId;
             // console.log(userId);
-            let response = await axios.get(`http://10.10.22.199:3100/api/users/${userId}`, {
+            let response = await axios.get(`${API_URL}/api/auth/users/${userId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -102,8 +103,8 @@ export default function UploadImage() {
             if (response.status === 200) {
                 // console.log(response.data);
                 setTakeImage(response.data.user.imageUrl);
-                console.log(response.data.user.imageUrl);
-                console.log('sucess GET REQUEST');
+                // console.log(response.data.user.imageUrl);
+                // console.log('sucess GET REQUEST');
 
             }
         } catch (error) {
@@ -113,8 +114,8 @@ export default function UploadImage() {
     };
 
     useEffect(() => {
-        getUser()
-    }, []);
+        getUser();
+    }, [getUser()]);
 
     return (
         <View style={imageUploaderStyles.imageContainer}>
@@ -122,7 +123,7 @@ export default function UploadImage() {
             <View>
                 <Image style={{ width: 120, height: 120, borderRadius: 100, }} source={takeImage ? { uri: takeImage, } : require('../assets/DefaultUser.png')} />
                 {/* BTN UPLOAD IMAGE */}
-                <TouchableOpacity onPress={() => setModalVisible(true)} style={imageUploaderStyles.uploadBtn}>
+                <TouchableOpacity onPress={() => setModalVisible(true)} style={imageUploaderStyles.UploadAvatar}>
                     <AntDesign name="camera" size={30} color="#FF6B6B" style={{ width: 30, height: 30 }} />
                 </TouchableOpacity>
             </View>
@@ -131,7 +132,7 @@ export default function UploadImage() {
             <Modal animationType="slide" transparent={true} visible={modalVisible} style={modalStyles.Modal} >
                 <View style={modalStyles.ModalContainer}>
                     <TouchableOpacity onPress={() => setModalVisible(false)} style={modalStyles.closeBtn}>
-                        <Text style={modalStyles.closeBtnText}>❌</Text>
+                        <Text style={modalStyles.closeBtnModal}>❌</Text>
                     </TouchableOpacity>
                     <View style={modalStyles.modalContent}>
                         {/* IMMAGE USER */}
@@ -161,14 +162,12 @@ const imageUploaderStyles = StyleSheet.create({
         justifyContent: 'center',
         margin: 30,
     },
-    uploadBtn: {
-        position: 'absolute',
-        bottom: 0,
-        right: 0,
-        opacity: 0.8,
-        borderRadius: 100,
-        zIndex: 1,
+    UploadAvatar: {
+        display: "flex",
+        alignItems: "flex-end",
+        justifyContent: "center",
     },
+
 })
 const modalStyles = StyleSheet.create({
     Modal: {
@@ -195,14 +194,10 @@ const modalStyles = StyleSheet.create({
         padding: 10,
         borderRadius: 5,
         zIndex: 1,
-        display: 'flex',
-        position: 'absolute',
-        right: 20,
-        top: 210,
+        alignSelf: 'flex-end',
     },
-    closeBtnText: {
+    closeBtnModal: {
         fontSize: 20,
-        color: 'white',
     },
     modalContent: {
         backgroundColor: 'white',

@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, SafeAreaView, TextInput, View, TouchableHighlight, Text, Image, TouchableOpacity, Icon } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
+import BaseUrl from '../services/BaseUrl';
+const API_URL = BaseUrl
+
 
 const InscriptionScreen = ({ navigation }) => {
   const [firstName, setFirstName] = useState('');
@@ -42,7 +45,7 @@ const InscriptionScreen = ({ navigation }) => {
     } else {
       // requête axios here localhost3000/signup
       try {
-        const response = await axios.post('http://10.10.22.199:3100/api/auth/signup', {
+        const response = await axios.post(`${API_URL}/api/auth/signup`, {
           firstName: firstName,
           lastName: lastName,
           email: email,
@@ -53,6 +56,7 @@ const InscriptionScreen = ({ navigation }) => {
           navigation.navigate('Home');
         }
       } catch (error) {
+        setRegisterError("Erreur network lors de l\'inscription. Veuillez réessayer.");
         if (error.response.status === 409) {
           setRegisterError("Email déjà utilisé, Veuillez utiliser une autre adresse email.");
         } else {
@@ -74,15 +78,6 @@ const InscriptionScreen = ({ navigation }) => {
     }
   }, [firstNameError, lastNameError, emailError, passwordError, confirmPasswordError, registerError]);
 
-  const CustomButton = () => (
-    <TouchableOpacity style={styles.button}
-      onPress={() =>
-        handleSubmit()
-      }>
-      <Text style={styles.buttonText}>Inscription</Text>
-    </TouchableOpacity >
-  );
-
   return (
     <SafeAreaView style={styles.container}>
       {/* Logo */}
@@ -93,7 +88,7 @@ const InscriptionScreen = ({ navigation }) => {
       {/* Firstname */}
       <TextInput
         style={styles.input}
-        placeholder=" Prénom"
+        placeholder="Prénom"
         placeholderTextColor="#ffff"
         keyboardType="name"
         value={firstName}
@@ -103,7 +98,7 @@ const InscriptionScreen = ({ navigation }) => {
       {/* Lastname */}
       <TextInput
         style={styles.input}
-        placeholder=" Nom"
+        placeholder="Nom"
         placeholderTextColor="#ffff"
         keyboardType="name-family"
         value={lastName}
@@ -113,7 +108,7 @@ const InscriptionScreen = ({ navigation }) => {
       {/* Email */}
       <TextInput
         style={styles.input}
-        placeholder=" E-mail"
+        placeholder="E-mail"
         placeholderTextColor="#ffff"
         keyboardType="name"
         value={email}
@@ -123,7 +118,7 @@ const InscriptionScreen = ({ navigation }) => {
       {/* Password */}
       <TextInput
         style={styles.input}
-        placeholder=" Mot de passe"
+        placeholder="Mot de passe"
         placeholderTextColor="#ffff"
         keyboardType="Mot de passe"
         secureTextEntry={hidePass ? true : false}
@@ -134,7 +129,7 @@ const InscriptionScreen = ({ navigation }) => {
       {/* C-Password */}
       <TextInput
         style={styles.input}
-        placeholder=" Confirmez votre mot de passe"
+        placeholder="Confirmez votre mot de passe"
         placeholderTextColor="#ffff"
         keyboardType="password"
         secureTextEntry={hidePass ? true : false}
@@ -152,7 +147,12 @@ const InscriptionScreen = ({ navigation }) => {
       <View>
         {/* Button Register */}
         {registerError !== '' && <Text style={styles.errorText}>{registerError}</Text>}
-        <CustomButton />
+        <TouchableOpacity style={styles.buttonRegister}
+          onPress={() =>
+            handleSubmit()
+          }>
+          <Text style={styles.buttonText}>Inscription</Text>
+        </TouchableOpacity >
       </View>
     </SafeAreaView>
   );
@@ -164,26 +164,29 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignContent: 'center',
     backgroundColor: '#0F1828',
-    paddingLeft: 10,
-    paddingRight: 10,
     paddingBottom: 70,
   },
   input: {
+    width: "90%",
+    alignItems: 'center',
+    justifyContent: 'center',
     height: 40,
     margin: 10,
+    padding: 10,
     borderWidth: 1,
     borderColor: "#152033",
     backgroundColor: "#152033",
-    borderRadius: 4,
+    borderRadius: 20,
     color: "#ffff"
   },
-  button: {
+  buttonRegister: {
+    alignItems: 'center',
     backgroundColor: '#FF6B6B',
+    width: "90%",
+    height: 40,
     padding: 10,
     margin: 10,
-    width: 350,
     borderRadius: 30,
-    alignItems: 'center',
   },
   buttonText: {
     color: 'white',

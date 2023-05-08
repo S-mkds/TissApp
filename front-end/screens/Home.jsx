@@ -1,9 +1,6 @@
 import React from 'react';
 import { View, Image, TouchableHighlight, StyleSheet, Text, } from 'react-native';
 
-
-
-
 const Home = ({ navigation }) => {
 	return (
 		<View style={styles.container}>
@@ -21,7 +18,6 @@ const Home = ({ navigation }) => {
 					onPress={() => navigation.navigate('Register', { name: 'Register' })}>
 					<Text style={styles.buttonText}>Inscription</Text>
 				</TouchableHighlight>
-
 			</View>
 		</View>
 	);
@@ -34,7 +30,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		backgroundColor: '#0F1828',
 	},
-
 	logo: {
 		width: 400,
 		height: 180,

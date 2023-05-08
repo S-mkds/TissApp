@@ -5,12 +5,16 @@ import Chat from "./screens/Chat";
 import Login from "./screens/Login";
 import Register from './screens/Register';
 import Contact from './screens/Contact';
+import Chanel from './screens/Chanel';
 import React, { useState, useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Asyncstorage: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 const Tab = createMaterialTopTabNavigator();
 const TabNavigate = () => {
@@ -25,7 +29,10 @@ const TabNavigate = () => {
             iconName = focused ? 'ios-chatbubbles' : 'ios-chatbubbles';
           }
           else if (route.name === 'Contact') {
-            iconName = focused ? 'ios-people-outline' : 'ios-people-outline';
+            iconName = focused ? 'ios-people' : 'ios-people';
+          }
+          else if (route.name === 'Chanel') {
+            iconName = focused ? 'ios-chatbox-ellipses-sharp' : 'ios-chatbox-ellipses-sharp';
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -35,6 +42,7 @@ const TabNavigate = () => {
         tabBarIndicatorStyle: { backgroundColor: 'white' },
       })}>
       <Tab.Screen name="Chat" component={Chat}/>
+      <Tab.Screen name="Chanel" component={Chanel}/>
       <Tab.Screen name="Contact" component={Contact} />
       <Tab.Screen name="Profil" component={Profil} />
     </Tab.Navigator>
@@ -48,12 +56,12 @@ const StackNavigate = () => {
 
   const checkToken = async() => {
     const token = await AsyncStorage.getItem('token');
-    if (token) {
+    if (!token) {
       setIsLoggedIn(true);
-      console.log('Status :',isLoggedIn);
+      console.log('Status : user connecté');
     } else {
       setIsLoggedIn(false);
-      console.log('Status :',isLoggedIn);
+      console.log('Status : user non connecté');
     }
   }
   useEffect(() => {

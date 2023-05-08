@@ -1,4 +1,4 @@
-const db = require('../models');
+const db = require('../database');
 const Sequelize = db.Sequelize;
 const jwt = require('jsonwebtoken');
 const { User } = db.sequelize.models;
@@ -44,7 +44,7 @@ exports.login = async (req, res, next) => {
       // Logique de isOnline lors d'une connexion celui passe en true, (lors d'une deconnexion penser à rajouter la methode PUT isOnline False)
       await User.update({ isOnline: true }, { where: { id: response.user.id } });
       const updatedUser = await User.findByPk(response.user.id);
-      console.log('User updated: ', updatedUser);
+      // console.log('User updated: ', updatedUser);
       res.status(201).json(newToken(response.user));
     } else {
       res.status(401).json({ error: response.message });
@@ -56,7 +56,7 @@ exports.login = async (req, res, next) => {
 };
 
 exports.editUser = async (req, res, next) => {
-  console.log("Received request to edit user: ", req.body);
+  // console.log("Received request to edit user: ", req.body);
   try {
     const userObject = req.file
       ? {
@@ -66,7 +66,7 @@ exports.editUser = async (req, res, next) => {
       }
       : { ...req.body };
 
-    console.log(userObject);
+    // console.log(userObject);
     const updatedUser = await req.user.update(userObject);
     return res.status(200).json({ user: updatedUser });
   } catch (error) {
@@ -88,7 +88,6 @@ exports.getAllUsers = (req, res, next) => {
       Sequelize.fn(
         'concat',
         Sequelize.col('firstName'),
-        ' ',
         Sequelize.col('lastName')
       ),
       {
@@ -109,19 +108,7 @@ exports.getAllUsers = (req, res, next) => {
     });
 };
 
-exports.FindAllUsers = (req, res, next) => {
-  User.findAll({ where: { deleted: false } })
-    .then((users) => {
-      res.status(200).json({ users });
-    })
-    .catch((error) => {
-      console.log(error);
-      res.status(400).json({ error });
-    });
-};
-
 // ROUTE ADMIN
-
 exports.deleteUserAccount = async (req, res, next) => {
   try {
     const user = req.user.admin
@@ -143,7 +130,7 @@ exports.editUserAdmin = async (req, res, next) => {
       }
       : { ...req.body };
 
-    console.log(userObject);
+    // console.log(userObject);
 
     const user = req.params.id
       ? await User.findOne({ where: { id: req.params.id } })

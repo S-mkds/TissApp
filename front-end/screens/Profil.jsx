@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, SafeAreaView, TextInput, View, Text, Image, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from 'jwt-decode';
-import UploadImage from '../components/imageUpload';
+import ImageUserUpload from '../components/ImageUserUpload';
 import axios from 'axios';
+import BaseUrl from '../services/BaseUrl';
+const API_URL = BaseUrl
 
 const Profil = ({ navigation }) => {
     // Récupération state du Pseudo et du Prénom et l'email
@@ -32,7 +34,7 @@ const Profil = ({ navigation }) => {
             const decodedToken = jwt_decode(token);
             const userId = decodedToken.userId;
             // console.log(userId);
-            let response = await axios.get(`http://10.10.22.199:3100/api/users/${userId}`, {
+            let response = await axios.get(`${API_URL}/api/auth/users/${userId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -60,7 +62,7 @@ const Profil = ({ navigation }) => {
             // requête axios here localhost3000/edit
             try {
                 const token = await AsyncStorage.getItem('token');
-                let response = await axios.put('http://10.10.22.199:3100/api/auth/edit', {
+                let response = await axios.put(`${API_URL}/api/auth/edit`, {
                     firstName: firstName, lastName: lastName
                 }, {
                     headers: {
@@ -113,7 +115,7 @@ const Profil = ({ navigation }) => {
     const handleLogout = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
-            let response = await axios.put('http://10.10.22.199:3100/api/auth/edit', {
+            let response = await axios.put(`${API_URL}/api/auth/edit`, {
                 isOnline: false
             }, {
                 headers: {
@@ -153,7 +155,7 @@ const Profil = ({ navigation }) => {
         <SafeAreaView style={styles.container}>
             {/* ADD IMAGE USER */}
             <View>
-                <UploadImage />
+                <ImageUserUpload />
             </View>
             {/* ID User */}
             <View>
@@ -210,7 +212,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "#152033",
         backgroundColor: "#152033",
-        borderRadius: 4,
+        borderRadius: 10,
         color: "#ffff",
         paddingLeft: 5,
     },
@@ -218,7 +220,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#FF6B6B',
         padding: 10,
         margin: 10,
-        width: 350,
         borderRadius: 30,
         alignItems: 'center',
     },
@@ -226,7 +227,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'gray',
         padding: 10,
         margin: 10,
-        width: 350,
         borderRadius: 30,
         alignItems: 'center',
     },
@@ -237,7 +237,6 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        maxWidth: 100,
         alignSelf: "center",
         margin: 15,
     },

@@ -1,8 +1,11 @@
 import { View, Text, TextInput, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
+import { format } from 'date-fns';
+import frLocale from 'date-fns/locale/fr';
 import axios from 'axios';
-
+import BaseUrl from '../services/BaseUrl';
+const API_URL = BaseUrl
 
 let timeoutId = null;
 const Contact = () => {
@@ -12,7 +15,7 @@ const Contact = () => {
     const handleSearch = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
-            const response = await axios.get('http://10.10.22.199:3100/api/users/', {
+            const response = await axios.get(`${API_URL}/api/auth/users/`, {
                 params: { search: search },
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -29,15 +32,19 @@ const Contact = () => {
     }
 
     useEffect(() => {
-        handleSearch();
-    }, []);
+        handleSearch(search);
+    }, [search]);
 
+    // search
     const onSearchChange = (text) => {
         setSearch(text);
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => {
-            handleSearch(text);
-        }, 200);
+        handleSearch(text);
+    };
+
+    // Formatage de la date
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return format(date, "EEEE d MMMM yyyy 'à' HH:mm:ss", { locale: frLocale });
     };
 
     return (
@@ -64,7 +71,7 @@ const Contact = () => {
                         <Text style={styles.userName}>{item.firstName}  {item.lastName}</Text>
                         {/* mettre le status hors ligne ou en ligne */}
                         <Text style={styles.userStatus}>{item.isOnline === true ? 'En ligne 🟢' : 'Hors ligne 🔴'}</Text>
-                        <Text style={styles.userCreatedAt}>{item.createdAt}</Text>
+                        <Text style={styles.userCreatedAt}>Crée le {formatDate(item.createdAt)}</Text>
                     </TouchableOpacity>
                 )}
             />
@@ -152,13 +159,12 @@ const styles = StyleSheet.create({
     userStatus: {
         color: 'white',
         fontSize: 8,
-        position: 'absolute',
         right: 15,
-
+        alignSelf: 'flex-end',
     },
     userCreatedAt: {
         color: 'white',
-        opacity: 0.5,
+        opacity: 0.8,
         fontSize: 5,
         alignSelf: 'flex-end',
         marginRight: 10,

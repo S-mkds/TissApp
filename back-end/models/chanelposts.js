@@ -6,28 +6,29 @@ const moment = require("moment");
 const { deleteFile } = require("../services/file-removal");
 
 module.exports = (sequelize, DataTypes) => {
-  class Post extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+  class PostsChanel extends Model {
     static associate(models) {
-      Post.belongsTo(models.User, { foreignKey: "userId" });
-      Post.hasMany(models.Comments);
-      Post.hasMany(models.Likes);
+      PostsChanel.belongsTo(models.User, { foreignKey: "userId" });
+      PostsChanel.belongsTo(models.Chanel, { foreignKey: "chanelId" });
     }
 
     readableCreatedAt() {
-      return moment(this.createdAt).locale("fr").format("LL");
+      return moment(this.createdAt).locale("fr").format("LLL");
     }
   }
-  Post.init(
+  PostsChanel.init(
     {
       userId: DataTypes.INTEGER,
-      content: DataTypes.TEXT,
-      imageUrl: DataTypes.STRING,
-      likesCount: DataTypes.INTEGER,
+      chanelId: DataTypes.INTEGER,
+      content: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      imageUrl: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      createdAt: DataTypes.DATE,
     },
     {
       sequelize,
@@ -38,21 +39,21 @@ module.exports = (sequelize, DataTypes) => {
           }
         },
       },
-      modelName: "Post",
+      modelName: "PostsChanel",
     }
   );
 
-  Post.afterDestroy(async (post) => {
+  PostsChanel.afterDestroy(async (post) => {
     if (post.imageUrl) {
       await deleteFile(post.imageUrl);
     }
   });
 
-  Post.afterUpdate(async (post) => {
+  PostsChanel.afterUpdate(async (post) => {
     if (post.dataValues.imageUrl !== post._previousDataValues.imageUrl) {
       await deleteFile(post._previousDataValues.imageUrl);
     }
   });
 
-  return Post;
+  return PostsChanel;
 };

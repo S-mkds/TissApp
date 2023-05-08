@@ -23,7 +23,7 @@ export default {
         // REQUEST GET ONE USER
         async getOneUser(userId) {
             try {
-                const data = await fetch(`http://localhost:3100/api/users/${userId}`, {
+                const data = await fetch(`http://localhost:3100/api/auth/users/${userId}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ export default {
         // REQUEST GET ALL USER
         async getUsers() {
             try {
-                const data = await fetch(`http://localhost:3100/api/users?search=`, {
+                const data = await fetch(`http://localhost:3100/api/auth/users?search=`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -100,7 +100,6 @@ export default {
             }, 1000);
         },
 
-        // LOGOUT
         // LOGOUT
         logout() {
             this.showSpinner = true;

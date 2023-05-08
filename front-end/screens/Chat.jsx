@@ -1,31 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { View, Text, FlatList, StyleSheet, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import io from 'socket.io-client';
+import { format } from 'date-fns';
+import frLocale from 'date-fns/locale/fr';
+import ImageMessageUpload from '../components/ImageMessageUpload';
+import BaseUrl from '../services/BaseUrl';
+import jwt_decode from 'jwt-decode';
+
+const API_URL = BaseUrl
 
 const Chat = () => {
     const navigation = useNavigation();
     const [messages, setMessages] = useState([]);
-    const [newMessage, setNewMessage] = useState('');
-    const [newImageUrl, setNewImageUrl] = useState('');
     // Check Text error
-    const [postMessageError, setPostMessageError] = useState('');
-
+    const [currentUser, setCurrentUser] = useState(null);
 
     const fetchMessages = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
-            const response = await axios.get(`http://10.10.22.199:3100/api/posts/`, {
+            const response = await axios.get(`${API_URL}/api/posts`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
             });
+
             if (response.status === 200) {
                 setMessages(response.data.posts);
 
+                const decodedToken = jwt_decode(token);
+                const userId = decodedToken.userId;
+                setCurrentUser(userId);
             } else {
                 console.log('error');
             }
@@ -34,53 +41,25 @@ const Chat = () => {
         }
     };
 
-    const handleSendMessage = async () => {
-        if (newMessage === '') {
-            setPostMessageError("Vous ne pouvez pas envoyer un message vide !");
-        } else {
-            try {
-                const data = {};
-                if (newMessage) data.content = newMessage;
-                if (newImageUrl) data.imageUrl = newImageUrl;
-                const token = await AsyncStorage.getItem('token');
-                const response = await axios.post('http://10.10.22.199:3100/api/posts', data, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                });
-                if (response.status === 201) {
-                    fetchMessages();
-                    setNewMessage('');
-                    setNewImageUrl('');
-                    console.log('request POST message, success !');
-                }
-                else {
-                    console.log('error');
-                    console.log(response.status);
-                }
-            } catch (error) {
-                console.error(error);
-                console.log(error.response);
-                console.log('request POST message, error !');
-            }
-        }
-    };
+    // ADD Socket 
     useEffect(() => {
         fetchMessages();
-        const socket = io('http://110.10.57.143.3:2000');
-        setTimeout(() => {
-            console.log(socket.connected)
-        }, 2000);
-        socket.on('newPost', (msg) => {
-            setMessages(messages => [...messages, msg]);
-            console.warn(msg);
+        const socket = io(`${API_URL}`);
+        // setTimeout(() => {
+        //     console.log("socket connecté", socket.connected)
+        // }, 2000);
+        socket.on('socketPost', (msgSocket) => {
+            fetchMessages();
+            setMessages(messages => [...messages, msgSocket]);
+            // console.log(msgSocket);
         });
-        if (postMessageError !== '') {
-            setTimeout(() => {
-                setPostMessageError('');
-            }, 2000);
-        }
-    }, [postMessageError]);
+    }, []);
+
+    // Formatage de la date
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return format(date, "EEEE d MMMM yyyy 'à' HH:mm:ss", { locale: frLocale });
+    };
 
     return (
         // Message view
@@ -92,37 +71,26 @@ const Chat = () => {
                 onEndReachedThreshold={0.5}
                 data={messages}
                 keyExtractor={item => `${item.id}-${item.createdAt}`}
-                renderItem={({ item }) =>
-                    <View style={styles.messageContainer}>
-                        <View style={styles.messageContent}>
-                            <Image style={styles.messageAvatar} source={item.User.imageUrl ? { uri: item.User.imageUrl } : require('../assets/DefaultUser.png')} />
+                renderItem={({ item }) => (
+                    <View style={[styles.messageContainer, item.User?.id === currentUser ? styles.currentUserMessageContainer : null]}>
+                        <View style={[styles.messageContent]}>
+                            <Image style={styles.messageAvatar} source={item.User && item.User.imageUrl ? { uri: item.User.imageUrl } : require('../assets/DefaultUser.png')} />
                             <View style={styles.messageTextContainer}>
-                                <Text style={styles.messageUsername}>{item.User.firstName} {item.User.lastName}</Text>
+                                <Text style={styles.messageUsername}>{item.User ? item.User.firstName : ''} {item.User ? item.User.lastName : ''}</Text>
+                                {item.imageUrl ? (
+                                    <Image style={styles.messageImage} source={item.imageUrl ? { uri: item.imageUrl, } : null} />
+                                ) : null}
                                 <Text style={styles.messageText}>{item.content}</Text>
-                                <Text style={styles.messageCreatedAt}>{item.createdAt}</Text>
+                                <Text style={styles.messageCreatedAt}>{formatDate(item.createdAt)}</Text>
                             </View>
                         </View>
-                    </View>}
+                    </View>
+                )}
             />
-
-            {/* Input & Button views */}
-            {postMessageError !== '' && <Text style={styles.errorText}>{postMessageError}</Text>}
             <View style={styles.inputContainer}>
-                <TouchableOpacity value={newImageUrl} style={styles.selectImageButton}>
-                    <Ionicons name="add-outline" size={24} color="white" />
-                </TouchableOpacity>
-                <TextInput
-                    value={newMessage}
-                    onChangeText={setNewMessage}
-                    placeholder="Entrez votre message..."
-                    placeholderTextColor={'white'}
-                    style={styles.input}
-                />
-                <TouchableOpacity onPress={handleSendMessage} style={styles.sendButton}>
-                    <Ionicons style={styles.sharpIcon} name="send-sharp" size={20} color="#FF6B6B" />
-                </TouchableOpacity>
-            </View>
-        </View>
+                <ImageMessageUpload />
+            </View >
+        </View >
     );
 };
 
@@ -139,28 +107,43 @@ const styles = StyleSheet.create({
         backgroundColor: '#0F1828',
         bottom: '1%',
         alignSelf: 'center',
+        margin: 10,
+        padding: 10,
+
     },
     messageContainer: {
         flex: 1,
-        alignSelf: 'flex-end',
+        alignSelf: 'flex-start',
         marginRight: 10,
         maxWidth: '90%',
         marginTop: 5,
-        borderWidth: 1,
-        borderColor: 'gray',
+        // borderWidth: 2,
+        backgroundColor: 'rgb(52, 77, 94)',
+        borderColor: 'grey',
         borderTopRightRadius: 20,
-        paddingTopleft: -20,
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,
+        paddingTopleft: -20,
         marginBottom: 5,
+        opacity: 0.9,
+    },
+
+    currentUserMessageContainer: {
+        backgroundColor: '#152033',
+        alignSelf: 'flex-end',
+        marginRight: 0,
+        marginLeft: 10,
+        borderWidth: 2,
+        borderColor: 'gray',
+        borderBottomRightRadius: -20,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        opacity: 0.9,
     },
     messageContent: {
         flexDirection: 'row',
-        backgroundColor: '#152033',
-        opacity: 0.8,
         borderRadius: 20,
         padding: 10,
-        alignItems: 'center',
     },
     messageAvatar: {
         width: 50,
@@ -170,7 +153,6 @@ const styles = StyleSheet.create({
         borderWidth: 3,
         borderColor: '#7452B7',
         boxShadow: '0 0 5px black',
-        opacity: 0.8,
     },
     messageTextContainer: {
         width: '80%',
@@ -181,48 +163,25 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 15,
         color: 'white',
+        paddingBottom: 15,
+        border: "black"
     },
     messageText: {
         fontSize: 13,
         padding: 5,
         color: 'white',
-
+    },
+    messageImage: {
+        width: 200,
+        height: 200,
+        borderRadius: 20,
+        alignSelf: 'center',
     },
     messageCreatedAt: {
+        margin: 2,
         fontSize: 8,
         color: 'white',
         alignSelf: 'flex-end',
-    },
-    // Input 
-    inputContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 10,
-        bottom: 5,
-        width: '100%',
-    },
-    input: {
-        flex: 1,
-        padding: 10,
-        borderWidth: 1,
-        borderColor: '#152033',
-        borderRadius: 8,
-        backgroundColor: '#152033',
-        borderWidth: 1,
-        borderColor: 'black',
-        borderRadius: 10,
-        opacity: 0.7,
-        color: 'white',
-    },
-    // Button
-    sendButton: {
-        padding: 5,
-        borderRadius: 8,
-    },
-    selectImageButton: {
-        padding: 2,
-        margin: 5,
-        borderRadius: 8,
     },
     errorText: {
         color: 'red',

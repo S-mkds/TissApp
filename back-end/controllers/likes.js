@@ -1,4 +1,4 @@
-const db = require('../models');
+const db = require('../database');
 const { Likes } = db.sequelize.models;
 
 exports.likeOnePost = async (req, res, next) => {
