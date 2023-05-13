@@ -7,6 +7,7 @@ import Register from "./screens/Register";
 import Contact from "./screens/Contact";
 import Chanel from "./screens/Chanel";
 import ChatGroups from "./screens/ChatGroups";
+import ChatInstant from "./screens/ChatInstant";
 import React, { useState, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
@@ -103,7 +104,11 @@ const StackNavigate = () => {
         component={ChatGroups}
         options={{ title: "Discusion de groupe ", headerShown: true }}
       />
-
+      <Stack.Screen
+        name="ChatInstant"
+        component={ChatInstant}
+        options={{ title: "Messagerie privée ", headerShown: true }}
+      />
       <Tab.Screen
         name="Profil"
         component={TabNavigate}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, SafeAreaView, TextInput, View, Text, Image, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from 'jwt-decode';
-import ImageUserUpload from '../components/ImageUserUpload';
+import ImageUserUpload from '../components/EditUserComponent';
 import axios from 'axios';
 import BaseUrl from '../services/BaseUrl';
 const API_URL = BaseUrl

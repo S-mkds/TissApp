@@ -1,6 +1,7 @@
 import { View, Text, TextInput, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { format } from 'date-fns';
 import frLocale from 'date-fns/locale/fr';
 import axios from 'axios';
@@ -9,6 +10,7 @@ const API_URL = BaseUrl
 
 let timeoutId = null;
 const Contact = () => {
+    const navigation = useNavigation();
     const [search, setSearch] = useState('');
     const [usersSearch, setSearchUsers] = useState([]);
 
@@ -65,7 +67,9 @@ const Contact = () => {
                 onEndReachedThreshold={0.5}
                 keyExtractor={item => item.id.toString()}
                 renderItem={({ item }) => (
-                    <TouchableOpacity style={styles.userContainer} >
+                    <TouchableOpacity style={styles.userContainer} 
+                    onPress={() => navigation.navigate('ChatInstant', { userId: item.id })}
+                    >
                         {/* mettre l'image de l'utilisateur */}
                         <Image style={styles.listItemAvatar} source={item.imageUrl ? { uri: item.imageUrl, } : require('../assets/DefaultUser.png')} />
                         <Text style={styles.userName}>{item.firstName}  {item.lastName}</Text>

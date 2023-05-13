@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import frLocale from 'date-fns/locale/fr';
 import axios from 'axios';
 import BaseUrl from '../services/BaseUrl';
-import ChanelComponent from '../components/chanelPost.jsx';
+import ChanelPostComponent from '../components/ChanelPostComponent';
 import { useNavigation } from '@react-navigation/native';
 const API_URL = BaseUrl;
 
@@ -87,8 +87,8 @@ return () => clearInterval(interval);
     )}
 />
             <View style={styles.addGroupBtn}>
-                <ChanelComponent style={styles.addGroupBtn}>
-                </ChanelComponent>
+                <ChanelPostComponent style={styles.addGroupBtn}>
+                </ChanelPostComponent>
             </View>
         </View>
     );

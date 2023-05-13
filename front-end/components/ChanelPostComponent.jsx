@@ -10,7 +10,7 @@ import BaseUrl from '../services/BaseUrl';
 import { set } from 'date-fns';
 const API_URL = BaseUrl
 
-export default function ChanelComponent() {
+export default function ChanelPostComponent() {
     const [modalVisible, setModalVisible] = useState(false);
     const [postImageChanel, setPostImageChanel] = useState('');
     const [postImageTitle, setPostImageTitle] = useState('');
