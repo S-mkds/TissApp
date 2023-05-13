@@ -4,17 +4,19 @@ const bodyParser = require("body-parser");
 
 // Create server
 const http = require("http").createServer(app);
+const port = 3100;
+
 http
-  .listen(3100, () => {
-    console.log("Serveur Node en route sur le port:", 3100, "✅ ");
+  .listen(port, () => {
+    console.log("Serveur Node en route sur le port:", port, "✅");
   })
   .on("error", (err) => {
     if (err.code === "EADDRINUSE") {
       console.log(
-        "Port 3100 is already in use, please select a different port ❌."
+        `Le port ${port} est déjà utilisé. Veuillez sélectionner un port différent ❌.`
       );
     } else {
-      console.log(`An error occurred: ${err}`, "❌");
+      console.log("Une erreur s'est produite :", err, "❌");
     }
   });
 

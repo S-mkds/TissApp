@@ -1,18 +1,23 @@
-const db = require('../database');
+const db = require("../database");
 const Sequelize = db.Sequelize;
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 const { User } = db.sequelize.models;
 
 const newToken = (user) => {
-  token = jwt.sign({ userId: user.id }, 'RANDOM_TOKEN_SECRET', {
-    expiresIn: '24h',
+  token = jwt.sign({ userId: user.id }, "RANDOM_TOKEN_SECRET", {
+    expiresIn: "24h",
   });
   return { user, token };
 };
 
 exports.signup = async (req, res, next) => {
-  if (!req.body.firstName || !req.body.lastName || !req.body.email || !req.body.password) {
-    res.status(400).json({ error: 'Vous devez fournir tous les champs' });
+  if (
+    !req.body.firstName ||
+    !req.body.lastName ||
+    !req.body.email ||
+    !req.body.password
+  ) {
+    res.status(400).json({ error: "Vous devez fournir tous les champs" });
   } else {
     try {
       // Créer un nouvel utilisateur
@@ -21,16 +26,19 @@ exports.signup = async (req, res, next) => {
         lastName: req.body.lastName,
         email: req.body.email,
         password: req.body.password,
-      })
-      res.status(201).json(newToken(user))
+      });
+      res.status(201).json(newToken(user));
     } catch (error) {
       // Vérification de l'email unique d'un utilisateur
-      if(error.name === 'SequelizeValidationError' && error.errors[0].path === 'email'){
-        res.status(409).json({ error: 'Email déjà utilisé' });
-        console.log("Email déjà utilisé")
-      }else{
+      if (
+        error.name === "SequelizeValidationError" &&
+        error.errors[0].path === "email"
+      ) {
+        res.status(409).json({ error: "Email déjà utilisé" });
+        console.log("Email déjà utilisé");
+      } else {
         res.status(400).json({ error });
-        console.log(error)
+        console.log(error);
       }
     }
   }
@@ -42,7 +50,10 @@ exports.login = async (req, res, next) => {
 
     if (response.valid) {
       // Logique de isOnline lors d'une connexion celui passe en true, (lors d'une deconnexion penser à rajouter la methode PUT isOnline False)
-      await User.update({ isOnline: true }, { where: { id: response.user.id } });
+      await User.update(
+        { isOnline: true },
+        { where: { id: response.user.id } }
+      );
       const updatedUser = await User.findByPk(response.user.id);
       // console.log('User updated: ', updatedUser);
       res.status(201).json(newToken(response.user));
@@ -60,10 +71,11 @@ exports.editUser = async (req, res, next) => {
   try {
     const userObject = req.file
       ? {
-        ...JSON.parse(req.body.user),
-        imageUrl: `${req.protocol}://${req.get('host')}/public/${req.file.filename
+          ...JSON.parse(req.body.user),
+          imageUrl: `${req.protocol}://${req.get("host")}/public/${
+            req.file.filename
           }`,
-      }
+        }
       : { ...req.body };
 
     // console.log(userObject);
@@ -84,17 +96,19 @@ exports.getOneUser = (req, res, next) => {
 
 exports.getAllUsers = (req, res, next) => {
   const options = {
-    where: [Sequelize.where(
-      Sequelize.fn(
-        'concat',
-        Sequelize.col('firstName'),
-        Sequelize.col('lastName')
+    where: [
+      Sequelize.where(
+        Sequelize.fn(
+          "concat",
+          Sequelize.col("firstName"),
+          Sequelize.col("lastName")
+        ),
+        {
+          [Sequelize.Op.like]: `%${req.query.search}%`,
+        }
       ),
-      {
-        [Sequelize.Op.like]: `%${req.query.search}%`,
-      },
-
-    ), { deleted: false }],
+      { deleted: false },
+    ],
     // limit: 10,
   };
 
@@ -108,14 +122,15 @@ exports.getAllUsers = (req, res, next) => {
     });
 };
 
-// ROUTE ADMIN
+// CTRL ROUTE ADMIN DELETE USER
 exports.deleteUserAccount = async (req, res, next) => {
   try {
     const user = req.user.admin
       ? await User.findOne({ where: { id: req.params.id } })
       : req.user;
+    console.log(user.user.admin);
     await user.softDestroy();
-    res.status(200).json({ message: 'Compte supprimé' });
+    res.status(200).json({ message: "Compte supprimé" });
   } catch (error) {
     res.status(400).json({ error });
   }
@@ -125,9 +140,11 @@ exports.editUserAdmin = async (req, res, next) => {
   try {
     const userObject = req.file
       ? {
-        ...JSON.parse(req.body.user),
-        imageUrl: `${req.protocol}://${req.get('host')}/public/${req.file.filename}`,
-      }
+          ...JSON.parse(req.body.user),
+          imageUrl: `${req.protocol}://${req.get("host")}/public/${
+            req.file.filename
+          }`,
+        }
       : { ...req.body };
 
     // console.log(userObject);
@@ -143,6 +160,3 @@ exports.editUserAdmin = async (req, res, next) => {
     console.log(response.error);
   }
 };
-
-
-

@@ -26,7 +26,7 @@ exports.createPostChanel = async (req, res, next) => {
       creatorUserId: req.user.id,
     });
     if (req.file) {
-      postChanel.attachment = `${req.protocol}://${req.get("host")}/images/${
+      postChanel.attachment = `${req.protocol}://${req.get("host")}/public/${
         req.file.filename
       }`;
     }

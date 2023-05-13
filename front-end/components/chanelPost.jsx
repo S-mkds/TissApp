@@ -54,11 +54,16 @@ export default function ChanelComponent() {
     // Requete pour savegarder l'image d'un utilisateur et l'enregistrer en bdd
     async function postChanel() {
         if(postImageTitle === '' ) {
+            console.log('Veuillez remplir le champs titre')
            setTimeout(() => {
             setImageError(' Veuillez remplir le champs titre');
-              }, 2000);
+              }, 6000);
               setImageError('');
+              return;
         }
+        if(postImageChanel === '' ) {
+            console.log('Veuillez remplir le champs image')
+                }
           try {
             const token = await AsyncStorage.getItem('token');
             //Retrieve the userId with the token
@@ -77,47 +82,48 @@ export default function ChanelComponent() {
                 title: postImageTitle,
                 content: postImageDescription,
                 userId: userId,
-                imageUrl: '',
+                imageUrl: "",
             };
+
             if (postImageChanel) {
                 postData.imageUrl = `${Date.now()}_${postImageChanel.split('/').pop()}`;
                 postServeurChanel.append('post', JSON.stringify(postData));
-            } else { 
+              }
+                else {
+                postServeurChanel.append('post', JSON.stringify(postData));
+                }
+            if(postData.imageUrl === '') {
+                postData.imageUrl = ''
                 postServeurChanel.append('post', JSON.stringify(postData));
             }
+              if(postImageDescription === ''){
+                postData.content = 'Pas de description';
+                }
 
             console.log(postData);
             const response = await axios.post(`${API_URL}/api/chanel/create-chanel`, postServeurChanel, {
-              headers: {
+                headers: {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': `Bearer ${token}`,
               },
             });
             if (response.status === 201) {
-            setPostImageChanel('');
-            setPostImageTitle('');
-            setPostImageDescription('');
-                
-              setModalVisible(false);
-              setChanelImgSuccess('Chanel créé avec succès !');
+                console.log('Chanel créé avec succès !');
+            setChanelImgSuccess('Chanel créé avec succès !');
+            setTimeout(() => {
+                setModalVisible(false);
+            }, 4000);
             } else {
+            setImageError("Erreur lors de l'envoi du message", response.status);
               console.log('Erreur lors de la création du chanel');
               setImageError("Erreur lors de l'envoi du message");
             }
           } catch (error) {
-            console.log('Catch ERROR lors de la création du chanel');
-            console.log(error);
-            console.log(error.response.data.message)
-            console.log(error.response.data.message[0].message)
-            setImageError("Erreur réseau lors de l'envoi du message");
+            setImageError("Erreur réseau lors de l'envoi du message, Status: " + error.response.status +" " +JSON.stringify(error.response.data));
+            console.log('Catch ERROR lors de la création du chanel Status: ' + error.response.status +" " +JSON.stringify(error.response.data));
           }
           finally {
             // Remise à zéro du message d'erreur
-            setTimeout(() => {
-              setImageError('');
-              setChanelImgSuccess('');
-            //   setModalVisible(false);
-            }, 5000);
           }
       }
       useEffect(() => {
@@ -125,9 +131,9 @@ export default function ChanelComponent() {
             setTimeout(() => {
                 setChanelImgSuccess('');
                 setImageError('');
-            }, 5000);
+            }, 8000);
         }
-    }, [setChanelImgSuccess, setImageError]);
+    }, [setChanelImgSuccess, setImageError, postImageChanelError, postImageChanelSuccess]);
 
 
 
@@ -150,9 +156,15 @@ export default function ChanelComponent() {
                         <Text style={modalStyles.closeBtnModal}>❌</Text>
                     </TouchableOpacity>
                     <View style={modalStyles.modalContent}>
+                        
                         {/* IMMAGE USER */}
-                        <Image style={{ width: 60, height: 50 }} source={postImageChanel ? { uri: postImageChanel, } : require('../assets/Add_Image_icon.png')} />
+                        <Image style={{ width: 100, height: 100, margin: 10}} source={postImageChanel ? { uri: postImageChanel } : require('../assets/Add_Image_icon.png')} />
                         {/* BTN MODAL */}
+                        {/* icone X qui supprime si il y a une postImageChanel */}
+                        {postImageChanel !== '' && <TouchableOpacity onPress={() => setPostImageChanel('')} style={modalStyles.modalBtn}>
+                            <Text style={modalStyles.modalBtnText}>Supprimer l'image</Text>
+                        </TouchableOpacity>}
+
 
                         < TextInput
                             value={postImageTitle}
@@ -167,6 +179,13 @@ export default function ChanelComponent() {
                             placeholder="Entrez le nom de votre description ici"
                             placeholderTextColor={'white'}
                             style={modalStyles.input}
+                            {...(postImageDescription.length > 100 && { maxLength: 100 }) 
+                            // si la longueur de la description est supérieur à 100, on ne peut plus écrire
+                            }
+                            // si la valeur est vide alors postImageDescription = 'Pas de description'
+                            {...(postImageDescription === '' && { postImageDescription: 'Pas de description' })
+                            }
+
                         />
                         <TouchableOpacity onPress={addPicture} style={modalStyles.modalBtn}>
                             <Text style={modalStyles.modalBtnText}>Choisir une image</Text>
@@ -177,10 +196,9 @@ export default function ChanelComponent() {
                         <TouchableOpacity onPress={() => postChanel()} style={modalStyles.modalBtnSave}>
                             <Text style={modalStyles.modalBtnTextSave}>Enregistrer votre groupe</Text>
                         </TouchableOpacity>
-
-                    </View>
-                    {postImageChanelError !== '' && <Text style={modalStyles.errorText}>{postImageChanelError}</Text>}
+                        {postImageChanelError !== '' && <Text style={modalStyles.errorText}>{postImageChanelError}</Text>}
                         {postImageChanelSuccess !== '' && <Text style={modalStyles.successText}>{postImageChanelSuccess}</Text>}
+                    </View>
                 </View>
             </Modal>
   </View >
@@ -198,7 +216,6 @@ const imageUploaderStyles = StyleSheet.create({
 })
 const modalStyles = StyleSheet.create({
     Modal: {
-        backgroundColor: 'red',
         padding: 2,
         borderRadius: 10,
         width: '100%',
@@ -243,10 +260,10 @@ const modalStyles = StyleSheet.create({
         padding: 10,
         borderRadius: 10,
         width: '100%',
-        height: '40%',
+        height: '60%',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'space-around',
         marginBottom: 10,
     },
     modalBtn: {

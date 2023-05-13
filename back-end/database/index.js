@@ -50,15 +50,29 @@ sequelize
   .authenticate()
   .then(() => {
     console.log(
-      "Connexion à la base de données établie avec succès." + 3306 + " ✅"
+      "Connexion à la base de données établie avec succès. ->" +
+        " Host:" +
+        config.host +
+        " Port:" +
+        config.port +
+        " Database:" +
+        config.database +
+        " Username:" +
+        config.username +
+        " Password:" +
+        config.password +
+        " -> OK ✅"
     );
   })
   .catch((err) => {
     console.error(
       "❌ Impossible de se connecter à la base de données : vérifier le port disponnible :" +
-        3306,
+        config.port +
+        " ou le host disponnible :" +
+        config.host +
+        " ou les identifiants de connexion à la base de données votre fichier config.json",
       err,
-      "Erreur lors de la connexion ❌ vériifer le port/host disponnible, ou les identifiants de connexion à la base de données votre fichier config.json"
+      "Erreur lors de la connexion ❌ vérifer le port/host disponnible, ou les identifiants de connexion à la base de données votre fichier config.json"
     );
   });
 

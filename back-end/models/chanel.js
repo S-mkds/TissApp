@@ -20,8 +20,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       title: {
         type: DataTypes.TEXT,
-        unique: false,
-        allowNull: false,
+        unique: true,
+        allowNull: true,
       },
       imageUrl: {
         type: DataTypes.STRING,
@@ -35,22 +35,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      validate: {
-        eitherTitle() {
-          if (!this.title) {
-            throw new Error("Vous ne pouvez pas créer de publication vide !");
-          }
-        },
-        titleDoesntExistYet() {
-          if (this.title) {
-            Chanel.findOne({ where: { title: this.title } }).then((chanel) => {
-              if (chanel) {
-                throw new Error("Ce nom de chanel existe déjà !");
-              }
-            });
-          }
-        },
-      },
       modelName: "Chanel",
     }
   );

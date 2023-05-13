@@ -254,7 +254,6 @@ const styles = StyleSheet.create({
         borderRadius: 17,
         borderWidth: 3,
         borderColor: '#7452B7',
-        boxShadow: '0 0 5px black',
         backgroundColor: 'black',
         opacity: 0.8,
     },

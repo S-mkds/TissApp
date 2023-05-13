@@ -108,7 +108,6 @@ const styles = StyleSheet.create({
         height: 40,
         borderWidth: 1,
         borderColor: 'black',
-        boxShadow: '0 0 5px black',
         padding: 8,
         borderRadius: 10,
         backgroundColor: 'gray',
@@ -135,7 +134,6 @@ const styles = StyleSheet.create({
         borderBottomColor: 'gray',
         margin: 10,
         padding: 10,
-        boxShadow: '0 0 5px black',
     },
     listItemAvatar: {
         width: 50,
@@ -144,7 +142,6 @@ const styles = StyleSheet.create({
         marginRight: 8,
         borderWidth: 3,
         borderColor: '#7452B7',
-        boxShadow: '0 0 5px black',
         backgroundColor: 'black',
         opacity: 0.8,
     },

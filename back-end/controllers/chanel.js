@@ -2,31 +2,51 @@ const fs = require("fs");
 const db = require("../database");
 const { Chanel } = db.sequelize.models;
 
-exports.createChanel = (req, res, next) => {
-  let postObject = req.body;
-  if (req.file) {
-    postObject = JSON.parse(req.body.post);
-    postObject.imageUrl = `${req.protocol}://${req.get("host")}/public/${
-      req.file.filename
-    }`;
+exports.createChanel = async (req, res, next) => {
+  try {
+    let postObject = req.body;
+    if (req.file) {
+      postObject = JSON.parse(req.body.post);
+      postObject.imageUrl = `${req.protocol}://${req.get("host")}/public/${
+        req.file.filename
+      }`;
+    }
+    // Création de l'objet du post avec les données reçues
+    const chanel = new Chanel({
+      title: postObject.title, // Utilisation d'une chaîne vide si title est vide
+      content: postObject.content, // Utilisation d'une chaîne vide si content est vide
+      userId: req.user.id,
+      imageUrl: postObject.imageUrl, // Utilisation d'une chaîne vide si imageUrl est vide
+    });
+    if (chanel.title === "") {
+      return res.status(400).json({ error: "Title cannot be empty" });
+    }
+    // find on sequelize if title already exists without crashing the server; await is used to wait for the response from the database
+    const chanelExist = await Chanel.findOne({
+      where: { title: chanel.title },
+    });
+    if (chanelExist) {
+      return res.status(400).json({ error: "Title already exists" });
+    }
+    // check if title and content are not too long
+    if (chanel.title.length > 50) {
+      return res.status(400).json({ error: "Title is too long" });
+    }
+    if (chanel.content.length > 500) {
+      return res.status(400).json({ error: "Content is too long" });
+    }
+    // Sauvegarde de l'objet dans la base de données
+    chanel
+      .save()
+      .then(() => res.status(201).json({ message: "Chanel créé !" }))
+      .catch((error) => {
+        res.status(400).json({ error });
+        console.log(error);
+      });
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+    console.log(error);
   }
-
-  // Création de l'objet du post avec les données reçues
-  const chanel = new Chanel({
-    title: postObject.title,
-    content: postObject.content,
-    userId: req.user.id,
-    imageUrl: postObject.imageUrl,
-  });
-  // Sauvegarde de l'objet dans la base de données
-  chanel
-    .save()
-    .then(() => res.status(201).json({ message: "Chanel créé !" }))
-    .catch(
-      (error) => res.status(400).json({ error }) && console.log(error),
-      console.log(req.body),
-      console.log(req.user.id)
-    );
 };
 
 exports.getChanels = (req, res, next) => {

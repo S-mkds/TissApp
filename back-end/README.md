@@ -2,7 +2,7 @@
 
 Création d'un chat mobile avec React Native NodeJS, Express et Mysql
 
-## Utilisation du projet
+## Lancement du projet
 
 ## Commencer par cloner le projet
 
@@ -15,11 +15,14 @@ https://github.com/Tchessi/app-mobile-chat.git
 cd back-end
 npm install
 npm i nodemon
-nodemon server ou node server
-Pour des tests spécifiques (avec postman par exemple), le backend répond à l'adresse: http://localhost:3000
+npm run server || node app || nodemon app
+le port du server est: 3100
+Pour des tests spécifiques (avec postman par exemple), le backend répond à l'adresse: http://localhost:3100
 
 ```
+
 ## Base de données
+
 ```
 cd back-end
 npm i mysql -g 
@@ -32,7 +35,9 @@ npx sequelize-cli db:migrate
 // Faire attention à la date de migration. Assurez-vous que la table parente existe (Primary Key, Foreign Key)
 
 ```
+
 # Example: Génerer les models et les migrations
+
 ```
 User:
 npx sequelize-cli model:generate --name User --attributes firstName:string,lastName:string,email:string,password:string,imageUrl:string,deleted:boolean,isOnline:boolean,admin:boolean
@@ -42,8 +47,15 @@ npx sequelize-cli migration:generate --name migration_name_here --model User --g
 ```
 
 # Pour installer sequilize CLI
+
 ```
 npm install --save-dev sequelize-cli
+```
+
+## Crée un fichier public pour l'enregistrement des images
+
+```
+/public
 ```
 
 ## Technologies utilisées
@@ -101,3 +113,4 @@ Crée un fichier config/config.json et mettre en place la configuration de la ba
     "port": 3306,
     "dialect": "mysql"
   }
+}

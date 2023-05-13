@@ -1,27 +1,54 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, Image } from 'react-native';
+import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, TouchableHighlight, FlatList, } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import BaseUrl from '../services/BaseUrl';
+const API_URL = BaseUrl
+import jwt_decode from 'jwt-decode';
+
 import { useNavigation } from '@react-navigation/native';
 import io from 'socket.io-client';
 import { format } from 'date-fns';
 import frLocale from 'date-fns/locale/fr';
 import ImageMessageUpload from '../components/ImageMessageUpload';
-import BaseUrl from '../services/BaseUrl';
-import jwt_decode from 'jwt-decode';
 
-const API_URL = BaseUrl
-
-const Chat = () => {
-    const navigation = useNavigation();
+// const token = await AsyncStorage.getItem('token'); // récupérer le token des données stockées en local (AsyncStorage) pour l'envoyer dans les headers de la requête axios
+const ChatGroups = ({ route  }) => {
+    const { chanelId } = route.params;
+    console.log(chanelId);
     const [messages, setMessages] = useState([]);
+    const {title, SetTitle} = useState('');
     // Check Text error
     const [currentUser, setCurrentUser] = useState(null);
+    
+    // Récupérer le chanelId
+    const fetchChanelId = async () => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            const response = await axios.get(`${API_URL}/api/chanel/chanels/${chanelId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            if (response.status === 200) {
+                SetTitle(response.data.ChanelId);
+                const decodedToken = jwt_decode(token);
+                const userId = decodedToken.userId;
+                setCurrentUser(userId);
+            } else {
+                console.log('error fetch ChanelId');
+            }
+        } catch (error) {
+            console.error(error);
+            console.log('error fetch ChanelId');
+        }
+    };
 
     const fetchMessages = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
-            const response = await axios.get(`${API_URL}/api/posts`, {
+            const response = await axios.get(`${API_URL}/api/chanelPosts/get-all-posts-chanel`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -29,7 +56,7 @@ const Chat = () => {
 
             if (response.status === 200) {
                 setMessages(response.data.posts);
-
+                SetTitle(response.data.ChanelId);
                 const decodedToken = jwt_decode(token);
                 const userId = decodedToken.userId;
                 setCurrentUser(userId);
@@ -38,11 +65,14 @@ const Chat = () => {
             }
         } catch (error) {
             console.error(error);
+            console.log('error');
+
         }
     };
 
     // ADD Socket 
     useEffect(() => {
+        fetchChanelId();
         fetchMessages();
         const socket = io(`${API_URL}`);
         // setTimeout(() => {
@@ -64,6 +94,7 @@ const Chat = () => {
     return (
         // Message view
         <View style={styles.container}>
+            <Text style={styles.title}>Titre : {title}</Text>
             <FlatList
                 style={styles.messageListContainer}
                 inverted={true}
@@ -189,4 +220,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Chat;
+export default ChatGroups;

@@ -6,9 +6,12 @@ import frLocale from 'date-fns/locale/fr';
 import axios from 'axios';
 import BaseUrl from '../services/BaseUrl';
 import ChanelComponent from '../components/chanelPost.jsx';
+import { useNavigation } from '@react-navigation/native';
 const API_URL = BaseUrl;
 
 const Chanel = () => {
+    const navigation = useNavigation();
+
     const [search, setSearch] = useState('');
     const [groups, setGroups] = useState([
     ]);
@@ -30,19 +33,24 @@ const Chanel = () => {
                 },
             });
             if (response.status === 200) {
-                setGroups(response.data);
+                setGroups(response.data)
                 // console.log(JSON.stringify(response));
                 // console.log(groups);
             }
         } catch (error) {
-            console.log('request GETALL users, error !');
             console.log(error);
         }
     }
-
-useEffect(() => {
-    handleSearch(search);
-}, [search]);
+    const navigateChat = () => {
+        navigation.navigate('Chat-Group');
+    }
+    useEffect(() => {
+        handleSearch();
+const interval = setInterval(() => {
+    handleSearch();
+}, 1000);
+return () => clearInterval(interval);
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -62,15 +70,22 @@ useEffect(() => {
     onEndReachedThreshold={0.5}
     keyExtractor={(item) => item.id.toString()}
     renderItem={({ item }) => (
-        <TouchableOpacity style={styles.listChanel}>
-            <Image style={styles.imageChannel} source={{ uri: item.imageUrl ? item.imageUrl : 'https://www.w3schools.com/howto/img_avatar.png' }} />
-            <Text style={styles.textChanel}>Titre: {item.title}</Text>
-            <Text style={styles.textChanel}>Description: {item.content}</Text>
-            <Text style={styles.textChanelCreatedAt}>Crée le: {formatDate(item.createdAt)}</Text>
-        </TouchableOpacity>
+        <TouchableOpacity
+    style={styles.listChanel}
+    onPress={() => navigation.navigate('ChatGroups', { chanelId: item.id })}
+        >
+    <Image
+        style={styles.imageChannel}
+        source={{ uri: item.imageUrl ? item.imageUrl : '' }}
+    />
+    <Text style={styles.textChanel}>Serveur: {item.title}</Text>            
+    <Text style={styles.textChanel}>Description: {item.content}</Text>   
+    <Text style={styles.textChanelCreatedAt}>
+        Crée le: {formatDate(item.createdAt)}
+    </Text>
+</TouchableOpacity>
     )}
 />
-
             <View style={styles.addGroupBtn}>
                 <ChanelComponent style={styles.addGroupBtn}>
                 </ChanelComponent>
@@ -109,7 +124,6 @@ const styles = StyleSheet.create({
         height: 35,
         borderWidth: 1,
         borderColor: 'black',
-        boxShadow: '0 0 5px black',
         padding: 5,
         borderRadius: 10,
         backgroundColor: 'gray',
@@ -118,33 +132,26 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 12,
     },
+    dataContainer: {
+    },
     listContainer: {
         width: '100%',
-        borderBottomWidth: 1,
-        borderBottomColor: 'gray',
-        padding: 10,
-        boxShadow: '0 0 5px black',
-        borderBottomColor: 'gray',
-        borderBottomWidth: 1,
+        padding: 5,
     },
     listChanel: {
         backgroundColor: 'darkorange',
         transparent: true,
-        opacity: 0.8,
-        margin: 10,
+        opacity: 0.7,
         padding: 5,
         borderRadius: 10,
-        zIndex: 1,
-        borderBottomColor: 'gray',
-        borderBottomWidth: 1,
-        boxShadow: '0 0 5px black',
+        margin: 8,
     },
     imageChannel: {
-        width: 50,
-        height: 50,
-        margin: 5,
-        borderRadius: 100,
+        width: 60,
+        height: 80,
+        borderRadius: 10,
         alignSelf: 'flex-start',
+        backfaceVisibility: 'hidden',
     },
     textChanel: {
         color: 'white',
