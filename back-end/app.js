@@ -50,6 +50,7 @@ const userRoutes = require("./routes/user");
 const postsRoutes = require("./routes/posts");
 const chanelRoutes = require("./routes/channel");
 const chanelPostsRoutes = require("./routes/chanelposts");
+const instantPostsRoutes = require("./routes/instantpost");
 // Route non utilisé
 const likeRoute = require("./routes/like");
 const commentRoute = require("./routes/comment");
@@ -62,6 +63,7 @@ app.use("/api/auth", userRoutes);
 app.use("/api/posts", postsRoutes);
 app.use("/api/chanel", chanelRoutes);
 app.use("/api/chanelPosts", chanelPostsRoutes);
+app.use("/api/instantPosts", instantPostsRoutes);
 // Non utilisé
 app.use("/api/like", likeRoute);
 app.use("/api/comment", commentRoute);

@@ -50,9 +50,20 @@ exports.createChanel = async (req, res, next) => {
 };
 
 exports.getChanels = (req, res, next) => {
-  Chanel.findAll()
-    .then((chanels) => res.status(200).json({ chanels }))
-    .catch((error) => res.status(400).json({ error }));
+  Chanel.findAll({
+    include: [
+      {
+        model: db.User,
+        attributes: ["firstName", "lastName", "imageUrl"],
+      },
+    ],
+  })
+    .then((chanels) => {
+      res.status(200).json({ chanels });
+    })
+    .catch((error) => {
+      res.status(400).json({ error });
+    });
 };
 
 exports.getOneChanel = (req, res, next) => {

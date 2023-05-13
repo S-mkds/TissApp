@@ -44,6 +44,7 @@ const ChatGroups = ({ route }) => {
 
         try {
             const token = await AsyncStorage.getItem('token');
+            // /postsChanels/:chanelId/posts cette route permet de récupérer les messages d'un chanel grâce à son id mis en params avant le /posts 
             const response = await axios.get(`${API_URL}/api/chanelPosts/chanels/${chanelId}/posts`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,

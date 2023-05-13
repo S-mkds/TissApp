@@ -1,101 +1,81 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, TouchableHighlight, FlatList, } from 'react-native';
+import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, TouchableHighlight, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import BaseUrl from '../services/BaseUrl';
-const API_URL = BaseUrl
+const API_URL = BaseUrl;
 import jwt_decode from 'jwt-decode';
 
 import { useNavigation } from '@react-navigation/native';
 import io from 'socket.io-client';
 import { format } from 'date-fns';
 import frLocale from 'date-fns/locale/fr';
-import ImageUploadMessageChanelChat from '../components/ChatGroupsComponent';
+import ChatInstantComponent from '../components/ChatInstantComponent';
 
-const ChatInstant = ({ route }) => {
-    const { userId } = route.params;
-    // console.log(userId);
-    const [messages, setMessages] = useState([]);
-    const [title, setTitle] = useState('');
-    const [currentUser, setCurrentUser] = useState(null);
-  
-    const fetchChanelId = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token');
-        const response = await axios.get(`${API_URL}/api/chanel/chanels/${userId}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        if (response.status === 200) {
-            // console.log(response.data)
-            setTitle(response.data.chanel.title + ' - ' + response.data.chanel.id);
-        } else {
-          console.log('Error fetching ChanelId');
-        }
-      } catch (error) {
-        console.error(error);
-        console.log('Error fetching ChanelId');
+const ChatGroups = ({ route }) => {
+  const { userId } = route.params;
+  console.log("recuperation de l'id du recipiant", userId);
+
+  const [messages, setMessages] = useState([]);
+  const [recipiantId, setRecipiantId] = useState('');
+  const [currentUser, setCurrentUser] = useState(null);3
+const getCurrentUser = async () => {
+  const token = await AsyncStorage.getItem('token');
+  const decodedToken = jwt_decode(token);
+    const meUser = decodedToken.userId;
+    setCurrentUser(meUser);
+    console.log("recuperation de l'id du currentUser", meUser);
+}
+const fetchRecipiantId = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const response = await axios.get(`${API_URL}/api/instantPosts/instantposts/${userId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      console.log(response)
+      if (response.status === 200) {
+        console.log(response.data.posts); // Les données des instantposts
+        setRecipiantId(response.data.posts.recipientId);
+        setMessages(response.data.posts.messages);
+      } else {
+        console.log('Error fetching instantPosts get');
       }
-    };
+    } catch (error) {
+      console.error(error);
+      console.log('Error CATCH fetching instantPosts get');
+    }
+  };
 
-    const fetchMessages = async () => {
+useEffect(() => {
+    getCurrentUser(); // Appel pour récupérer l'id du currentUser
+    fetchRecipiantId();
+    const socket = io(`${API_URL}`);
+    setTimeout(() => {
+      console.log("socket connecté", socket.connected);
+    }, 2000);
+    socket.on('socketInstantPost', (msgGroupsSocket) => {
+      setMessages(messages => [...messages, msgGroupsSocket]);
+      console.log(msgGroupsSocket);
+    });
+  }, []);
 
-        try {
-            const token = await AsyncStorage.getItem('token');
-            const response = await axios.get(`${API_URL}/api/chanelPosts/chanels/${userId}/posts`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
-    
-            if (response.status === 200) {
-                // console.log(channelId);
-                // console.log(response.data);
-                setMessages(response.data.postsChanels);
-                const decodedToken = jwt_decode(token);
-                const userId = decodedToken.userId;
-                setCurrentUser(userId);
-            } else {
-                console.log('error');
-            }
-        } catch (error) {
-            console.error(error);
-            console.log('error Catch');
-        }
-    };
-    
-
-    // ADD Socket 
-    useEffect(() => {
-        // fetchChanelId();
-        fetchMessages();
-        const socket = io(`${API_URL}`);
-        setTimeout(() => {
-            console.log("socket connecté", socket.connected)
-        }, 2000);
-        socket.on('socketPostChanel', (msgGroupsSocket) => {
-            fetchMessages();
-            setMessages(messages => [...messages, msgGroupsSocket]);
-            console.log(msgGroupsSocket);
-        });
-    }, []);
-
-    // Formatage de la date
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        return format(date, "EEEE d MMMM yyyy 'à' HH:mm:ss", { locale: frLocale });
-    };
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return format(date, "EEEE d MMMM yyyy 'à' HH:mm:ss", { locale: frLocale });
+  };
 
     return (
         // Message view
         <View style={styles.container}>
-            <Text style={styles.title}>Serveur : {title}</Text>
+            
+            <Text style={styles.title}>recipiant:{recipiantId}, userid du destinateur: {userId}, UserId du proprietaire: {currentUser} </Text>
             <FlatList
                 style={styles.messageListContainer}
                 inverted={true}
-                onEndReached={fetchMessages}
+                onEndReached={fetchRecipiantId}
                 onEndReachedThreshold={0.5}
                 data={messages}
                 keyExtractor={item => `${item.id}-${item.createdAt}`}
@@ -116,7 +96,7 @@ const ChatInstant = ({ route }) => {
                 )}
             />
             <View style={styles.inputContainer}>
-            <ImageUploadMessageChanelChat chanelId={chanelId} />
+            <ChatInstantComponent  />
             </View >
         </View >
     );
@@ -229,4 +209,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ChatInstant;
+export default ChatGroups;

@@ -68,7 +68,7 @@ const Contact = () => {
                 keyExtractor={item => item.id.toString()}
                 renderItem={({ item }) => (
                     <TouchableOpacity style={styles.userContainer} 
-                    onPress={() => navigation.navigate('ChatInstant', { userId: item.id })}
+                    onPress={() => navigation.navigate('ChatInstant', { userId: item.id, recipientId: item.id })}
                     >
                         {/* mettre l'image de l'utilisateur */}
                         <Image style={styles.listItemAvatar} source={item.imageUrl ? { uri: item.imageUrl, } : require('../assets/DefaultUser.png')} />

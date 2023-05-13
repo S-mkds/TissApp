@@ -8,13 +8,14 @@ import BaseUrl from '../services/BaseUrl';
 import ChanelPostComponent from '../components/ChanelPostComponent';
 import { useNavigation } from '@react-navigation/native';
 const API_URL = BaseUrl;
+import jwt_decode from 'jwt-decode';
 
 const Chanel = () => {
     const navigation = useNavigation();
 
     const [search, setSearch] = useState('');
-    const [groups, setGroups] = useState([
-    ]);
+    const [groups, setGroups] = useState([]);
+    const [currentUser, setCurrentUser] = useState(null);
 
     const onSearchChange = (text) => {
         setSearch(text);
@@ -34,6 +35,8 @@ const Chanel = () => {
             });
             if (response.status === 200) {
                 setGroups(response.data)
+
+                // console.log(userId);
                 // console.log(JSON.stringify(response));
                 // console.log(groups);
             }
@@ -73,16 +76,17 @@ return () => clearInterval(interval);
         <TouchableOpacity
     style={styles.listChanel}
     onPress={() => navigation.navigate('ChatGroups', { chanelId: item.id })}
+    // console.log(item.id)
+
         >
+    <Text style={styles.textChanel}>{item.User.firstName} {item.User.lastName} </Text>   
     <Image
         style={styles.imageChannel}
         source={{ uri: item.imageUrl ? item.imageUrl : '' }}
     />
     <Text style={styles.textChanel}>Serveur: {item.title}</Text>            
-    <Text style={styles.textChanel}>Description: {item.content}</Text>   
-    <Text style={styles.textChanelCreatedAt}>
-        Crée le: {formatDate(item.createdAt)}
-    </Text>
+    <Text style={styles.textChanel}>Description: {item.content}</Text>
+    <Text style={styles.textChanelCreatedAt}>Crée le: {formatDate(item.createdAt)} </Text>
 </TouchableOpacity>
     )}
 />
