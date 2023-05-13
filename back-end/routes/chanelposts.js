@@ -6,7 +6,7 @@ const multer = require("../middleware/multer-config");
 
 router.post("/post-chanel", auth, multer, chanelPostsCtrl.createPostChanel);
 router.get("/get-one-posts-chanel/:id", auth, chanelPostsCtrl.getOnePostChanel);
-router.get("/get-all-posts-chanel", auth, chanelPostsCtrl.getAllPostsChanel);
+router.get("/chanels/:chanelId/posts", auth, chanelPostsCtrl.getAllPostsChanel); // route pour afficher tous les posts d'un chanel ciblé avec son id chanel dans l'url (req.params.chanelId)
 router.put(
   "/put-all-posts-chanel/:id",
   auth,

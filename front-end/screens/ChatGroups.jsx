@@ -11,52 +11,49 @@ import { useNavigation } from '@react-navigation/native';
 import io from 'socket.io-client';
 import { format } from 'date-fns';
 import frLocale from 'date-fns/locale/fr';
-import ImageMessageUpload from '../components/ImageMessageUpload';
+import ImageUploadMessageChanelChat from '../components/ChatGroupsComponent';
 
-// const token = await AsyncStorage.getItem('token'); // récupérer le token des données stockées en local (AsyncStorage) pour l'envoyer dans les headers de la requête axios
-const ChatGroups = ({ route  }) => {
+const ChatGroups = ({ route }) => {
     const { chanelId } = route.params;
-    console.log(chanelId);
+    // console.log(chanelId);
     const [messages, setMessages] = useState([]);
-    const {title, SetTitle} = useState('');
-    // Check Text error
+    const [title, setTitle] = useState('');
     const [currentUser, setCurrentUser] = useState(null);
-    
-    // Récupérer le chanelId
+  
     const fetchChanelId = async () => {
-        try {
-            const token = await AsyncStorage.getItem('token');
-            const response = await axios.get(`${API_URL}/api/chanel/chanels/${chanelId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
-            if (response.status === 200) {
-                SetTitle(response.data.ChanelId);
-                const decodedToken = jwt_decode(token);
-                const userId = decodedToken.userId;
-                setCurrentUser(userId);
-            } else {
-                console.log('error fetch ChanelId');
-            }
-        } catch (error) {
-            console.error(error);
-            console.log('error fetch ChanelId');
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await axios.get(`${API_URL}/api/chanel/chanels/${chanelId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        if (response.status === 200) {
+            // console.log(response.data)
+            setTitle(response.data.chanel.title + ' - ' + response.data.chanel.id);
+        } else {
+          console.log('Error fetching ChanelId');
         }
+      } catch (error) {
+        console.error(error);
+        console.log('Error fetching ChanelId');
+      }
     };
 
     const fetchMessages = async () => {
+
         try {
             const token = await AsyncStorage.getItem('token');
-            const response = await axios.get(`${API_URL}/api/chanelPosts/get-all-posts-chanel`, {
+            const response = await axios.get(`${API_URL}/api/chanelPosts/chanels/${chanelId}/posts`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
             });
-
+    
             if (response.status === 200) {
-                setMessages(response.data.posts);
-                SetTitle(response.data.ChanelId);
+                // console.log(channelId);
+                // console.log(response.data);
+                setMessages(response.data.postsChanels);
                 const decodedToken = jwt_decode(token);
                 const userId = decodedToken.userId;
                 setCurrentUser(userId);
@@ -65,23 +62,23 @@ const ChatGroups = ({ route  }) => {
             }
         } catch (error) {
             console.error(error);
-            console.log('error');
-
+            console.log('error Catch');
         }
     };
+    
 
     // ADD Socket 
     useEffect(() => {
         fetchChanelId();
         fetchMessages();
         const socket = io(`${API_URL}`);
-        // setTimeout(() => {
-        //     console.log("socket connecté", socket.connected)
-        // }, 2000);
-        socket.on('socketPost', (msgSocket) => {
+        setTimeout(() => {
+            console.log("socket connecté", socket.connected)
+        }, 2000);
+        socket.on('socketPostChanel', (msgGroupsSocket) => {
             fetchMessages();
-            setMessages(messages => [...messages, msgSocket]);
-            // console.log(msgSocket);
+            setMessages(messages => [...messages, msgGroupsSocket]);
+            console.log(msgGroupsSocket);
         });
     }, []);
 
@@ -94,7 +91,7 @@ const ChatGroups = ({ route  }) => {
     return (
         // Message view
         <View style={styles.container}>
-            <Text style={styles.title}>Titre : {title}</Text>
+            <Text style={styles.title}>Serveur : {title}</Text>
             <FlatList
                 style={styles.messageListContainer}
                 inverted={true}
@@ -119,7 +116,7 @@ const ChatGroups = ({ route  }) => {
                 )}
             />
             <View style={styles.inputContainer}>
-                <ImageMessageUpload />
+            <ImageUploadMessageChanelChat chanelId={chanelId} />
             </View >
         </View >
     );
@@ -131,6 +128,19 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#0F1828',
     },
+    title: {
+        fontSize: 10,
+        fontWeight: 'bold',
+        color: 'white',
+        textAlign: 'center',
+        marginTop: 10,
+        marginBottom: 10,
+        backgroundColor: '#152033',
+        maxWidth: '95%',
+        alignSelf: 'center',
+        padding: 10,
+        borderRadius: 20,
+    },
 
     messageListContainer: {
         flex: 1,
@@ -140,7 +150,6 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         margin: 10,
         padding: 10,
-
     },
     messageContainer: {
         flex: 1,
@@ -155,7 +164,7 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,
         paddingTopleft: -20,
-        marginBottom: 5,
+        marginBottom: 15,
         opacity: 0.9,
     },
 

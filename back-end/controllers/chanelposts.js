@@ -1,60 +1,91 @@
 const fs = require("fs");
 const db = require("../database");
 const { PostsChanel } = db.sequelize.models;
+const io = require("../app");
 
-// post a chanel
+// create a chanel post
 exports.createPostChanel = async (req, res, next) => {
+  let postObject = req.body;
+  if (req.file) {
+    postObject = JSON.parse(req.body.post);
+    postObject.imageUrl = `${req.protocol}://${req.get("host")}/public/${
+      req.file.filename
+    }`;
+  }
   try {
-    if (req.body.content === "") {
-      return res.status(400).json({ error: "You can't post an empty message" });
-    }
-    // check chanel if exist or not and if user is member of this chanel
-    const chanel = await db.Chanel.findOne({
-      where: { id: req.body.chanelId },
-    }); // check if chanel exist
-    if (!chanel) {
-      return res
-        .status(400)
-        .json({ error: "Chanel not found! Channel: " + req.body.chanelId });
-    }
-    const user = await db.User.findOne({ where: { id: req.user.id } }); // check if user exist
-    if (!user) {
-      return res.status(400).json({ error: "User not found" });
-    }
-    const postChanel = new PostsChanel({
-      ...req.body,
-      creatorUserId: req.user.id,
+    let postChanel = await PostsChanel.create({
+      ...postObject,
+      chanelId: req.query.id, // Utilisez req.query.id pour récupérer l'ID du canal depuis les paramètres de la requête
+      userId: req.user.id,
     });
-    if (req.file) {
-      postChanel.attachment = `${req.protocol}://${req.get("host")}/public/${
-        req.file.filename
-      }`;
-    }
-    await postChanel.save();
-    res.status(201).json({
-      message: "Post on chanel created ! Chanel: " + req.body.chanelId,
-      message: "Postid on chanel created ! postId: " + req.body.id,
+
+    postChanel = await PostsChanel.findOne({
+      where: { id: postChanel.id },
+      include: [db.User],
     });
+
+    const msgGroupsSocket = {
+      id: postChanel.id,
+      userId: postChanel.userId,
+      content: postChanel.content,
+      createdAt: postChanel.createdAt,
+      updatedAt: postChanel.updatedAt,
+      imageUrl: postChanel.imageUrl,
+      userImageUrl: postChanel.User.imageUrl,
+      userFirstName: postChanel.User.firstName,
+      userLastName: postChanel.User.lastName,
+    };
+
+    io.emit("socketPostChanel", msgGroupsSocket);
+
+    res.status(201).json({ postChanel });
   } catch (error) {
-    res.status(400).json({ error });
+    console.log(error);
+    res.status(400).json({ error: error.message });
   }
 };
 
-// get all chanels
+// get all chanels posts by chanel id (route: GET /api/chanels/:chanelId/posts)
 exports.getAllPostsChanel = (req, res, next) => {
-  PostsChanel.findAll()
+  const { chanelId } = req.params; // Récupérer l'id du canal depuis les paramètres de la route
+  const limit = 500;
+  const page = parseInt(req.query.page) || 1;
+
+  const options = {
+    include: [
+      {
+        model: db.User,
+      },
+    ],
+    limit,
+    offset: limit * (page - 1),
+    order: [["createdAt", "DESC"]],
+  };
+
+  if (req.query.userId) {
+    options.where = {
+      userId: parseInt(req.query.userId),
+      chanelId: parseInt(chanelId), // Ajouter la condition chanelId pour filtrer les messages par chanelId
+    };
+  } else {
+    options.where = {
+      chanelId: parseInt(chanelId), // Ajouter la condition chanelId pour filtrer les messages par chanelId
+    };
+  }
+
+  PostsChanel.findAll(options)
     .then((postsChanels) => res.status(200).json({ postsChanels }))
     .catch((error) => res.status(400).json({ error }));
 };
 
-// get one chanel
+// get one chanel post
 exports.getOnePostChanel = (req, res, next) => {
   PostsChanel.findOne({ where: { id: req.params.id } })
     .then((postChanel) => res.status(200).json({ postChanel }))
     .catch((error) => res.status(400).json({ error }));
 };
 
-// modify a chanel
+// modify a chanel post
 exports.modifyPostChanel = (req, res, next) => {
   PostsChanel.findOne({ where: { id: req.params.id } })
     .then((postChanel) => {

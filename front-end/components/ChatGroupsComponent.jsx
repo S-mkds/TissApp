@@ -8,7 +8,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import BaseUrl from '../services/BaseUrl';
 const API_URL = BaseUrl;
 
-export default function ImageUploadMessageChanelChat() {
+export default function ImageUploadMessageChanelChat({ chanelId }) {
+    // Récuperation du chanelId depuis le composant ChatGroups (props) pour l'envoyer dans la requete POST en paramètre 
+    // console.log(chanelId)
     const [image, setImage] = useState(null);
     const [newMessage, setNewMessage] = useState('');
 
@@ -90,10 +92,13 @@ export default function ImageUploadMessageChanelChat() {
                 }
                 // console.log(postData);
 
-                const response = await axios.post(`${API_URL}/api/posts`, postMessage, {
+                const response = await axios.post(`${API_URL}/api/chanelPosts/post-chanel`, postMessage, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         'Authorization': `Bearer ${token}`,
+                    },
+                    params: {
+                        id: chanelId, // Ajoutez l'ID du canal aux paramètres de la requête
                     },
                 });
 
