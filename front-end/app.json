@@ -24,10 +24,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/NewLogo.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.samir13011.TissApp"
     },
     "web": {
       "favicon": "./assets/NewLogo.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "873f8503-2af7-40f7-9f09-f0f687e97aef"
+      }
     }
   }
 }
