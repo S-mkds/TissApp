@@ -43,12 +43,10 @@ const ChatGroups = ({ route }) => {
           console.log("Erreur lors de la récupération des messages du destinataire (catch)");
         }
       };
+
       
       useEffect(() => {
         fetchRecipientId(recipientId);
-        if (recipientId && currentUser) {
-          fetchRecipientId(recipientId);
-        }
         const socket = io(`${API_URL}`);
         setTimeout(() => {
           // console.log("soket connecté" + socket.connected + "recipientId:" + recipientId + "currentUser:" + currentUser)
@@ -60,7 +58,7 @@ const ChatGroups = ({ route }) => {
           console.log(msgMpSocket);
         }
         );
-      }, [recipientId]);
+      }, []);
   
     const formatDate = (dateString) => {
       const date = new Date(dateString);
@@ -76,7 +74,7 @@ const ChatGroups = ({ route }) => {
         <FlatList
                 style={styles.messageListContainer}
                 inverted={true}
-                onEndReached={fetchRecipientId}
+                onEndReached={() => fetchRecipientId(recipientId)}
                 onEndReachedThreshold={0.5}
                 data={messages}
                 keyExtractor={item => `${item.id}-${item.createdAt}`}
