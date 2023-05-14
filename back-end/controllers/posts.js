@@ -1,15 +1,13 @@
-const fs = require('fs');
-const db = require('../database');
+const fs = require("fs");
+const db = require("../database");
 const { Post } = db.sequelize.models;
-const io = require('../app');
-
-
+const io = require("../app");
 
 exports.createPost = async (req, res, next) => {
   let postObject = req.body;
   if (req.file) {
     postObject = JSON.parse(req.body.post);
-    postObject.imageUrl = `${req.protocol}://${req.get('host')}/public/${
+    postObject.imageUrl = `${req.protocol}://${req.get("host")}/public/${
       req.file.filename
     }`;
   }
@@ -18,7 +16,10 @@ exports.createPost = async (req, res, next) => {
       ...postObject,
       userId: req.user.id,
     });
-    post = await Post.findOne({ where: { id: post.id }, include: db.User });
+    post = await Post.findOne({
+      where: { id: post.id },
+      include: db.User,
+    });
     const msgSocket = {
       id: post.id,
       userId: post.userId,
@@ -28,9 +29,9 @@ exports.createPost = async (req, res, next) => {
       imageUrl: post.imageUrl,
       userImageUrl: post.User.imageUrl,
       userFirstName: post.User.firstName,
-      userLastName: post.User.lastName
+      userLastName: post.User.lastName,
     };
-    io.emit('socketPost', msgSocket);
+    io.emit("socketPost", msgSocket);
     // console.log('io emit log here :', msgSocket);
     res.status(201).json({ post });
   } catch (error) {
@@ -64,7 +65,7 @@ exports.getAllPosts = (req, res, next) => {
     ],
     limit,
     offset: limit * (page - 1),
-    order: [['createdAt', 'DESC']],
+    order: [["createdAt", "DESC"]],
   };
 
   if (req.query.userId) {
@@ -78,19 +79,17 @@ exports.getAllPosts = (req, res, next) => {
     .catch((error) => res.status(400).json({ error }));
 };
 
-
-
 exports.modifyPost = (req, res, next) => {
   const postObject = req.file
     ? {
         ...JSON.parse(req.body.post),
-        imageUrl: `${req.protocol}://${req.get('host')}/public/${
+        imageUrl: `${req.protocol}://${req.get("host")}/public/${
           req.file.filename
         }`,
       }
     : { ...req.body };
 
-  if(req.user.isAdmin) {
+  if (req.user.isAdmin) {
     Post.findOne({
       where: { id: req.params.id },
       include: db.User,
@@ -132,7 +131,7 @@ exports.deletePost = (req, res, next) => {
       post
         .destroy()
         .then(() =>
-          res.status(200).json({ message: 'Publication supprimée !' })
+          res.status(200).json({ message: "Publication supprimée !" })
         )
         .catch((error) => res.status(400).json({ error }));
     })

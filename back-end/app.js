@@ -26,6 +26,8 @@ io.on("connection", (socket) => {
   console.log("user connected socket io ✅");
   socket.on("disconnect", () => {
     console.log("user disconnected socket ❌");
+    // si l'utilisateur se déconnecte alors mettre isOnline à false
+    socket.broadcast.emit("user disconnected");
   });
 });
 module.exports = io;

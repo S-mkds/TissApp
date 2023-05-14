@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, TouchableHighlight, FlatList } from 'react-native';
+import { View, Text, Image, StyleSheet, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import BaseUrl from '../services/BaseUrl';
 const API_URL = BaseUrl;
 import jwt_decode from 'jwt-decode';
-
 import { useNavigation } from '@react-navigation/native';
 import io from 'socket.io-client';
 import { format } from 'date-fns';
@@ -14,6 +13,7 @@ import frLocale from 'date-fns/locale/fr';
 import ChatInstantComponent from '../components/ChatInstantComponent';
 
 const ChatGroups = ({ route }) => {
+
     const { recipientId } = route.params;
     // console.log("ID du destinataire :", recipientId);
     const [messages, setMessages] = useState([]);
@@ -70,7 +70,8 @@ const ChatGroups = ({ route }) => {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>
-          Destinataire : {recipientId} , ID utilisateur actuel : {currentUser}
+          Destinataire : {recipientId} {"\n"} 
+          Émetteur : {currentUser}
         </Text>
         <FlatList
                 style={styles.messageListContainer}

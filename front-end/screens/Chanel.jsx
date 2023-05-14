@@ -35,7 +35,6 @@ const Chanel = () => {
             });
             if (response.status === 200) {
                 setGroups(response.data)
-
                 // console.log(userId);
                 // console.log(JSON.stringify(response));
                 // console.log(groups);
@@ -44,16 +43,15 @@ const Chanel = () => {
             console.log(error);
         }
     }
-    const navigateChat = () => {
-        navigation.navigate('Chat-Group');
-    }
     useEffect(() => {
-        handleSearch();
-const interval = setInterval(() => {
-    handleSearch();
-}, 1000);
-return () => clearInterval(interval);
-    }, []);
+        handleSearch(search);
+        const interval = setInterval(() => {
+        handleSearch(search);
+        }
+        , 1000);
+        return () => clearInterval(interval);
+    }, [search]);
+
 
     return (
         <View style={styles.container}>
@@ -70,6 +68,7 @@ return () => clearInterval(interval);
             <FlatList
     style={styles.listContainer}
     data={groups.chanels}
+    inverted={true}
     onEndReachedThreshold={0.5}
     keyExtractor={(item) => item.id.toString()}
     renderItem={({ item }) => (
@@ -77,7 +76,6 @@ return () => clearInterval(interval);
     style={styles.listChanel}
     onPress={() => navigation.navigate('ChatGroups', { chanelId: item.id })}
     // console.log(item.id)
-
         >
     <Text style={styles.textChanel}>{item.User.firstName} {item.User.lastName} </Text>   
     <Image
@@ -87,9 +85,9 @@ return () => clearInterval(interval);
     <Text style={styles.textChanel}>Serveur: {item.title}</Text>            
     <Text style={styles.textChanel}>Description: {item.content}</Text>
     <Text style={styles.textChanelCreatedAt}>Crée le: {formatDate(item.createdAt)} </Text>
-</TouchableOpacity>
+    </TouchableOpacity>
     )}
-/>
+    />
             <View style={styles.addGroupBtn}>
                 <ChanelPostComponent style={styles.addGroupBtn}>
                 </ChanelPostComponent>

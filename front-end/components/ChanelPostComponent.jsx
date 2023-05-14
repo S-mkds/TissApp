@@ -244,6 +244,7 @@ const modalStyles = StyleSheet.create({
         fontSize: 10,
         backgroundColor: 'gray',
         opacity: 0.8,
+        color: 'white',
     },
     closeBtn: {
         backgroundColor: 'rgba(0,0,0,0.5)',

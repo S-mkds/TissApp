@@ -1,32 +1,33 @@
 const db = require("../database");
+const fs = require("fs");
 const { InstantPost } = db.sequelize.models;
-const moment = require("moment");
 const { deleteFile } = require("../services/file-removal");
 const { Op } = require("sequelize");
+const io = require("../app");
 
 exports.createInstantPost = async (req, res, next) => {
   let postObject = req.body;
-  // Vérifiez si la propriété imageUrl est définie, sinon définissez-la sur null
-  if (!postObject.imageUrl) {
-    postObject.imageUrl = null;
-  }
+  const recipientId = req.query.recipientId; // Utilisez req.query.id pour récupérer l'ID du destinataire depuis les paramètres de la requête
+  // console.log(req.query);
+  // console.log("params", req.params, "req", req);
   if (req.file) {
     postObject = JSON.parse(req.body.post);
     postObject.imageUrl = `${req.protocol}://${req.get("host")}/public/${
       req.file.filename
     }`;
   }
-  const { recipientId } = req.params; // Utilisez recipientId comme paramètre plutôt que dans req.body
-  console.log("recipientId", recipientId);
-  console.log("userId", req.user.id);
   try {
+    console.log("recipientId", recipientId); // Utilisez le même nom de paramètre ici
+    console.log("userId", req.user.id);
+
     let post = await InstantPost.create({
       ...postObject,
       userId: req.user.id,
-      recipientId: recipientId, // Utilisez l'ID du destinataire fourni
+      recipientId: recipientId, // Utilisez le même nom de paramètre ici
     });
     console.log("recipientId", recipientId);
     console.log("userId", req.user.id);
+
     post = await InstantPost.findOne({
       where: { id: post.id },
       include: db.User,
@@ -45,7 +46,13 @@ exports.createInstantPost = async (req, res, next) => {
     };
     io.emit("socketInstantPost", msgMpSocket);
     // console.log('io emit log here :', msgSocket);
+    if (req) {
+      // console.log("req", req + "ok" + "post", post);
+    }
     res.status(201).json({ post });
+    if (res) {
+      // console.log("res", res + "ok" + "post", post);
+    }
   } catch (error) {
     console.log(error);
     res.status(400).json({ error });
@@ -57,7 +64,7 @@ exports.getInstantPosts = (req, res, next) => {
   const { userId, recipientId } = req.params;
   console.log("recipientId", recipientId);
   console.log("userId", req.user.id);
-  console.log(req.params);
+  // console.log(req.params);
 
   // Vérification des paramètres obligatoires
   if (!userId || !recipientId) {
@@ -87,7 +94,7 @@ exports.getInstantPosts = (req, res, next) => {
     order: [["createdAt", "DESC"]],
   })
     .then((posts) => {
-      console.log("Messages récupérés :", posts);
+      // console.log("Messages récupérés :", posts);
       res.status(200).json({ posts });
     })
     .catch((error) => {

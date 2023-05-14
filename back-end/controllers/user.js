@@ -128,7 +128,7 @@ exports.deleteUserAccount = async (req, res, next) => {
     const user = req.user.admin
       ? await User.findOne({ where: { id: req.params.id } })
       : req.user;
-    console.log(user.user.admin);
+    // console.log(user.user.admin);
     await user.softDestroy();
     res.status(200).json({ message: "Compte supprimé" });
   } catch (error) {

@@ -18,6 +18,8 @@ exports.createPostChanel = async (req, res, next) => {
       chanelId: req.query.id, // Utilisez req.query.id pour récupérer l'ID du canal depuis les paramètres de la requête
       userId: req.user.id,
     });
+    console.log("chanelId", req.query.id);
+    console.log("userId", req.user.id);
 
     postChanel = await PostsChanel.findOne({
       where: { id: postChanel.id },
@@ -37,8 +39,13 @@ exports.createPostChanel = async (req, res, next) => {
     };
 
     io.emit("socketPostChanel", msgGroupsSocket);
-
+    if (req) {
+      // console.log("req", req + "ok" + "postChanel", postChanel);
+    }
     res.status(201).json({ postChanel });
+    if (res) {
+      // console.log("res", res + "ok" + "postChanel", postChanel);
+    }
   } catch (error) {
     console.log(error);
     res.status(400).json({ error: error.message });

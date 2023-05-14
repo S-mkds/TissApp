@@ -1,6 +1,7 @@
 const fs = require("fs");
 const db = require("../database");
 const { Chanel } = db.sequelize.models;
+const sequelize = require("sequelize");
 
 exports.createChanel = async (req, res, next) => {
   try {
@@ -56,6 +57,11 @@ exports.getChanels = (req, res, next) => {
         model: db.User,
         attributes: ["firstName", "lastName", "imageUrl"],
       },
+    ],
+    where: [
+      sequelize.where(sequelize.fn("concat", sequelize.col("title")), {
+        [sequelize.Op.like]: `%${req.query.search}%`,
+      }),
     ],
   })
     .then((chanels) => {

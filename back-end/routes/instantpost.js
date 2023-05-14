@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const instantpostCtrl = require("../controllers/instantpost");
 const auth = require("../middleware/auth");
 const multer = require("../middleware/multer-config");
-const instantpostCtrl = require("../controllers/instantpost");
 
 router.post("/", auth, multer, instantpostCtrl.createInstantPost);
 router.get(
