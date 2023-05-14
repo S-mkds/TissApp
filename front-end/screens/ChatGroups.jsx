@@ -79,7 +79,7 @@ const ChatGroups = ({ route }) => {
         socket.on('socketPostChanel', (msgGroupsSocket) => {
             fetchMessages();
             setMessages(messages => [...messages, msgGroupsSocket]);
-            console.log(msgGroupsSocket);
+            // console.log(msgGroupsSocket);
         });
     }, []);
 

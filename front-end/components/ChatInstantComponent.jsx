@@ -6,9 +6,11 @@ import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BaseUrl from '../services/BaseUrl';
+import jwt_decode from 'jwt-decode';
 const API_URL = BaseUrl;
 
-export default function ChatInstantComponent() {
+export default function ChatInstantComponent({ recipientId }) {
+    // console.log("recuperation de l'id du recipiant", recipientId);
     const [image, setImage] = useState(null);
     const [newMessage, setNewMessage] = useState('');
 
@@ -60,6 +62,11 @@ export default function ChatInstantComponent() {
     };
 
     async function handleMessage() {
+        const token = await AsyncStorage.getItem('token');
+        const decodedToken = jwt_decode(token);
+        const userId = decodedToken.userId;
+        console.log("recuperation de l'id du currentUser", userId);
+        console.log("recuperation de l'id du recipiant", recipientId); // Ajout de cette ligne pour afficher la valeur de recipientId      
         if (isSending) {
             setMessageQueue([...messageQueue, newMessage]);
             return;
@@ -90,12 +97,20 @@ export default function ChatInstantComponent() {
                 }
                 // console.log(postData);
 
-                const response = await axios.post(`${API_URL}/api/posts`, postMessage, {
-                    headers: {
+                const response = await axios.post(
+                    `${API_URL}/api/instantPosts/`,
+                    postMessage,
+                    {
+                      headers: {
                         'Content-Type': 'multipart/form-data',
-                        'Authorization': `Bearer ${token}`,
-                    },
-                });
+                        Authorization: `Bearer ${token}`,
+                      },
+                      data: {
+                        recipientId: recipientId,
+                        userId: userId,
+                      },
+                    }
+                  );
 
                 if (response.status === 201) {
                     setNewMessage('');

@@ -5,7 +5,11 @@ const multer = require("../middleware/multer-config");
 const instantpostCtrl = require("../controllers/instantpost");
 
 router.post("/", auth, multer, instantpostCtrl.createInstantPost);
-router.get("/instantposts/:id", auth, instantpostCtrl.getInstantPosts); // Utilisation de "/instantposts/:id" pour la requête GET
+router.get(
+  "/instantposts/:userId/:recipientId",
+  auth,
+  instantpostCtrl.getInstantPosts
+); // Utilisation de "/instantposts/:id" pour la requête GET
 router.put("/instantpost/:id", auth, multer, instantpostCtrl.modifyInstantPost);
 router.delete("/instantpost/:id", auth, instantpostCtrl.deleteInstantPost);
 

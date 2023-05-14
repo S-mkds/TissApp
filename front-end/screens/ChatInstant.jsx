@@ -14,68 +14,68 @@ import frLocale from 'date-fns/locale/fr';
 import ChatInstantComponent from '../components/ChatInstantComponent';
 
 const ChatGroups = ({ route }) => {
-  const { userId } = route.params;
-  console.log("recuperation de l'id du recipiant", userId);
+    const { recipientId } = route.params;
+    // console.log("ID du destinataire :", recipientId);
+    const [messages, setMessages] = useState([]);
+    const [currentUser, setCurrentUser] = useState('');
 
-  const [messages, setMessages] = useState([]);
-  const [recipiantId, setRecipiantId] = useState('');
-  const [currentUser, setCurrentUser] = useState(null);3
-const getCurrentUser = async () => {
-  const token = await AsyncStorage.getItem('token');
-  const decodedToken = jwt_decode(token);
-    const meUser = decodedToken.userId;
-    setCurrentUser(meUser);
-    console.log("recuperation de l'id du currentUser", meUser);
-}
-const fetchRecipiantId = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      const response = await axios.get(`${API_URL}/api/instantPosts/instantposts/${userId}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      console.log(response)
-      if (response.status === 200) {
-        console.log(response.data.posts); // Les données des instantposts
-        setRecipiantId(response.data.posts.recipientId);
-        setMessages(response.data.posts.messages);
-      } else {
-        console.log('Error fetching instantPosts get');
-      }
-    } catch (error) {
-      console.error(error);
-      console.log('Error CATCH fetching instantPosts get');
-    }
-  };
 
-useEffect(() => {
-    getCurrentUser(); // Appel pour récupérer l'id du currentUser
-    fetchRecipiantId();
-    const socket = io(`${API_URL}`);
-    setTimeout(() => {
-      console.log("socket connecté", socket.connected);
-    }, 2000);
-    socket.on('socketInstantPost', (msgGroupsSocket) => {
-      setMessages(messages => [...messages, msgGroupsSocket]);
-      console.log(msgGroupsSocket);
-    });
-  }, []);
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return format(date, "EEEE d MMMM yyyy 'à' HH:mm:ss", { locale: frLocale });
-  };
-
+    const fetchRecipientId = async (recipientId) => {
+        try {
+          const token = await AsyncStorage.getItem('token');
+          const decodedToken = jwt_decode(token);
+          const currentUser = decodedToken.userId;
+            setCurrentUser(currentUser);
+          // console.log("Récupération des messages du destinataire", "userId:", currentUser, "recipientId:", recipientId);
+          const response = await axios.get(`${API_URL}/api/instantPosts/instantposts/${currentUser}/${recipientId}`, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+            },
+          });
+          if (response.status === 200) {
+            // console.log("response data ici", response.data);
+            setMessages(response.data.posts);
+          } else {
+            console.log("Erreur lors de la récupération des messages du destinataire");
+          }
+        } catch (error) {
+          console.error(error);
+          console.log("Erreur lors de la récupération des messages du destinataire (catch)");
+        }
+      };
+      
+      useEffect(() => {
+        fetchRecipientId(recipientId);
+        if (recipientId && currentUser) {
+          fetchRecipientId(recipientId);
+        }
+        const socket = io(`${API_URL}`);
+        setTimeout(() => {
+          // console.log("soket connecté" + socket.connected + "recipientId:" + recipientId + "currentUser:" + currentUser)
+        }, 2000);
+        console.log("socket connecté", socket.connected)
+        socket.on('socketInstantPost', (msgMpSocket) => {
+          fetchRecipientId(recipientId);
+          setMessages((messages) => [...messages, msgMpSocket]);
+          console.log(msgMpSocket);
+        }
+        );
+      }, [recipientId]);
+  
+    const formatDate = (dateString) => {
+      const date = new Date(dateString);
+      return format(date, "EEEE d MMMM yyyy 'à' HH:mm:ss", { locale: frLocale });
+    };
+  
     return (
-        // Message view
-        <View style={styles.container}>
-            
-            <Text style={styles.title}>recipiant:{recipiantId}, userid du destinateur: {userId}, UserId du proprietaire: {currentUser} </Text>
-            <FlatList
+      <View style={styles.container}>
+        <Text style={styles.title}>
+          Destinataire : {recipientId} , ID utilisateur actuel : {currentUser}
+        </Text>
+        <FlatList
                 style={styles.messageListContainer}
                 inverted={true}
-                onEndReached={fetchRecipiantId}
+                onEndReached={fetchRecipientId}
                 onEndReachedThreshold={0.5}
                 data={messages}
                 keyExtractor={item => `${item.id}-${item.createdAt}`}
@@ -96,11 +96,12 @@ useEffect(() => {
                 )}
             />
             <View style={styles.inputContainer}>
-            <ChatInstantComponent  />
+            <ChatInstantComponent recipientId={recipientId} />
             </View >
         </View >
     );
 };
+
 
 const styles = StyleSheet.create({
     // Container

@@ -9,6 +9,8 @@ module.exports = (sequelize, DataTypes) => {
   class InstantPost extends Model {
     static associate(models) {
       InstantPost.belongsTo(models.User, { foreignKey: "userId" });
+      InstantPost.hasMany(models.Comments);
+      InstantPost.hasMany(models.Likes);
     }
 
     readableCreatedAt() {
