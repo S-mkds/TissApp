@@ -1,10 +1,30 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import jwt_decode from "jwt-decode";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FontAwesome5, Ionicons, Entypo } from '@expo/vector-icons';
 
-const Footer = () => {
+const Footer = ({current}) => {
+	const [userId, setUserId] = useState(null);
 	const navigation = useNavigation();
+
+	useEffect(() => {
+		const getUserId = async () => {
+			const token = await AsyncStorage.getItem('token');
+			const decodedToken = jwt_decode(token);
+			setUserId(decodedToken.userId);
+		};
+
+		getUserId();
+	}, []);
+
+	const navigateToProfile = () => {
+		if (userId) {
+			navigation.navigate('Profil', { userId });
+		}
+	};
+
 	return (
 		<View>
 			<View style={styles.footer}>
@@ -15,7 +35,7 @@ const Footer = () => {
 					size={30}
 					onPress={() => navigation.navigate('Contacts')}
 					activeOpacity={0.7}
-					underlayColor="#ffff" 
+					underlayColor="#ffff"
 				/>
 				<Ionicons
 					style={styles.chatIcon}
@@ -24,16 +44,16 @@ const Footer = () => {
 					size={30}
 					onPress={() => navigation.navigate('Chat')}
 					activeOpacity={0.7}
-					underlayColor="#ffff" 
+					underlayColor="#ffff"
 				/>
 				<FontAwesome5
 					style={styles.dots}
 					name="ellipsis-h"
 					color='#F7F7FC'
 					size={25}
-					onPress={() => navigation.navigate('Profil')}
+					onPress={navigateToProfile}
 					activeOpacity={0.7}
-					underlayColor="#ffff" 
+					underlayColor="#ffff"
 				/>
 			</View>
 		</View>
@@ -60,7 +80,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-
-})
+});
 
 export default Footer;

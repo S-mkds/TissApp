@@ -5,17 +5,23 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from "jwt-decode";
 import UploadImage from '../components/UploadImage';
 import LogoutButton from '../components/LogoutButton'
+//  pour afficher les notification
 import { showMessage } from 'react-native-flash-message';
+
 import axios from 'axios';
 import BaseUrl from '../services/BaseUrl';
 
 const API_URL = BaseUrl;
 
-const ProfilScreen = ({ navigation }) => {
-
+const ProfilScreen = ({ route }) => {
+	const { userId } = route.params;
 	const [userfirstName, setUserfirstName] = useState('');
 	const [userlastName, setUserlastName] = useState('');
 	const [userEmail, setUserEmail] = useState('');
+	const [userProfileImageUrl, setUserProfileImageUrl] = useState(null);
+	const [currentUserId, setCurrentUserId] = useState(null);
+	const [currentUser, setCurrentUser] = useState('');
+
 
 	const [firstName, setFirstName] = useState('');
 	const [lastName, setLastName] = useState('');
@@ -25,7 +31,7 @@ const ProfilScreen = ({ navigation }) => {
 		try {
 			const token = await AsyncStorage.getItem('token');
 			const decodedToken = jwt_decode(token);
-			const userId = decodedToken.userId;
+			setCurrentUser(decodedToken.userId);
 			let response = await axios.get(`${API_URL}api/users/${userId}`, {
 				headers: {
 					'Authorization': `Bearer ${token}`,
@@ -35,10 +41,16 @@ const ProfilScreen = ({ navigation }) => {
 				setUserfirstName(response.data.user.firstName);
 				setUserlastName(response.data.user.lastName);
 				setUserEmail(response.data.user.email);
+				setUserProfileImageUrl(response.data.user.imageUrl);
+				setCurrentUserId(response.data.user.id)
 			}
 		} catch (error) {
 		}
 	};
+
+	useEffect(() => {
+		getUser();
+	}, [userId]);
 
 	useEffect(() => {
 		getUser();
@@ -118,11 +130,12 @@ const ProfilScreen = ({ navigation }) => {
 		<View style={styles.container}>
 			<View style={Styles.logoArea}>
 
-				<UploadImage />
+				<UploadImage imageUrl={userProfileImageUrl} currentId={currentUserId} />
 
 				<Text style={styles.username}>{userfirstName} {userlastName}</Text>
 				<Text style={styles.useremail}>{userEmail}</Text>
 			</View>
+			{currentUser === userId && (
 			<View style={styles.textInputContainer}>
 				<TextInput
 					style={Styles.input}
@@ -143,16 +156,19 @@ const ProfilScreen = ({ navigation }) => {
 					editable={isEditing}
 				/>
 			</View>
-			<View>
-				<TouchableHighlight
-					style={styles.submit}
-					onPress={handleEdit}
-					activeOpacity={0.7}
-				>
-					<Text style={Styles.submitText}>{isEditing ? 'Enregistrer' : 'Modifier'}</Text>
-				</TouchableHighlight>
-				<LogoutButton />
-			</View>
+			)}
+			{currentUser === userId && (
+        <View>
+          <TouchableHighlight
+            style={styles.submit}
+            onPress={handleEdit}
+            activeOpacity={0.7}
+          >
+            <Text style={Styles.submitText}>{isEditing ? 'Enregistrer' : 'Modifier'}</Text>
+          </TouchableHighlight>
+          <LogoutButton />
+        </View>
+      )}
 		</View>
 	);
 }

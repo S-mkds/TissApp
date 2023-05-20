@@ -11,7 +11,7 @@ const FloatingButton = forwardRef((props, ref) => {
 			ref={ref}
 			style={styles.floatingButton}
 			activeOpacity={0.7}
-			onPress={() => navigation.navigate('Contacts')}
+			onPress={() => navigation.navigate('Chat')}
 		>
 			<Icon name="message" color="#fff" size={30} />
 		</TouchableOpacity>
@@ -21,12 +21,12 @@ const FloatingButton = forwardRef((props, ref) => {
 const styles = StyleSheet.create({
 	floatingButton: {
 		position: 'absolute',
-		bottom: 70,
-		right: 20,
+		bottom: 10,
+		right: 10,
 		width: 60,
 		height: 60,
 		borderRadius: 30,
-		backgroundColor: '#007aff',
+		backgroundColor: '#46D6D8',
 		justifyContent: 'center',
 		alignItems: 'center',
 	},

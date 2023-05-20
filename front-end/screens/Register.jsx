@@ -90,7 +90,7 @@ const InscriptionScreen = ({ navigation }) => {
         style={styles.input}
         placeholder="Prénom"
         placeholderTextColor="#ffff"
-        keyboardType="name"
+        keyboardType="default"
         value={firstName}
         onChangeText={text => setFirstName(text)}
       />
@@ -100,7 +100,7 @@ const InscriptionScreen = ({ navigation }) => {
         style={styles.input}
         placeholder="Nom"
         placeholderTextColor="#ffff"
-        keyboardType="name-family"
+        keyboardType="default"
         value={lastName}
         onChangeText={text => setLastName(text)}
       />
@@ -110,7 +110,7 @@ const InscriptionScreen = ({ navigation }) => {
         style={styles.input}
         placeholder="E-mail"
         placeholderTextColor="#ffff"
-        keyboardType="name"
+        keyboardType="email-address"
         value={email}
         onChangeText={text => setEmail(text)}
       />
@@ -120,7 +120,7 @@ const InscriptionScreen = ({ navigation }) => {
         style={styles.input}
         placeholder="Mot de passe"
         placeholderTextColor="#ffff"
-        keyboardType="Mot de passe"
+        keyboardType="default"
         secureTextEntry={hidePass ? true : false}
         value={password}
         onChangeText={text => setPassword(text)}
@@ -131,7 +131,7 @@ const InscriptionScreen = ({ navigation }) => {
         style={styles.input}
         placeholder="Confirmez votre mot de passe"
         placeholderTextColor="#ffff"
-        keyboardType="password"
+        keyboardType="default"
         secureTextEntry={hidePass ? true : false}
         value={confirmPassword}
         onChangeText={text => setConfirmPassword(text)}

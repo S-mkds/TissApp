@@ -26,28 +26,21 @@ export default function LoginForm() {
       if (user && user.admin === true) {
         navigate('/dashboard', { replace: true });
       } else {
-        setErrorMessage('Seul l\'administrateur peut se connecter.');
+        setErrorMessage("Seul l'administrateur peut se connecter.");
       }
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {
         setErrorMessage(error.response.data.message);
       } else {
-        setErrorMessage('Une erreur s\'est produite lors de la connexion.');
+        setErrorMessage("Une erreur s'est produite lors de la connexion.");
       }
     }
   };
 
-
   return (
     <>
-
       <Stack spacing={3}>
-        <TextField
-          name="email"
-          label="Adresse Email"
-          value={formData.email}
-          onChange={handleChange}
-        />
+        <TextField name="email" label="Adresse Email" value={formData.email} onChange={handleChange} />
         <TextField
           name="password"
           label="Mot de passe"
@@ -72,13 +65,11 @@ export default function LoginForm() {
           Mot de passe oublié?
         </Link>
       </Stack>
-      {
-        errorMessage && (
-          <Alert severity="error" sx={{ marginBottom: 2 }} onClose={() => setErrorMessage(null)}>
-            {errorMessage}
-          </Alert>
-        )
-      }
+      {errorMessage && (
+        <Alert severity="error" sx={{ marginBottom: 2 }} onClose={() => setErrorMessage(null)}>
+          {errorMessage}
+        </Alert>
+      )}
       <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
         Se connecter
       </LoadingButton>

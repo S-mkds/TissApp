@@ -3,10 +3,10 @@ import { Image, View, TouchableOpacity, Text, StyleSheet, Modal, TextInput } fro
 import * as ImagePicker from 'expo-image-picker';
 import * as MediaLibrary from 'expo-media-library';
 import * as Camera from 'expo-camera';
-// import * as Permissions from 'expo-permissions';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Animated } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
 import BaseUrl from '../services/BaseUrl';
 import { Icon } from 'react-native-elements';
@@ -17,6 +17,7 @@ export default function ImageUploadMessage() {
 	const [newMessage, setNewMessage] = useState('');
 
 	const [modalVisible, setModalVisible] = useState(false);
+	const spinValue = useState(new Animated.Value(0))[0];
 
 	// Check textError
 	const [postImageError, setPostImageError] = useState('');
@@ -26,6 +27,27 @@ export default function ImageUploadMessage() {
 	const [isSending, setIsSending] = useState(false);
 	const [messageQueue, setMessageQueue] = useState([]);
 
+	useEffect(() => {
+		if (isSending) {
+			Animated.loop(
+				Animated.timing(
+					spinValue,
+					{
+						toValue: 1,
+						duration: 1000, // cela signifie que chaque rotation durera 1 seconde
+						useNativeDriver: true,
+					}
+				)
+			).start();
+		} else {
+			Animated.timing(spinValue).reset();
+		}
+	}, [isSending]);
+
+	const spin = spinValue.interpolate({
+		inputRange: [0, 1],
+		outputRange: ['0deg', '360deg']
+	});
 
 	// Demande les permissions pour accéder à la caméra et à la galerie
 	const getPermissionsAsync = async () => {
@@ -195,15 +217,26 @@ export default function ImageUploadMessage() {
 					style={PostStyle.input}
 				/>
 				<TouchableOpacity onPress={handleMessage} disabled={isSending} style={PostStyle.sendButton}>
-					<Icon
-						name='sc-telegram'
-						type='evilicon'
-						color='#FF6B6B'
-						size={45}
-						activeOpacity={0.8}
-					/>
+					{isSending ? (
+						<Animated.View style={{ transform: [{ rotate: spin }] }}>
+							<Icon
+								name='sc-telegram'
+								type='evilicon'
+								color='#FF6B6B'
+								size={20}
+								activeOpacity={0.8}
+							/>
+						</Animated.View>
+					) : (
+						<Icon
+							name='sc-telegram'
+							type='evilicon'
+							color='#FF6B6B'
+							size={45}
+							activeOpacity={0.8}
+						/>
+					)}
 				</TouchableOpacity>
-				{isSending && <Text style={modalStyles.sendWaitsText}>...</Text>}
 			</View>
 
 			{/* MODAL */}

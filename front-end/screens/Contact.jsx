@@ -71,7 +71,7 @@ const Contact = () => {
                     onPress={() => navigation.navigate('ChatInstant', { recipientId: item.id })}
                     >
                         {/* mettre l'image de l'utilisateur */}
-                        <Image style={styles.listItemAvatar} source={item.imageUrl ? { uri: item.imageUrl, } : require('../assets/DefaultUser.png')} />
+                        <Image style={styles.listItemAvatar} source={item.imageUrl ? { uri: item.imageUrl, } : require('../assets/avatarplaceholder.png')} />
                         <Text style={styles.userName}>{item.firstName}  {item.lastName}</Text>
                         {/* mettre le status hors ligne ou en ligne */}
                         <Text style={styles.userStatus}>{item.isOnline === true ? 'En ligne 🟢' : 'Hors ligne 🔴'}</Text>
@@ -145,8 +145,6 @@ const styles = StyleSheet.create({
         borderRadius: 17,
         marginRight: 8,
         borderWidth: 3,
-        borderColor: '#7452B7',
-        backgroundColor: 'black',
         opacity: 0.8,
     },
     userName: {

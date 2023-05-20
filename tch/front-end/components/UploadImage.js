@@ -4,18 +4,23 @@ import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import * as MediaLibrary from 'expo-media-library';
 import * as Camera from 'expo-camera';
-// import * as Permissions from 'expo-permissions';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BaseUrl from '../services/BaseUrl';
 import jwt_decode from "jwt-decode";
 
+
 const API_URL = BaseUrl;
 
-export default function UploadImage() {
+export default function UploadImage({ imageUrl, currentId }) {
+
 	const [image, setImage] = useState(null);
+	const [userImage, setUserImage] = useState(null);
 	const [modalVisible, setModalVisible] = useState(false);
 	const [profilImage, setProfilImage] = useState('');
+	const [userId, setUserId] = useState(null);
+	const [profileUserId, setProfileUserId] = useState(null);
+	
 
 	// Check textError
 	const [editImageUserError, setEditImageUserError] = useState('');
@@ -56,52 +61,57 @@ export default function UploadImage() {
 
 
 	// Requete pour savegarder l'image d'un utilisateur et l'enregistrer en bdd
-	const savePicture = async () => {
-		try {
-			const formData = new FormData();
-			formData.append('image', {
-				uri: image,
-				type: 'image/jpeg',
-				name: 'avatar',
-			}, 'image');
-			const fileName = `${Date.now()}_${image.split('/').pop()}`;
-			formData.append('user', JSON.stringify({ imageUrl: fileName }));
-			const token = await AsyncStorage.getItem('token');
-			const response = await axios.put(`${API_URL}api/auth/edit`, formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data',
-					'Authorization': `Bearer ${token}`,
-				},
-			});
-			console.log(response.data);
-			if (response.status === 200) {
-				setEditImageUserSuccess('Votre image a bien été modifiée');
-				setTimeout(() => {
-					setEditImageUserSuccess('');
-				}, 3000);
-			} else {
+	const savePicture = async (userIdToEdit) => {
+		if (currentId === userIdToEdit) {
+			try {
+				const formData = new FormData();
+				formData.append('image', {
+					uri: image,
+					type: 'image/jpeg',
+					name: 'avatar',
+				}, 'image');
+				const fileName = `${Date.now()}_${image.split('/').pop()}`;
+				formData.append('user', JSON.stringify({ imageUrl: fileName }));
+				const token = await AsyncStorage.getItem('token');
+				const response = await axios.put(`${API_URL}api/auth/edit`, formData, {
+					headers: {
+						'Content-Type': 'multipart/form-data',
+						'Authorization': `Bearer ${token}`,
+					},
+				});
+				console.log(response.data);
+				if (response.status === 200) {
+					setEditImageUserSuccess('Votre image a bien été modifiée');
+					setTimeout(() => {
+						setEditImageUserSuccess('');
+					}, 3000);
+				} else {
+					setEditImageUserError('Une erreur est survenue, impossible de modifier votre image');
+					setTimeout(() => {
+						setEditImageUserError('');
+					}, 3000);
+				}
+			} catch (error) {
+				console.log(error);
 				setEditImageUserError('Une erreur est survenue, impossible de modifier votre image');
 				setTimeout(() => {
 					setEditImageUserError('');
 				}, 3000);
 			}
-		} catch (error) {
-			console.log(error);
-			setEditImageUserError('Une erreur est survenue, impossible de modifier votre image');
-			setTimeout(() => {
-				setEditImageUserError('');
-			}, 3000);
+		} else {
+			console.log("Vous n'avez pas la permission de modifier ce profil");
 		}
 	};
 
-	// Get user Request
+
+	// Fonction permettant de stocker l'userId dans le state et récupere la photo de profil
 	const getUser = async () => {
 		try {
 			const token = await AsyncStorage.getItem('token');
-			//Retrieve the userId with the token
+			// Récupérez l'userId avec le token
 			const decodedToken = jwt_decode(token);
-			// console.log("decode le token ici -", decodedToken)
 			const userId = decodedToken.userId;
+			setUserId(userId); // stockez l'userId dans l'état
 			let response = await axios.get(`${API_URL}api/users/${userId}`, {
 				headers: {
 					'Authorization': `Bearer ${token}`,
@@ -110,33 +120,35 @@ export default function UploadImage() {
 			if (response.status === 200) {
 				console.log(response.data);
 				setProfilImage(response.data.user.imageUrl);
-				console.log(response.data.user.imageUrl);
-				console.log('sucess GET REQUEST');
+				setProfileUserId(response.data.user.id);
+				console.log(response.data.user.id);
+				// console.log('GET REQUEST réussie');
 			}
 		} catch (error) {
-			console.log('catch GET REQUEST');
+			console.log('erreur GET REQUEST');
 		}
-
 	};
-
 
 	useEffect(() => {
 		getUser();
-	}, [getUser()]);
+	}, []);
 
 	return (
 		<View >
 			<View style={imageUploaderStyles.container}>
-				<TouchableOpacity onPress={() => setModalVisible(true)}>
-					<Image style={{ width: 100, height: 100, borderRadius: 100, }} source={profilImage ? { uri: profilImage } : require('../assets/avatarplaceholder.png')} />
+				<TouchableOpacity onPress={currentId === profileUserId ? () => setModalVisible(true) : null}>
+					<Image style={{ width: 100, height: 100, borderRadius: 100 }} source={{ uri: imageUrl }} />
 				</TouchableOpacity>
 			</View>
+			
 			<View style={imageUploaderStyles.uploadBtnContainer}>
-				<TouchableOpacity onPress={() => setModalVisible(true)} style={imageUploaderStyles.uploadBtn} >
-
-					<AntDesign style={imageUploaderStyles.iconplus} name="pluscircle" size={30} color="white" />
-				</TouchableOpacity>
+				{currentId === profileUserId && (
+					<TouchableOpacity onPress={() => setModalVisible(true)} style={imageUploaderStyles.uploadBtn}>
+						<AntDesign style={imageUploaderStyles.iconplus} name="pluscircle" size={30} color="white" />
+					</TouchableOpacity>
+				)}
 			</View>
+
 			{/* MODAL */}
 			<Modal animationType="slide" transparent={true} visible={modalVisible} style={modalStyles.Modal} >
 				<View style={modalStyles.ModalContainer}>
@@ -146,14 +158,15 @@ export default function UploadImage() {
 					<View style={modalStyles.modalContent}>
 						{/* IMAGE USER */}
 						<TouchableOpacity onPress={addPicture} >
-							<Image style={{ width: 100, height: 100, borderRadius: 100, }} source={image ? { uri: image, } : require('../assets/avatarplaceholder.png')} />
+							<Image style={{ width: 100, height: 100, borderRadius: 100, }} source={image ? { uri: image, } : (userImage ? { uri: userImage } : require('../assets/avatarplaceholder.png'))} />
 						</TouchableOpacity>
+
 						{/* BTN MODAL */}
 						<View style={modalStyles.btnPicture}>
 							<TouchableOpacity onPress={takePicture} style={modalStyles.btnCamera} >
 								<AntDesign style={imageUploaderStyles.iconplus} name="camera" size={30} color="#FF6B6B" />
 							</TouchableOpacity>
-							<TouchableOpacity onPress={savePicture} style={modalStyles.modalBtnSave}>
+							<TouchableOpacity onPress={() => savePicture(currentId)} style={modalStyles.modalBtnSave}>
 								<Text style={modalStyles.modalBtnTextSave}>Enregistrer</Text>
 							</TouchableOpacity>
 						</View>
@@ -294,5 +307,35 @@ const modalStyles = StyleSheet.create({
 		color: 'green',
 		fontSize: 14,
 		fontWeight: 'bold',
+	},
+	profilImage: {
+		width: 60,
+		height: 60,
+		borderRadius: 16,
+	},
+	initialContainer: {
+		width: 60,
+		height: 60,
+		backgroundColor: ' #ccc',
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: '#FF6B6B',
+		borderRadius: 16,
+	},
+	initialText: {
+		textTransform: 'uppercase',
+		color: '#ffffff',
+		textAlign: 'center',
+		fontSize: 16,
+		fontWeight: 'bold',
+	},
+	profilName: {
+		marginLeft: 20,
+	},
+	fullName: {
+		color: "#ffffff",
+		marginBottom: 10,
+		fontSize: 15
 	},
 })

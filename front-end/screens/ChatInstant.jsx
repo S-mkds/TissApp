@@ -81,7 +81,7 @@ const ChatGroups = ({ route }) => {
                 renderItem={({ item }) => (
                     <View style={[styles.messageContainer, item.User?.id === currentUser ? styles.currentUserMessageContainer : null]}>
                         <View style={[styles.messageContent]}>
-                            <Image style={styles.messageAvatar} source={item.User && item.User.imageUrl ? { uri: item.User.imageUrl } : require('../assets/DefaultUser.png')} />
+                            <Image style={styles.messageAvatar} source={item.User && item.User.imageUrl ? { uri: item.User.imageUrl } : require('../assets/avatarplaceholder.png')} />
                             <View style={styles.messageTextContainer}>
                                 <Text style={styles.messageUsername}>{item.User ? item.User.firstName : ''} {item.User ? item.User.lastName : ''}</Text>
                                 {item.imageUrl ? (
@@ -171,7 +171,6 @@ const styles = StyleSheet.create({
         borderRadius: 17,
         marginRight: 8,
         borderWidth: 3,
-        borderColor: '#7452B7',
     },
     messageTextContainer: {
         width: '80%',
@@ -183,7 +182,6 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: 'white',
         paddingBottom: 15,
-        border: "black"
     },
     messageText: {
         fontSize: 13,

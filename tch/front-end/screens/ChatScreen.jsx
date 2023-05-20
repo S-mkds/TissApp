@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, TextInput, Image, FlatList, TouchableOpacity, TouchableWithoutFeedback,ScrollView } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import { Icon } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { showMessage } from 'react-native-flash-message';
 import { useNavigation } from '@react-navigation/native';
+import { Modal } from 'react-native';
 import ChatFooter from '../components/ChatFooter';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import BaseUrl from '../services/BaseUrl';
@@ -21,6 +21,22 @@ const ChatScreen = () => {
 	const [newImageUrl, setNewImageUrl] = useState('');
 	const [currentDate, setCurrentDate] = useState('');
 	const [currentUser, setCurrentUser] = useState(null);
+	//  Variable d'état pour contrôler l'affichage du Modal et l'image à afficher
+	const [modalVisible, setModalVisible] = useState(false);
+	const [selectedImage, setSelectedImage] = useState(null);
+	const [longPressedMessageId, setLongPressedMessageId] = useState(null);
+
+
+	// La fonction pour ouvrir le Modal et définir l'image sélectionnée
+	const openImageModal = (imageUrl) => {
+		setSelectedImage(imageUrl);
+		setModalVisible(true);
+	};
+
+	// La fonction pour fermer le Modal
+	const closeImageModal = () => {
+		setModalVisible(false);
+	};
 
 
 	
@@ -64,13 +80,29 @@ const ChatScreen = () => {
 			try {
 				const token = await AsyncStorage.getItem('token');
 				const formData = new FormData();
-				formData.append('content', newMessage);
+				if (newMessage) {
+					formData.append('content', newMessage);
+				}
 				if (image) {
-					formData.append('imageUrl', image);
+					let imgUriParts = image.split('.');
+					let fileType = imgUriParts[imgUriParts.length - 1];
+
+					formData.append('imageUrl', {
+						uri: image,
+						name: `photo.${fileType}`,
+						type: `image/${fileType}`,
+					});
+				}
+				if (image) {
+					postData.imageUrl = `${Date.now()}_${image.split('/').pop()}`;
+					postMessage.append('post', JSON.stringify(postData));
+				} else {
+					postMessage.append('content', newMessage);
 				}
 				const response = await axios.post(`${API_URL}api/posts/`, formData, {
 					headers: {
 						'Authorization': `Bearer ${token}`,
+						'Content-Type': 'multipart/form-data'
 					},
 				});
 				if (response.status === 201) {
@@ -99,6 +131,7 @@ const ChatScreen = () => {
       setMessages((prevState) =>
         prevState.filter((message) => message.id !== messageId)
       );
+			setLongPressedMessageId(null)
 			showNotification()
     } else {
       console.log('error');
@@ -111,9 +144,11 @@ const ChatScreen = () => {
 
 	const handleLongPress = (messageId, userId) => {
 		if (userId === currentUser) {
+			setLongPressedMessageId(messageId);
 			deleteMessage(messageId);
 		}
 	};
+
 
 
 	useEffect(() => {
@@ -153,14 +188,20 @@ const ChatScreen = () => {
 						onLongPress={() => handleLongPress(item.id, item.User?.id)}
 						activeOpacity={0.8}
 					>
-						<View style={[styles.messageContainer, item.User?.id === currentUser ? styles.currentUserMessageContainer : null]}>
+						<View style={[
+							styles.messageContainer,
+							item.User?.id === currentUser ? styles.currentUserMessageContainer : null,
+							item.id === longPressedMessageId ? styles.longPressedMessage : null
+						]}>
 						<View style={[styles.messageContent]}>
 							<Image style={styles.messageAvatar} source={item.User && item.User.imageUrl ? { uri: item.User.imageUrl } : require('../assets/avatarplaceholder.png')} />
 							<View style={styles.messageTextContainer}>
 								<Text style={styles.messageUsername}>{item.User ? item.User.firstName : ''} {item.User ? item.User.lastName : ''}</Text>
-								{item.imageUrl ? (
-									<Image style={styles.messageImage} source={item.imageUrl ? { uri: item.imageUrl, } : null} />
-								) : null}
+									{item.imageUrl ? (
+										<TouchableOpacity onPress={() => openImageModal(item.imageUrl)}>
+											<Image style={styles.messageImage} source={{ uri: item.imageUrl }} />
+										</TouchableOpacity>
+									) : null}
 								<Text style={styles.messageText}>{item.content}</Text>
 								<Text style={styles.messageCreatedAt}>{currentDate}</Text>
 							</View>
@@ -172,6 +213,24 @@ const ChatScreen = () => {
 			<View style={styles.Bottomcontainer}>
 				<ChatFooter onSend={sendMessage} setImage={setImage} setNewImageUrl={setNewImageUrl} newImageUrl={newImageUrl} />
 			</View>
+			{/* Modal pour l'image */}
+			<Modal
+				animationType="slide"
+				transparent={true}
+				visible={modalVisible}
+				onRequestClose={closeImageModal}
+			>
+				<View style={styles.centeredView}>
+					<View style={styles.modalView}>
+						<Image source={{ uri: selectedImage }} style={{ width: '100%', height: '100%' }} />
+						<TouchableWithoutFeedback onPress={closeImageModal}>
+							<View style={styles.closeButton}>
+								<Icon name="close" size={30} color="white" />
+							</View>
+						</TouchableWithoutFeedback>
+					</View>
+				</View>
+			</Modal>
 		</View>
 	);
 }
@@ -301,7 +360,7 @@ const styles = StyleSheet.create({
 	messageImage: {
 		width: "100%",
 		height: 100,
-		borderRadius: 20,
+		borderRadius: 10,
 		alignSelf: 'center',
 	},
 	messageCreatedAt: {
@@ -314,6 +373,55 @@ const styles = StyleSheet.create({
 		alignSelf: 'center',
 		fontSize: 10,
 	},
+	centeredView: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginTop: 20,
+	},
+	modalView: {
+		width: '90%',
+		height: '80%',
+		margin: 20,
+		backgroundColor: 'white',
+		borderRadius: 10,
+		padding: 10,
+		alignItems: 'center',
+		shadowColor: '#000',
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 4,
+		elevation: 5,
+	},
+	closeButton: {
+		backgroundColor: '#9e9e9e6e',
+		borderRadius: 50,
+		padding: 10,
+		elevation: 2,
+		position: 'absolute',
+		bottom: 15,
+		right: 15,
+	},
+	closeButtonText: {
+		color: 'white',
+		fontWeight: 'bold',
+		textAlign: 'center',
+	},
+	longPressedMessage: {
+		backgroundColor: 'gray', 
+		transform: [{ scale: 0.9 }]
+	},
+	longPressedMessageText: {
+		fontSize: 14, 
+	},
+	longPressedMessageImage: {
+		width: "100%", 
+		height: 100,
+	},
+
 });
 
 export default ChatScreen;

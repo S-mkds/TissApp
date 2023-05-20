@@ -2,11 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, ScrollView, FlatList, TextInput, TouchableOpacity, Image, Pressable, TouchableHighlight } from 'react-native';
 import { Avatar, Badge, Icon, withBadge } from "react-native-elements";
-import SearchBar from '../components/SearchBar';
 import { Feather, Entypo } from "@expo/vector-icons";
-import Footer from '../components/Footer';
 import Modal from '../components/Modal';
-// import FloatingButton from '../components/FloatingButton';
+import FloatingButton from '../components/FloatingButton';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BaseUrl from '../services/BaseUrl';
@@ -120,6 +118,7 @@ const ContactScreen = ({ navigation, clicked, searchPhrase, setSearchPhrase, set
 				renderItem={renderItem}
 			/>
 			{visible ? <Modal setVisible={setVisible} /> : ""}
+			<FloatingButton/>
 		</View>
 	);
 }
