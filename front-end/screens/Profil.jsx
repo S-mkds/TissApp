@@ -148,16 +148,18 @@ const Profil = ({ navigation }) => {
             onPress={() =>
                 handleLogout()
             }>
-            <AntDesign name="logout" size={24} color="red" />
+            <Text style={styles.buttonText}><AntDesign name="logout" size={15} color="red" />  Se déconnecter</Text>
+           
         </TouchableOpacity >
     );
 
     return (
         <SafeAreaView style={styles.container}>
-            <LogoutButton />
+            {/* ADD IMAGE USER */}
             <View>
                 <ImageUserUpload />
             </View>
+            {/* ID User */}
             <View>
                 <Text style={styles.nameUser}>{userfirstName} {userlastName}</Text>
                 <Text style={styles.nameUser}>{userEmail}</Text>
@@ -190,6 +192,7 @@ const Profil = ({ navigation }) => {
                 <EditButton />
                 {editUserError !== '' && <Text style={styles.errorText}>{editUserError}</Text>}
                 {editUserSuccess !== '' && <Text style={styles.successText}>{editUserSuccess}</Text>}
+                <LogoutButton />
             </View>
         </SafeAreaView>
     );
@@ -223,7 +226,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     buttonLogout: {
-        alignItems: 'flex-end',
+        padding: 10,
+        margin: 10,
+        borderRadius: 30,
+        alignItems: 'center',
+        borderColor: '#FF6B6B',
+        borderWidth: 2,
     },
     buttonText: {
         color: 'white',

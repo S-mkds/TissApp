@@ -3,6 +3,7 @@ import { Image, View, TouchableOpacity, Text, StyleSheet, Modal, TextInput } fro
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import { Ionicons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BaseUrl from '../services/BaseUrl';
@@ -184,10 +185,10 @@ export default function ChatInstantComponent({ recipientId }) {
                         <Image style={{ width: 120, height: 120, borderRadius: 15, }} source={image ? { uri: image, } : require('../assets/Add_Image_icon.png')} />
                         {/* BTN MODAL */}
                         <TouchableOpacity onPress={addPicture} style={modalStyles.modalBtn}>
-                            <Text style={modalStyles.modalBtnText}>Choisir une image</Text>
+                        <AntDesign name="picture" size={30} color="#FF6B6B" style={{ width: 30, height: 30 }} />
                         </TouchableOpacity>
                         <TouchableOpacity onPress={takePicture} style={modalStyles.modalBtn}>
-                            <Text style={modalStyles.modalBtnText}>Prendre une photo</Text>
+                            <AntDesign name="camera" size={30} color="#FF6B6B" style={{ width: 30, height: 30 }} />
                         </TouchableOpacity>
                         {postImageError !== '' && <Text style={modalStyles.errorText}>{postImageError}</Text>}
                         {isSending && <Text style={modalStyles.sendWaitsText}>Veuillez patientez...</Text>}

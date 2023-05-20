@@ -188,10 +188,10 @@ export default function ChanelPostComponent() {
 
                         />
                         <TouchableOpacity onPress={addPicture} style={modalStyles.modalBtn}>
-                            <Text style={modalStyles.modalBtnText}>Choisir une image</Text>
+                            <AntDesign name="picture" size={30} color="#FF6B6B" style={{ width: 30, height: 30 }} />
                         </TouchableOpacity>
                         <TouchableOpacity onPress={takePicture} style={modalStyles.modalBtn}>
-                            <Text style={modalStyles.modalBtnText}>Prendre une photo</Text>
+                            <AntDesign name="camera" size={30} color="#FF6B6B" style={{ width: 30, height: 30 }} />
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => postChanel()} style={modalStyles.modalBtnSave}>
                             <Text style={modalStyles.modalBtnTextSave}>Enregistrer votre groupe</Text>

@@ -14,28 +14,29 @@ import ChatInstantComponent from '../components/ChatInstantComponent';
 
 const ChatGroups = ({ route }) => {
 
-    const { recipientId } = route.params;
+    const { recipientId, recipientName, recipientLastName } = route.params;
+    // console.log("nom" + recipientName + "prenom" + recipientLastName)
     // console.log("ID du destinataire :", recipientId);
     const [messages, setMessages] = useState([]);
     const [currentUser, setCurrentUser] = useState('');
-
+    // récuperation des infos du destinataire et de l'émetteur
 
     const fetchRecipientId = async (recipientId) => {
-        try {
-          const token = await AsyncStorage.getItem('token');
-          const decodedToken = jwt_decode(token);
-          const currentUser = decodedToken.userId;
-            setCurrentUser(currentUser);
-          // console.log("Récupération des messages du destinataire", "userId:", currentUser, "recipientId:", recipientId);
-          const response = await axios.get(`${API_URL}/api/instantPosts/instantposts/${currentUser}/${recipientId}`, {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-            },
-          });
-          if (response.status === 200) {
-            // console.log("response data ici", response.data);
-            setMessages(response.data.posts);
-          } else {
+      try {
+        // Récupérer le token d'authentification
+        const token = await AsyncStorage.getItem('token');
+        const decodedToken = jwt_decode(token);
+        const currentUser = decodedToken.userId;
+        setCurrentUser(currentUser);
+  
+        const response = await axios.get(`${API_URL}/api/instantPosts/instantposts/${currentUser}/${recipientId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        if (response.status === 200) {
+          setMessages(response.data.posts);
+        } else {
             console.log("Erreur lors de la récupération des messages du destinataire");
           }
         } catch (error) {
@@ -44,7 +45,6 @@ const ChatGroups = ({ route }) => {
         }
       };
 
-      
       useEffect(() => {
         fetchRecipientId(recipientId);
         const socket = io(`${API_URL}`);
@@ -67,10 +67,9 @@ const ChatGroups = ({ route }) => {
   
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>
-          Destinataire : {recipientId} {"\n"} 
-          Émetteur : {currentUser}
-        </Text>
+      <Text style={styles.title}>
+        Envoyer à: {recipientName} {recipientLastName}
+      </Text>
         <FlatList
                 style={styles.messageListContainer}
                 inverted={true}

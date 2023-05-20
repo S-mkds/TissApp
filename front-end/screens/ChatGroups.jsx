@@ -30,7 +30,7 @@ const ChatGroups = ({ route }) => {
         });
         if (response.status === 200) {
             // console.log(response.data)
-            setTitle(response.data.chanel.title + ' - ' + response.data.chanel.id);
+            setTitle(response.data.chanel.title + ' - n°' + response.data.chanel.id);
         } else {
           console.log('Error fetching ChanelId');
         }
