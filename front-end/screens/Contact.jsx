@@ -72,9 +72,8 @@ const Contact = () => {
                     >
                         {/* mettre l'image de l'utilisateur */}
                         <Image style={styles.listItemAvatar} source={item.imageUrl ? { uri: item.imageUrl, } : require('../assets/avatarplaceholder.png')} />
+                        <Text style={styles.userStatus}>{item.isOnline === true ? '🟢' : '🔴'}</Text>
                         <Text style={styles.userName}>{item.firstName}  {item.lastName}</Text>
-                        {/* mettre le status hors ligne ou en ligne */}
-                        <Text style={styles.userStatus}>{item.isOnline === true ? 'En ligne 🟢' : 'Hors ligne 🔴'}</Text>
                         <Text style={styles.userCreatedAt}>Crée le {formatDate(item.createdAt)}</Text>
                     </TouchableOpacity>
                 )}
@@ -102,19 +101,13 @@ const styles = StyleSheet.create({
         marginTop: 20,
         marginBottom: 20,
     },
-    searchButton: {
-        backgroundColor: 'black',
-        padding: 7,
-        borderRadius: 10,
-    },
     searchInput: {
         width: '95%',
         height: 40,
         borderWidth: 1,
-        borderColor: 'black',
+        borderColor: 'gray',
         padding: 8,
         borderRadius: 10,
-        backgroundColor: 'gray',
         opacity: 0.5,
         margin: 10,
     },
@@ -147,6 +140,12 @@ const styles = StyleSheet.create({
         borderWidth: 3,
         opacity: 0.8,
     },
+    userStatus: {
+        color: 'white',
+        fontSize: 10,
+        alignSelf: 'flex-start',
+        right: 18,
+    },
     userName: {
         color: 'white',
         marginRight: 10,
@@ -154,12 +153,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignSelf: 'flex-start',
         marginTop: 15,
-    },
-    userStatus: {
-        color: 'white',
-        fontSize: 8,
-        right: 15,
-        alignSelf: 'flex-end',
     },
     userCreatedAt: {
         color: 'white',

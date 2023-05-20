@@ -10,7 +10,7 @@ import jwt_decode from 'jwt-decode';
 const API_URL = BaseUrl;
 
 export default function ChatInstantComponent({ recipientId }) {
-    console.log("recuperation de l'id du recipiant", recipientId);
+    // console.log("recuperation de l'id du recipiant", recipientId);
     const [image, setImage] = useState(null);
     const [newMessage, setNewMessage] = useState('');
 
@@ -36,7 +36,7 @@ export default function ChatInstantComponent({ recipientId }) {
     const addPicture = async () => {
         let image = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: false,
+            allowsEditing: true,
             quality: 1,
         });
         if (!image.canceled) {
@@ -48,7 +48,7 @@ export default function ChatInstantComponent({ recipientId }) {
         await getPermissionsAsync();
         let image = await ImagePicker.launchCameraAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: false,
+            allowsEditing: true,
             quality: 1,
         });
         if (!image.canceled) {
@@ -65,8 +65,8 @@ export default function ChatInstantComponent({ recipientId }) {
         const token = await AsyncStorage.getItem('token');
         const decodedToken = jwt_decode(token);
         const userId = decodedToken.userId;
-        console.log("recuperation de l'id du currentUser dans la requete", userId);
-        console.log("recuperation de l'id du recipient dans la requete", recipientId); // Ajout de cette ligne pour afficher la valeur de recipientId      
+        // console.log("recuperation de l'id du currentUser dans la requete", userId);
+        // console.log("recuperation de l'id du recipient dans la requete", recipientId);       
         if (isSending) {
             setMessageQueue([...messageQueue, newMessage]);
             return;

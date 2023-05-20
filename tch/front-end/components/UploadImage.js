@@ -51,7 +51,7 @@ export default function UploadImage({ imageUrl, currentId }) {
 		await getPermissionsAsync();
 		let image = await ImagePicker.launchCameraAsync({
 			mediaTypes: ImagePicker.MediaTypeOptions.Images,
-			allowsEditing: false,
+			allowsEditing: true,
 			quality: 1,
 		});
 		if (!image.canceled) {

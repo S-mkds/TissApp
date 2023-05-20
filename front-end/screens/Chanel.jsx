@@ -77,14 +77,14 @@ const Chanel = () => {
     onPress={() => navigation.navigate('ChatGroups', { chanelId: item.id })}
     // console.log(item.id)
         >
-    <Text style={styles.textChanel}>{item.User.firstName} {item.User.lastName} </Text>   
     <Image
         style={styles.imageChannel}
-        source={{ uri: item.imageUrl ? item.imageUrl : '' }}
+        source={{ uri: item.imageUrl ? item.imageUrl : require('../assets/avatarplaceholder.png')}}
     />
-    <Text style={styles.textChanel}>Serveur: {item.title}</Text>            
-    <Text style={styles.textChanel}>Description: {item.content}</Text>
-    <Text style={styles.textChanelCreatedAt}>Crée le: {formatDate(item.createdAt)} </Text>
+    <Text style={styles.textChanel}>Nom du Server:{'\n'}{item.title}</Text>            
+    <Text style={styles.textChanel}>Description du server:{'\n'}{item.content}</Text>
+    <Text style={styles.textChanelCreated}>Crée par: {item.User.firstName} {item.User.lastName} </Text>   
+    <Text style={styles.textChanelCreated}>Crée le: {formatDate(item.createdAt)} </Text>
     </TouchableOpacity>
     )}
     />
@@ -106,47 +106,31 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '80%',
-        backgroundColor: '#0F1828',
-    },
-    searchBar: {
-        width: '70%',
-        height: 40,
-        borderWidth: 1,
-        borderColor: 'white',
-        padding: 5,
-        marginTop: 15,
-        marginBottom: 20,
-        borderRadius: 10,
-        backgroundColor: 'gray',
-        color: 'white',
+        width: '85%',
     },
     searchInput: {
-        width: '90%',
-        height: 35,
+        width: '95%',
+        height: 40,
         borderWidth: 1,
-        borderColor: 'black',
-        padding: 5,
+        borderColor: 'gray',
+        padding: 8,
         borderRadius: 10,
-        backgroundColor: 'gray',
         opacity: 0.5,
-        margin: 5,
-        color: 'white',
-        fontSize: 12,
+        margin: 10,
     },
     dataContainer: {
     },
     listContainer: {
-        width: '100%',
-        padding: 5,
+        width: '95%',
     },
     listChanel: {
-        backgroundColor: 'darkorange',
-        transparent: true,
-        opacity: 0.7,
-        padding: 5,
+        backgroundColor: '#152033',
+        padding: 10,
         borderRadius: 10,
         margin: 8,
+        borderColor: 'gray',
+        borderWidth: 1,
+
     },
     imageChannel: {
         width: 60,
@@ -158,8 +142,9 @@ const styles = StyleSheet.create({
     textChanel: {
         color: 'white',
         fontSize: 15,
+        padding: 5,
     },
-    textChanelCreatedAt: {
+    textChanelCreated: {
         color: 'white',
         fontSize:8,
         padding: 5,

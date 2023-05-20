@@ -144,7 +144,7 @@ export default function ChanelPostComponent() {
             <View>
                 {/* BTN UPLOAD IMAGE */}
                 <TouchableOpacity onPress={() => setModalVisible(true)} style={imageUploaderStyles.UploadAvatar}>
-                    <AntDesign name="wifi" size={30} color="green" style={{ width: 30, height: 30 }} />
+                    <AntDesign name="pluscircleo" size={30} color="green" style={{ width: 30, height: 30 }} />
                 </TouchableOpacity>
             </View>
 

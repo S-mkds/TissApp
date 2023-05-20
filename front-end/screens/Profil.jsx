@@ -3,6 +3,7 @@ import { StyleSheet, SafeAreaView, TextInput, View, Text, Image, TouchableOpacit
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from 'jwt-decode';
 import ImageUserUpload from '../components/EditUserComponent';
+import { AntDesign } from '@expo/vector-icons';
 import axios from 'axios';
 import BaseUrl from '../services/BaseUrl';
 const API_URL = BaseUrl
@@ -147,17 +148,16 @@ const Profil = ({ navigation }) => {
             onPress={() =>
                 handleLogout()
             }>
-            <Text style={styles.buttonText}>Se déconnecter</Text>
+            <AntDesign name="logout" size={24} color="red" />
         </TouchableOpacity >
     );
 
     return (
         <SafeAreaView style={styles.container}>
-            {/* ADD IMAGE USER */}
+            <LogoutButton />
             <View>
                 <ImageUserUpload />
             </View>
-            {/* ID User */}
             <View>
                 <Text style={styles.nameUser}>{userfirstName} {userlastName}</Text>
                 <Text style={styles.nameUser}>{userEmail}</Text>
@@ -167,7 +167,7 @@ const Profil = ({ navigation }) => {
                 style={styles.input}
                 placeholder="Prénom"
                 placeholderTextColor="#ffff"
-                keyboardType="name"
+                keyboardType="default"
                 value={firstName}
                 onChange={text => setFirstName(text)}
                 onChangeText={text => setFirstName(text)}
@@ -179,7 +179,7 @@ const Profil = ({ navigation }) => {
                 style={styles.input}
                 placeholder="Nom"
                 placeholderTextColor="#ffff"
-                keyboardType="name-family"
+                keyboardType="default"
                 value={lastName}
                 onChange={text => setLastName(text)}
                 onChangeText={text => setLastName(text)}
@@ -190,7 +190,6 @@ const Profil = ({ navigation }) => {
                 <EditButton />
                 {editUserError !== '' && <Text style={styles.errorText}>{editUserError}</Text>}
                 {editUserSuccess !== '' && <Text style={styles.successText}>{editUserSuccess}</Text>}
-                <LogoutButton />
             </View>
         </SafeAreaView>
     );
@@ -224,11 +223,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     buttonLogout: {
-        backgroundColor: 'gray',
-        padding: 10,
-        margin: 10,
-        borderRadius: 30,
-        alignItems: 'center',
+        alignItems: 'flex-end',
     },
     buttonText: {
         color: 'white',

@@ -170,12 +170,13 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     buttonRegister: {
-        backgroundColor: 'gray',
         padding: 10,
         margin: 10,
         width: "80%",
         borderRadius: 30,
         alignItems: 'center',
+        borderColor: '#FF6B6B',
+        borderWidth: 1.5,
     },
     icon: {
         color: 'white',

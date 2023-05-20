@@ -34,7 +34,7 @@ export default function ImageUploadMessage() {
     const addPicture = async () => {
         let image = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: false,
+            allowsEditing: true,
             quality: 1,
         });
         if (!image.canceled) {
@@ -46,7 +46,7 @@ export default function ImageUploadMessage() {
         await getPermissionsAsync();
         let image = await ImagePicker.launchCameraAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: false,
+            allowsEditing: true,
             quality: 1,
         });
         if (!image.canceled) {

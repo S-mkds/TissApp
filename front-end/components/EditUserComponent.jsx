@@ -29,7 +29,7 @@ export default function UploadImage() {
     const addPicture = async () => {
         let image = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: false,
+            allowsEditing: true,
             quality: 1,
         });
         if (!image.canceled) {
@@ -40,7 +40,7 @@ export default function UploadImage() {
         await getPermissionsAsync();
         let image = await ImagePicker.launchCameraAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: false,
+            allowsEditing: true,
             quality: 1,
         });
         if (!image.canceled) {
@@ -121,7 +121,7 @@ export default function UploadImage() {
         <View style={imageUploaderStyles.imageContainer}>
             {/* IMAGE USER */}
             <View>
-                <Image style={{ width: 120, height: 120, borderRadius: 100, }} source={takeImage ? { uri: takeImage, } : require('../assets/DefaultUser.png')} />
+                <Image style={{ width: 120, height: 120, borderRadius: 100, }} source={takeImage ? { uri: takeImage, } : require('../assets/avatarplaceholder.png')} />
                 {/* BTN UPLOAD IMAGE */}
                 <TouchableOpacity onPress={() => setModalVisible(true)} style={imageUploaderStyles.UploadAvatar}>
                     <AntDesign name="camera" size={30} color="#FF6B6B" style={{ width: 30, height: 30 }} />
@@ -136,7 +136,7 @@ export default function UploadImage() {
                     </TouchableOpacity>
                     <View style={modalStyles.modalContent}>
                         {/* IMMAGE USER */}
-                        <Image style={{ width: 120, height: 120, borderRadius: 100, }} source={image ? { uri: image, } : require('../assets/DefaultUser.png')} />
+                        <Image style={{ width: 120, height: 120, borderRadius: 100, }} source={image ? { uri: image, } : require('../assets/avatarplaceholder.png')} />
                         {/* BTN MODAL */}
                         <TouchableOpacity onPress={addPicture} style={modalStyles.modalBtn}>
                             <Text style={modalStyles.modalBtnText}>Choisir une image</Text>

@@ -36,7 +36,7 @@ export default function ImageUploadMessageChanelChat({ chanelId }) {
     const addPicture = async () => {
         let image = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: false,
+            allowsEditing: true,
             quality: 1,
         });
         if (!image.canceled) {
@@ -48,7 +48,7 @@ export default function ImageUploadMessageChanelChat({ chanelId }) {
         await getPermissionsAsync();
         let image = await ImagePicker.launchCameraAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: false,
+            allowsEditing: true,
             quality: 1,
         });
         if (!image.canceled) {
