@@ -164,7 +164,7 @@ export default function ChanelPostComponent() {
                     </TouchableOpacity>
                         {/* IMMAGE USER */}
                         <Image
-                            style={postImageChanel ? modalStyles.imageSelect : [modalStyles.imageSelect, { width: 100, height: 100 }]}
+                            style={postImageChanel ? modalStyles.imageSelect : [modalStyles.imageSelect, { width: 80, height: 80 }]}
                             source={postImageChanel ? { uri: postImageChanel } : require('../assets/Add_Image_icon.png')}
                         />
                         {/* BTN MODAL */}
@@ -178,10 +178,10 @@ export default function ChanelPostComponent() {
                         {/* icone + qui permet d'ajouter une image */}
                         <View style={modalStyles.viewBtn}> 
                         <TouchableOpacity onPress={addPicture} style={modalStyles.modalBtn}>
-                            <AntDesign name="picture" size={50} color="black" style={{ width: 50, height: 50 }} />
+                            <AntDesign name="picture" size={40} color="black" style={{ width: 40, height: 40 }} />
                         </TouchableOpacity>
                         <TouchableOpacity onPress={takePicture} style={modalStyles.modalBtn}>
-                            <AntDesign name="camera" size={50} color="black" style={{ width: 50, height: 50 }} />
+                            <AntDesign name="camera" size={40} color="black" style={{ width: 40, height: 40 }} />
                         </TouchableOpacity>
                         </View>
                         {/* INPUTS */}

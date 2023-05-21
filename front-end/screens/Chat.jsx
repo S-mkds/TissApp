@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
@@ -8,6 +8,7 @@ import { format, set } from 'date-fns';
 import frLocale from 'date-fns/locale/fr';
 import ImageMessageUpload from '../components/ChatPostComponent';
 import FullScreenImageModal from '../components/FullScreenImageModal';
+import ModalDeleteMessage from '../components/ModalDeleteMessage';
 import BaseUrl from '../services/BaseUrl';
 import jwt_decode from 'jwt-decode';
 
@@ -19,17 +20,48 @@ const Chat = () => {
     // Check Text error
     const [currentUser, setCurrentUser] = useState(null);
 
+    // Modal Image selected
     const [selectedImage, setSelectedImage] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
 
+    // Modal Delete Message
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [selectedMessage, setSelectedMessage] = useState(null);
+
+
+    // fonction image modal
     const openImageModal = (imageUrl) => {
         setSelectedImage(imageUrl);
         setModalVisible(true);
     };
-    
     const onCloseModal = () => {
         setModalVisible(false);
         setSelectedImage(null);
+    };
+
+// fonction fetch delete message
+const handleDeleteMessage = async (messageId, userId) => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const response = await axios.delete(`${API_URL}/api/posts/${userId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200) {
+        fetchMessages();
+      } else {
+        console.log('error');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+
+    const openDeleteModal = (message) => {
+        setSelectedMessage(message);
+        setShowDeleteModal(true);
     };
 
     const fetchMessages = async () => {
@@ -85,6 +117,7 @@ const Chat = () => {
                 data={messages}
                 keyExtractor={(item) => `${item.id}-${item.createdAt}`}
                 renderItem={({ item }) => (
+            <TouchableOpacity TouchableOpacity onPress={() => handleDeleteMessage(item.id, item.userId)}>
             <View
                 style={[
                     styles.messageContainer,
@@ -114,12 +147,18 @@ const Chat = () => {
                 </View>
                 </View>
             </View>
+            </TouchableOpacity>
             )}
         />
         <View style={styles.inputContainer}>
             <ImageMessageUpload />
         </View>
         <FullScreenImageModal visible={modalVisible} imageUrl={selectedImage} onClose={onCloseModal} />
+        <ModalDeleteMessage
+            visible={showDeleteModal}
+            onClose={() => setShowDeleteModal(false)}
+            onDelete={() => handleDeleteMessage(selectedMessage.id)}
+        />
         </View>
     );
 };

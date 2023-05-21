@@ -2,6 +2,11 @@ import React from 'react';
 import { View, Text, Modal, TouchableOpacity, StyleSheet } from 'react-native';
 
 const ModalDeleteMessage = ({ visible, onClose, onDelete }) => {
+  const handleDelete = () => {
+    onDelete();
+    onClose();
+  };
+
   return (
     <Modal visible={visible} transparent={true} onRequestClose={onClose}>
       <View style={styles.container}>
@@ -12,7 +17,7 @@ const ModalDeleteMessage = ({ visible, onClose, onDelete }) => {
             <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
               <Text style={styles.buttonText}>Annuler</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.deleteButton} onPress={onDelete}>
+            <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
               <Text style={styles.buttonText}>Supprimer</Text>
             </TouchableOpacity>
           </View>
@@ -34,6 +39,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     alignItems: 'center',
+    width: '95%',
   },
   title: {
     fontSize: 18,
@@ -41,14 +47,14 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   description: {
-    fontSize: 16,
+    fontSize: 15,
     marginBottom: 20,
   },
   buttonContainer: {
     flexDirection: 'row',
   },
   cancelButton: {
-    backgroundColor: '#ccc',
+    backgroundColor: 'grey',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
