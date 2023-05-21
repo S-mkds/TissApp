@@ -26,6 +26,7 @@ export default function ChanelPostComponent() {
         const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA);
         if (status !== 'granted') {
             alert('Vous devez autoriser l\'accès à la caméra et à la galerie pour utiliser cette fonctionnalité.');
+            Linking.openSettings();
         }
     };
     // console.log(props);
@@ -177,10 +178,10 @@ export default function ChanelPostComponent() {
                         {/* icone + qui permet d'ajouter une image */}
                         <View style={modalStyles.viewBtn}> 
                         <TouchableOpacity onPress={addPicture} style={modalStyles.modalBtn}>
-                            <AntDesign name="picture" size={50} color="#FF6B6B" style={{ width: 50, height: 50 }} />
+                            <AntDesign name="picture" size={50} color="black" style={{ width: 50, height: 50 }} />
                         </TouchableOpacity>
                         <TouchableOpacity onPress={takePicture} style={modalStyles.modalBtn}>
-                            <AntDesign name="camera" size={50} color="#FF6B6B" style={{ width: 50, height: 50 }} />
+                            <AntDesign name="camera" size={50} color="black" style={{ width: 50, height: 50 }} />
                         </TouchableOpacity>
                         </View>
                         {/* INPUTS */}

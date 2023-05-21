@@ -31,6 +31,7 @@ export default function ImageUploadMessageChanelChat({ chanelId }) {
         const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA);
         if (status !== 'granted') {
             alert('Vous devez autoriser l\'accès à la caméra et à la galerie pour utiliser cette fonctionnalité.');
+            Linking.openSettings();
         }
     };
     // console.log(props);

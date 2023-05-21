@@ -1,17 +1,46 @@
 import React from 'react';
-import { Modal, View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { Modal, View, Text, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import * as FileSystem from 'expo-file-system';
+import * as MediaLibrary from 'expo-media-library';
+import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
+import { AntDesign } from '@expo/vector-icons';
+import { format } from 'date-fns';
 
 const FullScreenImageModal = ({ visible, imageUrl, onClose }) => {
+  const handleDownload = async () => {
+    const currentDate = format(new Date(), 'yyyyMMddHHmmss');
+    const fileUri = FileSystem.documentDirectory + `${currentDate}.jpg`;
+    try {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== 'granted') {
+        console.log('Permission refusée pour accéder à la galerie');
+        return;
+      }
+
+      const { uri } = await FileSystem.downloadAsync(imageUrl, fileUri);
+      await MediaLibrary.createAssetAsync(uri);
+      console.log('Image enregistrée avec succès');
+      Alert.alert('Image enregistrée avec succès');
+    } catch (error) {
+      console.log('Erreur lors de l\'enregistrement de l\'image :', error);
+      Linking.openSettings();
+    }
+  };
 
   return (
     <Modal visible={visible} transparent={true}>
       <View style={styles.modalContainer}>
         {/* Bouton pour fermer la modal */}
         <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-          <Text style={styles.closeButtonText}>❌</Text>
+          <AntDesign name="close" size={30} color="red" />
         </TouchableOpacity>
         {/* Affichage de l'image en plein écran */}
         <Image style={styles.fullScreenImage} source={{ uri: imageUrl }} resizeMode="contain" />
+        {/* Bouton de téléchargement */}
+        <TouchableOpacity style={styles.downloadButton} onPress={handleDownload}>
+          <AntDesign name="download" size={30} color="green" />
+        </TouchableOpacity>
       </View>
     </Modal>
   );
@@ -24,23 +53,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
+  downloadButton: {
+    padding: 10,
+    borderRadius: 5,
+    marginLeft: 25,
+    alignSelf: 'flex-start',
+  },
   closeButton: {
     padding: 10,
     borderRadius: 5,
+    marginRight: 20,
     alignSelf: 'flex-end',
-    margin: 5,
   },
-
-
-  closeButtonText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-
   fullScreenImage: {
-    width: '80%',
-    height: '60%',
+    width: '95%',
+    height: '50%',
     borderRadius: 10,
   },
 });

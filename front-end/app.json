@@ -34,6 +34,18 @@
       "eas": {
         "projectId": "873f8503-2af7-40f7-9f09-f0f687e97aef"
       }
+    },
+    "permissions": {
+      "expo.mediaLibrary": {
+        "accesses": [
+          "MediaLibrary.writeOnly"
+        ]
+      },
+      "android": {
+        "permissions": [
+          "WRITE_EXTERNAL_STORAGE"
+        ]
+      }
     }
   }
 }
