@@ -32,7 +32,7 @@ export default function ChanelPostComponent() {
     const addPicture = async () => {
         let image = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: false,
+            allowsEditing: true,
             quality: 1,
         });
         if (!image.canceled) {
@@ -43,7 +43,7 @@ export default function ChanelPostComponent() {
         await getPermissionsAsync();
         let image = await ImagePicker.launchCameraAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: false,
+            allowsEditing: true,
             quality: 1,
         });
         if (!image.canceled) {
@@ -152,20 +152,27 @@ export default function ChanelPostComponent() {
             <Modal animationType="fade"  transparent={true} visible={modalVisible} style={modalStyles.Modal} 
                 backdropOpacity= {0.8}>
                 <View style={modalStyles.ModalContainer}>
+                    <View style={modalStyles.modalContent}>
                     <TouchableOpacity onPress={() => setModalVisible(false)} style={modalStyles.closeBtn}>
                         <Text style={modalStyles.closeBtnModal}>❌</Text>
                     </TouchableOpacity>
-                    <View style={modalStyles.modalContent}>
-                        
                         {/* IMMAGE USER */}
-                        <Image style={{ width: 100, height: 100, margin: 10}} source={postImageChanel ? { uri: postImageChanel } : require('../assets/Add_Image_icon.png')} />
+                        <Image style={modalStyles.imageSelect} source={postImageChanel ? { uri: postImageChanel } : require('../assets/Add_Image_icon.png')} />
                         {/* BTN MODAL */}
                         {/* icone X qui supprime si il y a une postImageChanel */}
                         {postImageChanel !== '' && <TouchableOpacity onPress={() => setPostImageChanel('')} style={modalStyles.modalBtn}>
                             <Text style={modalStyles.modalBtnText}>Supprimer l'image</Text>
                         </TouchableOpacity>}
-
-
+                        {/* icone + qui permet d'ajouter une image */}
+                        <View style={modalStyles.viewBtn}> 
+                        <TouchableOpacity onPress={addPicture} style={modalStyles.modalBtn}>
+                            <AntDesign name="picture" size={50} color="#FF6B6B" style={{ width: 50, height: 50 }} />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={takePicture} style={modalStyles.modalBtn}>
+                            <AntDesign name="camera" size={50} color="#FF6B6B" style={{ width: 50, height: 50 }} />
+                        </TouchableOpacity>
+                        </View>
+                        {/* INPUTS */}
                         < TextInput
                             value={postImageTitle}
                             onChangeText={setPostImageTitle}
@@ -185,16 +192,10 @@ export default function ChanelPostComponent() {
                             // si la valeur est vide alors postImageDescription = 'Pas de description'
                             {...(postImageDescription === '' && { postImageDescription: 'Pas de description' })
                             }
-
                         />
-                        <TouchableOpacity onPress={addPicture} style={modalStyles.modalBtn}>
-                            <AntDesign name="picture" size={30} color="#FF6B6B" style={{ width: 30, height: 30 }} />
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={takePicture} style={modalStyles.modalBtn}>
-                            <AntDesign name="camera" size={30} color="#FF6B6B" style={{ width: 30, height: 30 }} />
-                        </TouchableOpacity>
+                        {/* BTN SAVE */}
                         <TouchableOpacity onPress={() => postChanel()} style={modalStyles.modalBtnSave}>
-                            <Text style={modalStyles.modalBtnTextSave}>Enregistrer votre groupe</Text>
+                            <Text style={modalStyles.modalBtnTextSave}>Enregistrer votre chanel</Text>
                         </TouchableOpacity>
                         {postImageChanelError !== '' && <Text style={modalStyles.errorText}>{postImageChanelError}</Text>}
                         {postImageChanelSuccess !== '' && <Text style={modalStyles.successText}>{postImageChanelSuccess}</Text>}
@@ -215,40 +216,31 @@ const imageUploaderStyles = StyleSheet.create({
 
 })
 const modalStyles = StyleSheet.create({
-    Modal: {
-        padding: 2,
-        borderRadius: 10,
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        color: 'black',
-    },
     ModalContainer: {
         flex: 1,
-        display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        opacity: 0.9,
-        color: 'black',
-        backgroundColor: 'rgba(black, 0.5)',
+        backgroundColor: 'rgba(0,0,0,0.5)',
+    },
+    viewBtn: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
     },
     input: {
-        height: 25,
-        width: '50%',
         margin: 2,
         borderWidth: 1,
-        padding: 2,
+        padding: 5,
         borderRadius: 5,
-        fontSize: 10,
+        fontSize: 12,
         backgroundColor: 'gray',
-        opacity: 0.8,
         color: 'white',
+        width: '100%',
+        textAlign: 'center',
+        marginBottom: 10,
     },
     closeBtn: {
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        padding: 10,
+        padding: 2,
         borderRadius: 5,
         zIndex: 1,
         alignSelf: 'flex-end',
@@ -256,23 +248,25 @@ const modalStyles = StyleSheet.create({
     closeBtnModal: {
         fontSize: 20,
     },
+    imageSelect: {
+        width: 200,
+        height: 200,
+        borderRadius: 10,
+        marginBottom: 10,
+    },
     modalContent: {
-        backgroundColor: 'darkgrey',
+        backgroundColor: 'white',
         padding: 10,
         borderRadius: 10,
-        width: '100%',
-        height: '60%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-around',
         marginBottom: 10,
+        width: '85%',
     },
     modalBtn: {
-        backgroundColor: '#152033',
         padding: 5,
         borderRadius: 5,
-        width: '50%',
-        display: 'flex',
         alignItems: 'center',
     },
     modalBtnText: {
@@ -281,17 +275,16 @@ const modalStyles = StyleSheet.create({
     },
     modalBtnSave: {
         backgroundColor: 'green',
-        opacity: 0.8,
-        padding: 7,
+        padding: 10,
         borderRadius: 5,
-        width: '50%',
+        width: '100%',
         display: 'flex',
         alignItems: 'center',
     },
     modalBtnTextSave: {
         color: 'white',
         fontWeight: 'bold',
-        fontSize: 10,
+        fontSize: 12,
     },
     errorText: {
         color: 'red',
