@@ -133,18 +133,25 @@ exports.modifyInstantPost = (req, res, next) => {
 };
 
 exports.deleteInstantPost = (req, res, next) => {
-  InstantPost.findOne({ where: { id: req.params.id } })
-    .then(async (post) => {
+  const where = {
+    id: req.params.id,
+  };
+
+  if (!req.user.admin) {
+    where.userId = req.user.id;
+  }
+
+  InstantPost.findOne({ where })
+    .then((post) => {
       if (!post) {
-        res.status(400).json({ error: "Post introuvable" });
-      } else {
-        if (post.imageUrl) {
-          await deleteFile(post.imageUrl);
-        }
-        post
-          .destroy()
-          .then(() => res.status(200).json({ message: "Post supprimé" }));
+        res.status(400).json({ error: "Vous n'avez pas l'autorisation" });
       }
+      post
+        .destroy()
+        .then(() =>
+          res.status(200).json({ message: "Publication supprimée !" })
+        )
+        .catch((error) => res.status(400).json({ error }));
     })
-    .catch((error) => res.status(500).json({ error }));
+    .catch((error) => res.status(500).json({ error: error.message }));
 };

@@ -12,6 +12,7 @@ import { format } from 'date-fns';
 import frLocale from 'date-fns/locale/fr';
 import ChatInstantComponent from '../components/ChatInstantComponent';
 import FullScreenImageModal from '../components/FullScreenImageModal'
+import ModalDeleteMessage from '../components/ModalDeleteMessage';
 
 const ChatGroups = ({ route }) => {
 
@@ -24,6 +25,10 @@ const ChatGroups = ({ route }) => {
     
     const [selectedImage, setSelectedImage] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
+    
+    // Modal Delete Message
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [selectedMessage, setSelectedMessage] = useState(null);
 
     const openImageModal = (imageUrl) => {
         setSelectedImage(imageUrl);
@@ -34,6 +39,30 @@ const ChatGroups = ({ route }) => {
         setModalVisible(false);
         setSelectedImage(null);
     };
+
+    // fonction fetch delete message
+const handleDeleteMessage = async (messageId, userId) => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    const response = await axios.delete(`${API_URL}/api/instantPosts/instantpost/${messageId}?userId=${userId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    if (response.status === 200) {
+      fetchRecipientId(recipientId);
+    } else {
+      console.log('error');
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+  const openDeleteModal = (message) => {
+      setSelectedMessage(message);
+      setShowDeleteModal(true);
+  };
 
     const fetchRecipientId = async (recipientId) => {
       try {
@@ -92,6 +121,7 @@ const ChatGroups = ({ route }) => {
                 data={messages}
                 keyExtractor={item => `${item.id}-${item.createdAt}`}
                 renderItem={({ item }) => (
+                  <TouchableOpacity onPress={item.User?.id === currentUser ? () => openDeleteModal(item) : null}>
                     <View style={[styles.messageContainer, item.User?.id === currentUser ? styles.currentUserMessageContainer : null]}>
                         <View style={[styles.messageContent]}>
                             <Image style={styles.messageAvatar} source={item.User && item.User.imageUrl ? { uri: item.User.imageUrl } : require('../assets/avatarplaceholder.png')} />
@@ -107,12 +137,18 @@ const ChatGroups = ({ route }) => {
                             </View>
                         </View>
                     </View>
+                    </TouchableOpacity>
                 )}
             />
             <View style={styles.inputContainer}>
             <ChatInstantComponent recipientId={recipientId} />
             </View >
             <FullScreenImageModal visible={modalVisible} imageUrl={selectedImage} onClose={onCloseModal} />
+            <ModalDeleteMessage
+            visible={showDeleteModal}
+            onClose={() => setShowDeleteModal(false)}
+            onDelete={() => handleDeleteMessage(selectedMessage.id)}
+            />
         </View >
     );
 };
