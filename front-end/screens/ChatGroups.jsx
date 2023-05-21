@@ -48,7 +48,7 @@ const handleDeleteMessage = async (messageId, userId) => {
           'Authorization': `Bearer ${token}`,
         },
       });
-      console.log(response);
+    //   console.log(response);
       if (response.status === 200) {
         fetchMessages();
       } else {
