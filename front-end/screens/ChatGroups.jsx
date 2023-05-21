@@ -87,7 +87,7 @@ const ChatGroups = ({ route }) => {
         fetchMessages();
         const socket = io(`${API_URL}`);
         setTimeout(() => {
-            console.log("socket connecté", socket.connected)
+            // console.log("socket connecté", socket.connected)
         }, 2000);
         socket.on('socketPostChanel', (msgGroupsSocket) => {
             fetchMessages();

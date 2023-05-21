@@ -54,52 +54,55 @@ const Chanel = () => {
 
 
     return (
-        <View style={styles.container}>
-            <View style={styles.searchContainer}>
-                <TextInput
-                    style={styles.searchInput}
-                    placeholder="Rechercher un serveur..."
-                    placeholderTextColor={'white'}
-                    color={'white'}
-                    onChangeText={onSearchChange}
-                    value={search}
-                />
-            </View>
-            <FlatList
-    style={styles.listContainer}
-    data={groups.chanels}
-    inverted={true}
-    onEndReachedThreshold={0.5}
-    keyExtractor={(item) => item.id.toString()}
-    renderItem={({ item }) => (
-        <TouchableOpacity
-    style={styles.listChanel}
-    onPress={() => navigation.navigate('ChatGroups', { chanelId: item.id })}
-    // console.log(item.id)
-        >
-    <Image
-        style={styles.imageChannel}
-        source={{ uri: item.imageUrl ? item.imageUrl : require('../assets/avatarplaceholder.png')}}
-    />
-    <Text style={styles.textChanel}>
-        <Text style={styles.boldItalicText}>Titre:</Text>{'\n'}
-        <Text style={styles.channelName}>{item.title}</Text>
-    </Text>            
-
-    <Text style={styles.textChanel}>
-        <Text style={styles.boldItalicText}>Description:</Text>{'\n'}
-        <Text style={styles.channelName}>{item.content}</Text>
-    </Text>  
+    <View style={styles.container}>
+        <View style={styles.searchContainer}>
+            <TextInput
+                style={styles.searchInput}
+                placeholder="Rechercher un serveur..."
+                placeholderTextColor={'white'}
+                color={'white'}
+                onChangeText={onSearchChange}
+                value={search}
+            />
+        </View>
+    <FlatList
+        style={styles.listContainer}
+        data={groups.chanels}
+        inverted={false}
+        onEndReachedThreshold={0.5}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+    <TouchableOpacity
+        style={styles.listChanel}
+        onPress={() => navigation.navigate('ChatGroups', { chanelId: item.id })}>
+    <View style={styles.listChanelContainer}>
+        <Image
+            style={styles.imageChannel}
+            source={{ uri: item.imageUrl ? item.imageUrl : require('../assets/avatarplaceholder.png') }}
+        />
+  {/* Title & description */}
+        <View style={styles.textChanelContainer}>
+            <Text style={styles.textChanel}>
+            <Text style={styles.boldItalicText}>Titre:</Text>{'\n'}
+            <Text style={styles.channelName}>{item.title}</Text>
+            </Text>
+            <Text style={styles.textChanel}>
+            <Text style={styles.boldItalicText}>Description:</Text>{'\n'}
+            <Text style={styles.channelName}>{item.content}</Text>
+            </Text>
+        </View>
+    </View>
+    {/* Created time & author */}
     <Text style={styles.textChanelCreated}>Crée par: {item.User.firstName} {item.User.lastName} </Text>   
     <Text style={styles.textChanelCreated}>Crée le: {formatDate(item.createdAt)} </Text>
     </TouchableOpacity>
     )}
     />
-            <View style={styles.addGroupBtn}>
-                <ChanelPostComponent style={styles.addGroupBtn}>
-                </ChanelPostComponent>
-            </View>
+        <View style={styles.addGroupBtn}>
+            <ChanelPostComponent style={styles.addGroupBtn}>
+            </ChanelPostComponent>
         </View>
+    </View>
     );
 };
 const styles = StyleSheet.create({
@@ -109,6 +112,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#0F1828',
     },
+
     searchContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
@@ -125,10 +129,17 @@ const styles = StyleSheet.create({
         opacity: 0.5,
         margin: 10,
     },
-    dataContainer: {
+    listChanelContainer: {
+        flexDirection: 'row',
+    },
+    textChanelContainer: {
+        flex: 1,
+        width: '70%',
     },
     listContainer: {
         width: '95%',
+        height: '100%',
+
     },
     listChanel: {
         backgroundColor: '#152033',
@@ -140,8 +151,8 @@ const styles = StyleSheet.create({
 
     },
     imageChannel: {
-        width: 60,
-        height: 80,
+        width: 100,
+        height: 100,
         borderRadius: 10,
         alignSelf: 'flex-start',
         backfaceVisibility: 'hidden',
@@ -171,10 +182,11 @@ const styles = StyleSheet.create({
     boldItalicText: {
         fontWeight: 'bold',
         fontStyle: 'italic',
+        fontVariant: ['small-caps', 'oldstyle-nums'],
+        fontSize: 12,
     },
     channelName: {
-
-        fontSize: 11,
+        fontSize: 9.5,
     },
 });
 

@@ -51,6 +51,11 @@ export default function ChanelPostComponent() {
         }
     };
 
+    // Supprimer l'image
+    const handleDeleteImage = () => {
+        setPostImageChanel('');
+    };
+
     // Requete pour savegarder l'image d'un utilisateur et l'enregistrer en bdd
     async function postChanel() {
         if(postImageTitle === '' ) {
@@ -108,7 +113,7 @@ export default function ChanelPostComponent() {
               },
             });
             if (response.status === 201) {
-                console.log('Chanel créé avec succès !');
+                // console.log('Chanel créé avec succès !');
             setChanelImgSuccess('Chanel créé avec succès !');
             setTimeout(() => {
                 setModalVisible(false);
@@ -149,20 +154,26 @@ export default function ChanelPostComponent() {
             </View>
 
             {/* MODAL */}
-            <Modal animationType="fade"  transparent={true} visible={modalVisible} style={modalStyles.Modal} 
-                backdropOpacity= {0.8}>
+            <Modal animationType="fade"  transparent={true} visible={modalVisible} style={modalStyles.Modal}>
                 <View style={modalStyles.ModalContainer}>
                     <View style={modalStyles.modalContent}>
                     <TouchableOpacity onPress={() => setModalVisible(false)} style={modalStyles.closeBtn}>
-                        <Text style={modalStyles.closeBtnModal}>❌</Text>
+                        {/* <Text style={modalStyles.closeBtnModal}>❌</Text> */}
+                        <AntDesign name="close" size={30} color="red" style={{ width: 30, height: 24 }} />
                     </TouchableOpacity>
                         {/* IMMAGE USER */}
-                        <Image style={modalStyles.imageSelect} source={postImageChanel ? { uri: postImageChanel } : require('../assets/Add_Image_icon.png')} />
+                        <Image
+                            style={postImageChanel ? modalStyles.imageSelect : [modalStyles.imageSelect, { width: 100, height: 100 }]}
+                            source={postImageChanel ? { uri: postImageChanel } : require('../assets/Add_Image_icon.png')}
+                        />
                         {/* BTN MODAL */}
                         {/* icone X qui supprime si il y a une postImageChanel */}
-                        {postImageChanel !== '' && <TouchableOpacity onPress={() => setPostImageChanel('')} style={modalStyles.modalBtn}>
+                        {/* icone X qui supprime si il y a une postImageChanel */}
+                        {postImageChanel && (
+                            <TouchableOpacity onPress={handleDeleteImage} style={modalStyles.modalBtn}>
                             <Text style={modalStyles.modalBtnText}>Supprimer l'image</Text>
-                        </TouchableOpacity>}
+                            </TouchableOpacity>
+                        )}
                         {/* icone + qui permet d'ajouter une image */}
                         <View style={modalStyles.viewBtn}> 
                         <TouchableOpacity onPress={addPicture} style={modalStyles.modalBtn}>
@@ -252,7 +263,7 @@ const modalStyles = StyleSheet.create({
         width: 200,
         height: 200,
         borderRadius: 10,
-        marginBottom: 10,
+        marginBottom: 1,
     },
     modalContent: {
         backgroundColor: 'white',
@@ -271,7 +282,11 @@ const modalStyles = StyleSheet.create({
     },
     modalBtnText: {
         color: 'white',
-        fontSize: 10,
+        fontWeight: 'bold',
+        fontSize: 12,
+        padding: 4,
+        backgroundColor: 'red',
+        borderRadius: 5,
     },
     modalBtnSave: {
         backgroundColor: 'green',

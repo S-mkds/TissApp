@@ -26,7 +26,7 @@ const Login = ({ navigation }) => {
     // le password doit contenir au moins 8 Caractères, 1 Maj, 1 Min, 1 Chiffre, 1 Caractère spécial
 
     const handleLogin = async () => {
-        console.log(email, password);
+        // console.log(email, password);
         if (!emailRegex.test(email)) {
             setEmailError("L'adresse e-mail n'est pas valide");
         } else if (!passwordRegex.test(password)) {
@@ -41,7 +41,7 @@ const Login = ({ navigation }) => {
                 if (response.status === 201) {
                     // Stocker le token
                     await AsyncStorage.setItem('token', response.data.token);
-                    console.log('Token utilisateur: ', response.data.token, " login successful")
+                    // console.log('Token utilisateur: ', response.data.token, " login successful")
                     // console.log("status: 201, request login successful");
                     navigation.navigate('Profil');
                 } else {

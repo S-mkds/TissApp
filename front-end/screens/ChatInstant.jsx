@@ -65,11 +65,11 @@ const ChatGroups = ({ route }) => {
         setTimeout(() => {
           // console.log("soket connecté" + socket.connected + "recipientId:" + recipientId + "currentUser:" + currentUser)
         }, 2000);
-        console.log("socket connecté", socket.connected)
+        // console.log("socket connecté", socket.connected)
         socket.on('socketInstantPost', (msgMpSocket) => {
           fetchRecipientId(recipientId);
           setMessages((messages) => [...messages, msgMpSocket]);
-          console.log(msgMpSocket);
+          // console.log(msgMpSocket);
         }
         );
       }, []);
