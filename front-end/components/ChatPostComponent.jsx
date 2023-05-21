@@ -280,20 +280,20 @@ const modalStyles = StyleSheet.create({
     },
     closeBtnModal: {
         fontSize: 20,
-        color: 'white',
+        padding: 5,
+    },
+    modalBtn: {
+        padding: 10,
+        borderRadius: 5,
+        display: 'flex',
+        marginRight: 8,
     },
     modalContent: {
         borderRadius: 10,
         width: '100%',
         display: 'flex',
         alignItems: 'flex-end',
-        marginBottom: 80
-    },
-    modalBtn: {
-        padding: 10,
-        borderRadius: 5,
-        display: 'flex',
-        alignItems: 'center',
+        marginBottom: 68,
     },
     errorText: {
         color: 'red',

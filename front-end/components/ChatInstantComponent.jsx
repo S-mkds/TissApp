@@ -182,7 +182,6 @@ export default function ChatInstantComponent({ recipientId }) {
                     </TouchableOpacity>
                     <View style={modalStyles.modalContent}>
                         {/* IMMAGE USER */}
-                        <Image style={{ width: 120, height: 120, borderRadius: 15, }} source={image ? { uri: image, } : require('../assets/Add_Image_icon.png')} />
                         {/* BTN MODAL */}
                         <TouchableOpacity onPress={addPicture} style={modalStyles.modalBtn}>
                         <AntDesign name="picture" size={30} color="#FF6B6B" style={{ width: 30, height: 30 }} />
@@ -198,7 +197,6 @@ export default function ChatInstantComponent({ recipientId }) {
         </View >
     );
 }
-
 
 const PostStyle = StyleSheet.create({
     postContainer: {
@@ -282,44 +280,31 @@ const modalStyles = StyleSheet.create({
     ModalContainer: {
         flex: 1,
         display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-end',
         opacity: 1,
-        color: 'black',
-        backgroundColor: 'rgba(0,0,0,0.5)',
     },
     closeBtn: {
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        padding: 10,
+        paddingRight: 12,
         borderRadius: 5,
         zIndex: 1,
         alignSelf: 'flex-end',
     },
     closeBtnModal: {
         fontSize: 20,
-        color: 'white',
-    },
-    modalContent: {
-        backgroundColor: 'white',
-        padding: 20,
-        borderRadius: 10,
-        width: '100%',
-        height: '50%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-around',
+        padding: 5,
     },
     modalBtn: {
-        backgroundColor: '#152033',
         padding: 10,
         borderRadius: 5,
+        display: 'flex',
+        marginRight: 8,
+    },
+    modalContent: {
+        borderRadius: 10,
         width: '100%',
         display: 'flex',
-        alignItems: 'center',
-    },
-    modalBtnText: {
-        color: 'white',
-        fontSize: 20,
+        alignItems: 'flex-end',
+        marginBottom: 68,
     },
     errorText: {
         color: 'red',

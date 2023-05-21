@@ -1,22 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, Image } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import io from 'socket.io-client';
-import { format } from 'date-fns';
+import { format, set } from 'date-fns';
 import frLocale from 'date-fns/locale/fr';
 import ImageMessageUpload from '../components/ChatPostComponent';
+import FullScreenImageModal from '../components/FullScreenImageModal';
 import BaseUrl from '../services/BaseUrl';
 import jwt_decode from 'jwt-decode';
 
-const API_URL = BaseUrl
 
+const API_URL = BaseUrl
 const Chat = () => {
     const navigation = useNavigation();
     const [messages, setMessages] = useState([]);
     // Check Text error
     const [currentUser, setCurrentUser] = useState(null);
+
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const openImageModal = (imageUrl) => {
+        setSelectedImage(imageUrl);
+        setModalVisible(true);
+    };
+    
+    const onCloseModal = () => {
+        setModalVisible(false);
+        setSelectedImage(null);
+    };
 
     const fetchMessages = async () => {
         try {
@@ -62,37 +76,53 @@ const Chat = () => {
     };
 
     return (
-        // Message view
         <View style={styles.container}>
-            <FlatList
-                style={styles.messageListContainer}
-                inverted={true}
-                onEndReached={fetchMessages}
-                onEndReachedThreshold={0.5}
-                data={messages}
-                keyExtractor={item => `${item.id}-${item.createdAt}`}
-                renderItem={({ item }) => (
-                    <View style={[styles.messageContainer, item.User?.id === currentUser ? styles.currentUserMessageContainer : null]}>
-                        <View style={[styles.messageContent]}>
-                            <Image style={styles.messageAvatar} source={item.User && item.User.imageUrl ? { uri: item.User.imageUrl } : require('../assets/avatarplaceholder.png')} />
-                            <View style={styles.messageTextContainer}>
-                                <Text style={styles.messageUsername}>{item.User ? item.User.firstName : ''} {item.User ? item.User.lastName : ''}</Text>
-                                {item.imageUrl ? (
-                                    <Image style={styles.messageImage} source={item.imageUrl ? { uri: item.imageUrl, } : null} />
-                                ) : null}
-                                <Text style={styles.messageText}>{item.content}</Text>
-                                <Text style={styles.messageCreatedAt}>{formatDate(item.createdAt)}</Text>
-                            </View>
-                        </View>
-                    </View>
-                )}
-            />
-            <View style={styles.inputContainer}>
-                <ImageMessageUpload />
-            </View >
-        </View >
-    );
-};
+          <FlatList
+            style={styles.messageListContainer}
+            inverted={true}
+            onEndReached={fetchMessages}
+            onEndReachedThreshold={0.5}
+            data={messages}
+            keyExtractor={(item) => `${item.id}-${item.createdAt}`}
+            renderItem={({ item }) => (
+              <View
+                style={[
+                  styles.messageContainer,
+                  item.User?.id === currentUser ? styles.currentUserMessageContainer : null,
+                ]}
+              >
+                <View style={styles.messageContent}>
+                  <Image
+                    style={styles.messageAvatar}
+                    source={
+                      item.User && item.User.imageUrl
+                        ? { uri: item.User.imageUrl }
+                        : require('../assets/avatarplaceholder.png')
+                    }
+                  />
+                  <View style={styles.messageTextContainer}>
+                    <Text style={styles.messageUsername}>
+                      {item.User ? item.User.firstName : ''} {item.User ? item.User.lastName : ''}
+                    </Text>
+                    {item.imageUrl ? (
+                    <TouchableOpacity onPress={() => openImageModal(item.imageUrl)}>
+                        <Image source={{ uri: item.imageUrl }} style={styles.messageImage} />
+                    </TouchableOpacity>
+                    ) : null}
+                    <Text style={styles.messageText}>{item.content}</Text>
+                    <Text style={styles.messageCreatedAt}>{formatDate(item.createdAt)}</Text>
+                  </View>
+                </View>
+              </View>
+            )}
+          />
+          <View style={styles.inputContainer}>
+            <ImageMessageUpload />
+          </View>
+          <FullScreenImageModal visible={modalVisible} imageUrl={selectedImage} onClose={onCloseModal} />
+        </View>
+      );
+    };
 
 const styles = StyleSheet.create({
     // Container
@@ -118,8 +148,9 @@ const styles = StyleSheet.create({
         maxWidth: '90%',
         marginTop: 5,
         // borderWidth: 2,
-        backgroundColor: 'rgb(52, 77, 94)',
+        backgroundColor: '#FF6B6B',
         borderColor: 'grey',
+        borderWidth: 2,
         borderTopRightRadius: 20,
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,

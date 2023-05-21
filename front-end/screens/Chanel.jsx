@@ -81,8 +81,15 @@ const Chanel = () => {
         style={styles.imageChannel}
         source={{ uri: item.imageUrl ? item.imageUrl : require('../assets/avatarplaceholder.png')}}
     />
-    <Text style={styles.textChanel}>Nom du Server:{'\n'}{item.title}</Text>            
-    <Text style={styles.textChanel}>Description du server:{'\n'}{item.content}</Text>
+    <Text style={styles.textChanel}>
+        <Text style={styles.boldItalicText}>Titre:</Text>{'\n'}
+        <Text style={styles.channelName}>{item.title}</Text>
+    </Text>            
+
+    <Text style={styles.textChanel}>
+        <Text style={styles.boldItalicText}>Description:</Text>{'\n'}
+        <Text style={styles.channelName}>{item.content}</Text>
+    </Text>  
     <Text style={styles.textChanelCreated}>Crée par: {item.User.firstName} {item.User.lastName} </Text>   
     <Text style={styles.textChanelCreated}>Crée le: {formatDate(item.createdAt)} </Text>
     </TouchableOpacity>
@@ -161,7 +168,14 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
         marginRight: 20,
         },
+    boldItalicText: {
+        fontWeight: 'bold',
+        fontStyle: 'italic',
+    },
+    channelName: {
 
+        fontSize: 11,
+    },
 });
 
 export default Chanel;
