@@ -107,16 +107,30 @@ exports.modifyPostChanel = (req, res, next) => {
     .catch((error) => res.status(500).json({ error: error.message }));
 };
 
-// delete a chanel
+// delete a chanel post
 exports.deletePostChanel = (req, res, next) => {
-  PostsChanel.findOne({ where: { id: req.params.id } })
-    .then((postChanel) => {
-      if (postChanel.creatorUserId !== req.user.id) {
-        res.status(400).json({ error: "You don't have the authorization" });
+  const where = {
+    id: req.params.id,
+  };
+
+  if (!req.user.admin) {
+    where.userId = req.user.id;
+  }
+
+  PostsChanel.findOne({ where })
+    .then((chanelPost) => {
+      if (!chanelPost) {
+        return res
+          .status(400)
+          .json({ error: "Vous n'avez pas l'autorisation" });
       }
-      postChanel
+      chanelPost
         .destroy()
-        .then(() => res.status(200).json({ message: "Post deleted !" }))
+        .then(() =>
+          res
+            .status(200)
+            .json({ message: "Publication de canal post supprimée !" })
+        )
         .catch((error) => res.status(400).json({ error }));
     })
     .catch((error) => res.status(500).json({ error: error.message }));

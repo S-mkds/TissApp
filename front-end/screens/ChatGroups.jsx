@@ -38,6 +38,32 @@ const ChatGroups = ({ route }) => {
         setSelectedImage(null);
     };
 
+        // fonction fetch delete message
+const handleDeleteMessage = async (messageId, userId) => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+
+      const response = await axios.delete(`${API_URL}/api/chanelPosts/delete-posts-chanel/${messageId}?userId=${userId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      console.log(response);
+      if (response.status === 200) {
+        fetchMessages();
+      } else {
+        console.log('error');
+      }
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+    const openDeleteModal = (message) => {
+    setSelectedMessage(message);
+    setShowDeleteModal(true);
+};
+
     const fetchChanelId = async () => {
         try {
         const token = await AsyncStorage.getItem('token');
@@ -57,30 +83,6 @@ const ChatGroups = ({ route }) => {
         console.log('Error fetching ChanelId');
         }
     };
-
-    // fonction fetch delete message
-const handleDeleteMessage = async (messageId, userId) => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      const response = await axios.delete(`${API_URL}/api/chanelPosts/delete-posts-chanel/${messageId}?userId=${userId}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      if (response.status === 200) {
-        fetchMessages();
-      } else {
-        console.log('error');
-      }
-    } catch (error) {
-        console.error(error);
-    }
-};
-
-    const openDeleteModal = (message) => {
-    setSelectedMessage(message);
-    setShowDeleteModal(true);
-};
 
     const fetchMessages = async () => {
         try {
@@ -165,7 +167,7 @@ const handleDeleteMessage = async (messageId, userId) => {
             <ImageUploadMessageChanelChat chanelId={chanelId} />
             </View >
             <FullScreenImageModal visible={modalVisible} imageUrl={selectedImage} onClose={onCloseModal} />
-            <ModalDeleteMessage visible={showDeleteModal} message={selectedMessage} onClose={() => setShowDeleteModal(false)} onDelete={handleDeleteMessage} />
+            <ModalDeleteMessage onDelete={() => handleDeleteMessage(selectedMessage.id, selectedMessage.userId )} visible={showDeleteModal} onClose={() => setShowDeleteModal(false)} />
         </View >
     );
 };
