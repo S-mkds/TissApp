@@ -36,7 +36,7 @@ const FullScreenImageModal = ({ visible, imageUrl, onClose }) => {
           <AntDesign name="close" size={30} color="red" />
         </TouchableOpacity>
         {/* Affichage de l'image en plein écran */}
-        <Image style={styles.fullScreenImage} source={{ uri: imageUrl }} resizeMode="contain" />
+        <Image style={styles.fullScreenImage} source={{ uri: imageUrl }} resizeMode="cover" />
         {/* Bouton de téléchargement */}
         <TouchableOpacity style={styles.downloadButton} onPress={handleDownload}>
           <AntDesign name="download" size={30} color="green" />
@@ -67,8 +67,9 @@ const styles = StyleSheet.create({
   },
   fullScreenImage: {
     width: '95%',
-    height: '50%',
+    aspectRatio: 1, // Ratio d'aspect 1:1 pour conserver la proportion de l'image
     borderRadius: 10,
+    maxHeight: '100%',
   },
 });
 
