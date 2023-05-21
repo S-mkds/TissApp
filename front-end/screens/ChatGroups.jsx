@@ -6,12 +6,12 @@ import axios from 'axios';
 import BaseUrl from '../services/BaseUrl';
 const API_URL = BaseUrl
 import jwt_decode from 'jwt-decode';
-
 import { useNavigation } from '@react-navigation/native';
 import io from 'socket.io-client';
 import { format } from 'date-fns';
 import frLocale from 'date-fns/locale/fr';
 import ImageUploadMessageChanelChat from '../components/ChatGroupsComponent';
+import FullScreenImageModal from '../components/FullScreenImageModal';
 
 const ChatGroups = ({ route }) => {
     const { chanelId } = route.params;
@@ -19,25 +19,38 @@ const ChatGroups = ({ route }) => {
     const [messages, setMessages] = useState([]);
     const [title, setTitle] = useState('');
     const [currentUser, setCurrentUser] = useState(null);
-  
+
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const openImageModal = (imageUrl) => {
+        setSelectedImage(imageUrl);
+        setModalVisible(true);
+    };
+    
+    const onCloseModal = () => {
+        setModalVisible(false);
+        setSelectedImage(null);
+    };
+
     const fetchChanelId = async () => {
-      try {
+        try {
         const token = await AsyncStorage.getItem('token');
         const response = await axios.get(`${API_URL}/api/chanel/chanels/${chanelId}`, {
-          headers: {
+            headers: {
             'Authorization': `Bearer ${token}`,
-          },
+            },
         });
         if (response.status === 200) {
             // console.log(response.data)
             setTitle(response.data.chanel.title + ' - n°' + response.data.chanel.id);
         } else {
-          console.log('Error fetching ChanelId');
+            console.log('Error fetching ChanelId');
         }
-      } catch (error) {
+        } catch (error) {
         console.error(error);
         console.log('Error fetching ChanelId');
-      }
+        }
     };
 
     const fetchMessages = async () => {
@@ -107,7 +120,9 @@ const ChatGroups = ({ route }) => {
                             <View style={styles.messageTextContainer}>
                                 <Text style={styles.messageUsername}>{item.User ? item.User.firstName : ''} {item.User ? item.User.lastName : ''}</Text>
                                 {item.imageUrl ? (
+                                    <TouchableOpacity onPress={() => openImageModal(item.imageUrl)}>
                                     <Image style={styles.messageImage} source={item.imageUrl ? { uri: item.imageUrl, } : null} />
+                                    </TouchableOpacity>
                                 ) : null}
                                 <Text style={styles.messageText}>{item.content}</Text>
                                 <Text style={styles.messageCreatedAt}>{formatDate(item.createdAt)}</Text>
@@ -119,6 +134,7 @@ const ChatGroups = ({ route }) => {
             <View style={styles.inputContainer}>
             <ImageUploadMessageChanelChat chanelId={chanelId} />
             </View >
+            <FullScreenImageModal visible={modalVisible} imageUrl={selectedImage} onClose={onCloseModal} />
         </View >
     );
 };

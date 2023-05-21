@@ -77,52 +77,52 @@ const Chat = () => {
 
     return (
         <View style={styles.container}>
-          <FlatList
-            style={styles.messageListContainer}
-            inverted={true}
-            onEndReached={fetchMessages}
-            onEndReachedThreshold={0.5}
-            data={messages}
-            keyExtractor={(item) => `${item.id}-${item.createdAt}`}
-            renderItem={({ item }) => (
-              <View
+            <FlatList
+                style={styles.messageListContainer}
+                inverted={true}
+                onEndReached={fetchMessages}
+                onEndReachedThreshold={0.5}
+                data={messages}
+                keyExtractor={(item) => `${item.id}-${item.createdAt}`}
+                renderItem={({ item }) => (
+            <View
                 style={[
-                  styles.messageContainer,
-                  item.User?.id === currentUser ? styles.currentUserMessageContainer : null,
-                ]}
-              >
-                <View style={styles.messageContent}>
-                  <Image
+                    styles.messageContainer,
+                    item.User?.id === currentUser ? styles.currentUserMessageContainer : null,
+            ]}
+            >
+            <View style={styles.messageContent}>
+                <Image
                     style={styles.messageAvatar}
                     source={
-                      item.User && item.User.imageUrl
+                    item.User && item.User.imageUrl
                         ? { uri: item.User.imageUrl }
                         : require('../assets/avatarplaceholder.png')
                     }
-                  />
-                  <View style={styles.messageTextContainer}>
+                />
+                <View style={styles.messageTextContainer}>
                     <Text style={styles.messageUsername}>
-                      {item.User ? item.User.firstName : ''} {item.User ? item.User.lastName : ''}
+                        {item.User ? item.User.firstName : ''} {item.User ? item.User.lastName : ''}
                     </Text>
-                    {item.imageUrl ? (
+                        {item.imageUrl ? (
                     <TouchableOpacity onPress={() => openImageModal(item.imageUrl)}>
                         <Image source={{ uri: item.imageUrl }} style={styles.messageImage} />
                     </TouchableOpacity>
                     ) : null}
                     <Text style={styles.messageText}>{item.content}</Text>
                     <Text style={styles.messageCreatedAt}>{formatDate(item.createdAt)}</Text>
-                  </View>
                 </View>
-              </View>
+                </View>
+            </View>
             )}
-          />
-          <View style={styles.inputContainer}>
+        />
+        <View style={styles.inputContainer}>
             <ImageMessageUpload />
-          </View>
-          <FullScreenImageModal visible={modalVisible} imageUrl={selectedImage} onClose={onCloseModal} />
         </View>
-      );
-    };
+        <FullScreenImageModal visible={modalVisible} imageUrl={selectedImage} onClose={onCloseModal} />
+        </View>
+    );
+};
 
 const styles = StyleSheet.create({
     // Container

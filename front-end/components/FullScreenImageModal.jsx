@@ -8,9 +8,8 @@ const FullScreenImageModal = ({ visible, imageUrl, onClose }) => {
       <View style={styles.modalContainer}>
         {/* Bouton pour fermer la modal */}
         <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-          <Text style={styles.closeButtonText}>Fermer</Text>
+          <Text style={styles.closeButtonText}>❌</Text>
         </TouchableOpacity>
-
         {/* Affichage de l'image en plein écran */}
         <Image style={styles.fullScreenImage} source={{ uri: imageUrl }} resizeMode="contain" />
       </View>
@@ -27,23 +26,22 @@ const styles = StyleSheet.create({
   },
 
   closeButton: {
-    position: 'absolute',
-    top: 20,
-    right: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
     padding: 10,
     borderRadius: 5,
-    zIndex: 1,
+    alignSelf: 'flex-end',
+    margin: 5,
   },
 
+
   closeButtonText: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
   },
 
   fullScreenImage: {
-    width: '100%',
-    height: '100%',
+    width: '80%',
+    height: '60%',
+    borderRadius: 10,
   },
 });
 

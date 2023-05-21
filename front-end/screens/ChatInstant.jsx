@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, FlatList } from 'react-native';
+import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -11,6 +11,7 @@ import io from 'socket.io-client';
 import { format } from 'date-fns';
 import frLocale from 'date-fns/locale/fr';
 import ChatInstantComponent from '../components/ChatInstantComponent';
+import FullScreenImageModal from '../components/FullScreenImageModal'
 
 const ChatGroups = ({ route }) => {
 
@@ -20,6 +21,19 @@ const ChatGroups = ({ route }) => {
     const [messages, setMessages] = useState([]);
     const [currentUser, setCurrentUser] = useState('');
     // récuperation des infos du destinataire et de l'émetteur
+    
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const openImageModal = (imageUrl) => {
+        setSelectedImage(imageUrl);
+        setModalVisible(true);
+    };
+    
+    const onCloseModal = () => {
+        setModalVisible(false);
+        setSelectedImage(null);
+    };
 
     const fetchRecipientId = async (recipientId) => {
       try {
@@ -84,8 +98,10 @@ const ChatGroups = ({ route }) => {
                             <View style={styles.messageTextContainer}>
                                 <Text style={styles.messageUsername}>{item.User ? item.User.firstName : ''} {item.User ? item.User.lastName : ''}</Text>
                                 {item.imageUrl ? (
+                                    <TouchableOpacity onPress={() => openImageModal(item.imageUrl)}>
                                     <Image style={styles.messageImage} source={item.imageUrl ? { uri: item.imageUrl, } : null} />
-                                ) : null}
+                                    </TouchableOpacity>
+                              ) : null}
                                 <Text style={styles.messageText}>{item.content}</Text>
                                 <Text style={styles.messageCreatedAt}>{formatDate(item.createdAt)}</Text>
                             </View>
@@ -96,6 +112,7 @@ const ChatGroups = ({ route }) => {
             <View style={styles.inputContainer}>
             <ChatInstantComponent recipientId={recipientId} />
             </View >
+            <FullScreenImageModal visible={modalVisible} imageUrl={selectedImage} onClose={onCloseModal} />
         </View >
     );
 };
