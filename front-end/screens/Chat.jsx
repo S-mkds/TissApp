@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
@@ -27,7 +27,7 @@ const Chat = () => {
     // Modal Delete Message
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [selectedMessage, setSelectedMessage] = useState(null);
-
+ 
 
     // fonction image modal
     const openImageModal = (imageUrl) => {
@@ -43,7 +43,7 @@ const Chat = () => {
 const handleDeleteMessage = async (messageId, userId) => {
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await axios.delete(`${API_URL}/api/posts/${userId}`, {
+      const response = await axios.delete(`${API_URL}/api/posts/${messageId}?userId=${userId}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -57,7 +57,6 @@ const handleDeleteMessage = async (messageId, userId) => {
       console.error(error);
     }
   };
-  
 
     const openDeleteModal = (message) => {
         setSelectedMessage(message);
@@ -117,7 +116,7 @@ const handleDeleteMessage = async (messageId, userId) => {
                 data={messages}
                 keyExtractor={(item) => `${item.id}-${item.createdAt}`}
                 renderItem={({ item }) => (
-            <TouchableOpacity TouchableOpacity onPress={() => handleDeleteMessage(item.id, item.userId)}>
+            <TouchableOpacity onPress={item.User?.id === currentUser ? () => openDeleteModal(item) : null}>
             <View
                 style={[
                     styles.messageContainer,

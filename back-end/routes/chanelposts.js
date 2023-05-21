@@ -14,7 +14,7 @@ router.put(
   chanelPostsCtrl.modifyPostChanel
 );
 router.delete(
-  "/delete-all-posts-chanel/:id",
+  "/delete-posts-chanel/:id",
   auth,
   chanelPostsCtrl.deletePostChanel
 );
