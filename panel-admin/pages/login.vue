@@ -63,6 +63,9 @@ export default {
             }, 1000);
         },
     },
+    mounted() {
+        this.$lightModeConfig.initializeLightMode();
+    },
 }
 </script>
 

@@ -5,7 +5,8 @@ html, body, h1, h2, h3, h4, h5, h6, p, button, label, div {
   color: #fff !important;
 }
 
-.w-text {
+.w-text.light-mode,
+.w-text.light-mode * {
   color: #fff !important;
 }
 
@@ -28,6 +29,7 @@ h1.light-mode, h2.light-mode, h3.light-mode, h4.light-mode, h5.light-mode, h6.li
   color: rgb(57, 57, 57) !important;
 }
 
-.w-text.light-mode {
+.w-text.light-mode,
+.w-text.light-mode * {
   color: rgb(57, 57, 57) !important;
 }

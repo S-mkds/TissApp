@@ -22,7 +22,6 @@ export default {
         }
     },
     methods: {
-
         // REQUEST GET ONE USER
         async getOneUser(userId) {
             try {
@@ -296,6 +295,9 @@ export default {
         } else {
             console.log("Sorry, your browser does not support Web Storage...");
         }
+    },
+    mounted() {
+        this.$lightModeConfig.initializeLightMode();
     },
 }
 </script>

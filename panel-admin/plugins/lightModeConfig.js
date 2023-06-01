@@ -50,8 +50,14 @@ function updateLightModeClasses() {
   classes.forEach((classElement) => {
     if (lightModeConfig.lightMode) {
       classElement.classList.add("light-mode");
+      classElement.querySelectorAll("*").forEach((childElement) => {
+        childElement.classList.add("light-mode");
+      });
     } else {
       classElement.classList.remove("light-mode");
+      classElement.querySelectorAll("*").forEach((childElement) => {
+        childElement.classList.remove("light-mode");
+      });
     }
   });
 

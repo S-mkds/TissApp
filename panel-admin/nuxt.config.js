@@ -35,20 +35,6 @@ export default {
     { src: "~/plugins/lightModeConfig.js", mode: "client" },
   ],
 
-  hooks: {
-    mounted() {
-      this.$nextTick(() => {
-        const storedLightMode = localStorage.getItem("lightMode");
-        if (storedLightMode) {
-          const lightMode = JSON.parse(storedLightMode);
-          this.$lightModeConfig.lightMode = lightMode;
-        }
-        this.$lightModeConfig.initializeLightMode();
-        this.$lightModeConfig.toggleLightMode(); // Appeler la fonction toggleLightMode à chaque montée de la page
-      });
-    },
-  },
-
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 

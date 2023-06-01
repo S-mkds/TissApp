@@ -267,6 +267,9 @@ export default {
             return moment(date).locale('fr').format('dddd D MMMM, HH:mm:ss');
         },
     },
+    mounted() {
+        this.$lightModeConfig.initializeLightMode();
+    },
     created() {
         this.getPosts()
         //Decode token and get user connected
@@ -308,9 +311,8 @@ export default {
                     <thead>
                         <tr>
                             <th class="w-text">ID</th>
-                            <!-- <th class="w-text">Avatar</th> -->
                             <th class="w-text">Nom d'utilisateur</th>
-                            <th class="w-text">Image</th>
+                            <th class="w-text">Avatar</th>
                             <th class="w-text">Message</th>
                             <th class="w-text">Date de création</th>
                             <th class="w-text">Action</th>

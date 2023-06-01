@@ -126,7 +126,9 @@ export default {
                 });
         },
     },
-
+    mounted() {
+        this.$lightModeConfig.initializeLightMode();
+    },
     // CREATED
     created() {
         this.getPosts()
