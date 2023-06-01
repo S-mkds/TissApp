@@ -34,7 +34,7 @@ export default {
       <img class="logo-index" src="~/static/NewLogo.png" alt="Logo" />
       <h1 class="mainte-title-index" @click="loginDirection(); showSpinner = true">TISSAPP</h1>
     </div>
-    <p class="main-description-index">Administration</p>
+    <p class="w-text">Administration</p>
     <!-- light mode -->
     <button class="color-mode-index" @click="toggleLightMode">Activer/Désactiver le mode sombre</button>
   </div>

@@ -16,7 +16,7 @@ export const lightModeConfig = Vue.observable({
   },
 
   initializeLightMode() {
-    const storedLightMode = localStorage.getItem("LightMode");
+    const storedLightMode = localStorage.getItem("lightMode");
     if (storedLightMode) {
       this.lightMode = JSON.parse(storedLightMode);
     }

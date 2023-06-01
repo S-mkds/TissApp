@@ -21,7 +21,7 @@ html, body {
 /* ******************************************************************************************************************************** */
 /* Mode lumineux */
 html.light-mode, body.light-mode {
-  background-color: #ded9d9eb !important;
+  background-color: #9f9e9eeb !important;
   color: rgb(57, 57, 57) !important;
 }
 
@@ -35,6 +35,24 @@ h1.light-mode, h2.light-mode, h3.light-mode, h4.light-mode, h5.light-mode, h6.li
 }
 /* Styles spécifiques pour les éléments td en mode clair */
 html.light-mode td.w-text,
-html.light-mode td.w-text * {
+html.light-mode td.w-text *,
+html.light-mode h1.w-text,
+html.light-mode h1.w-text *,
+html.light-mode h2.w-text,
+html.light-mode h2.w-text *,
+html.light-mode h3.w-text,
+html.light-mode h3.w-text *,
+html.light-mode h4.w-text,
+html.light-mode h4.w-text *,
+html.light-mode h5.w-text,
+html.light-mode h5.w-text *,
+html.light-mode h6.w-text,
+html.light-mode h6.w-text *,
+html.light-mode p.w-text,
+html.light-mode p.w-text *,
+html.light-mode button.w-text,
+html.light-mode button.w-text *,
+html.light-mode label.w-text,
+html.light-mode label.w-text *{
   color: rgb(57, 57, 57) !important;
 }

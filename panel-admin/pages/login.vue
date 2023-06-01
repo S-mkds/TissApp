@@ -1,5 +1,7 @@
 
 <script>
+import { lightModeConfig } from '../plugins/lightModeConfig.js'
+
 import CustomSpinner from '../components/spinner.vue'
 export default {
     components: { CustomSpinner },
@@ -15,7 +17,15 @@ export default {
             }
         }
     },
+    mounted() {
+        this.$lightModeConfig.initializeLightMode();
+    },
     methods: {
+        mountedAfterReload() {
+            this.$lightModeConfig.initializeLightMode();
+            // Autres actions à effectuer après le rechargement
+            // ...
+        },
         async submitLogin() {
             const data = {
                 email: this.email,
@@ -63,10 +73,9 @@ export default {
             }, 1000);
         },
     },
-    mounted() {
-        this.$lightModeConfig.initializeLightMode();
-    },
+
 }
+
 </script>
 
 <template>

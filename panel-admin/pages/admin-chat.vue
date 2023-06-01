@@ -469,6 +469,7 @@ export default {
     margin: 1rem;
     width: 90%;
     min-width: 300px;
+    text-align: center;
 }
 
 td,

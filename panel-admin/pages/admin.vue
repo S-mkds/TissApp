@@ -149,7 +149,7 @@ export default {
         <!-- HEADER -->
         <header class="header">
             <img class="logo-h" src="~/static/NewLogo.png" alt="Logo-h" />
-            <h2 class="h-text title">TISSAPP Admin panel
+            <h2 class="w-text h-text title">TISSAPP Admin panel
             </h2>
             <div>
                 <h2 class="title-admin">Administrateur: {{ setOneUser.firstName }} {{ setOneUser.lastName }}</h2>
