@@ -312,7 +312,7 @@ export default {
 }
 
 .title-admin {
-    color: rgba(255, 0, 0, 0.626) !important;
+    color: red !important;
     justify-content: center;
     font-size: 1rem;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;

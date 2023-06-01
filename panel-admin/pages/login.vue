@@ -23,8 +23,6 @@ export default {
     methods: {
         mountedAfterReload() {
             this.$lightModeConfig.initializeLightMode();
-            // Autres actions à effectuer après le rechargement
-            // ...
         },
         async submitLogin() {
             const data = {

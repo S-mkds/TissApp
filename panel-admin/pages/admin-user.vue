@@ -307,7 +307,8 @@ export default {
         <header class="header">
             <img @click="adminPanel(); showSpinner = true" class="logo-h" src="~/static/NewLogo.png" alt="Logo-h" />
             <h1 class="w-text h-text">TISSAPP Admin panel
-                <p class="w-text">Administrateur: {{ setOneUser.firstName }} {{ setOneUser.lastName }}</p>
+                <p class="text-danger" style="color: red !important;">Administrateur: {{ setOneUser.firstName }} {{
+                    setOneUser.lastName }}</p>
             </h1>
             <div class="button-header">
                 <!-- chat button -->
@@ -515,17 +516,16 @@ th {
 }
 
 .text-sucess {
-    color: rgb(5, 183, 5) !important;
-    font-weight: 600;
+    color: rgb(6, 158, 6) !important;
 }
 
 .text-info {
-    color: rgb(56, 172, 255);
-    font-weight: 600;
+    color: rgb(5, 12, 107);
+    font-weight: 900;
 }
 
 .text-danger {
-    color: red;
+    color: red !important;
     font-weight: 600;
 }
 
