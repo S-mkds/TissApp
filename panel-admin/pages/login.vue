@@ -18,8 +18,8 @@ export default {
 
             },
             beforeMount() {
-                this.$darkModeConfig.updateDarkModeClasses();
                 this.$darkModeConfig.initializeDarkMode();
+                this.$darkModeConfig.updateDarkModeClasses();
             },
         }
     },

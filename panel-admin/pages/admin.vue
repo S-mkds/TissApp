@@ -167,9 +167,9 @@ export default {
         <div class="container">
             <div class="container-square-left">
                 <div class="square-user">
-                    <h4 class="w-text">Nombre d'utilisateurs: </h4>
+                    <h4 class="number-context">Nombre d'utilisateurs: </h4>
                     <br>
-                    <p class="w-text" style="text-align: center; font-size: 20px;">
+                    <p class="number-context" style="text-align: center; font-size: 20px;">
                         {{ totalUsers }}
                     </p>
                 </div>
@@ -186,9 +186,9 @@ export default {
             </div>
             <div class="container-square-left">
                 <div class="square-post">
-                    <h4 class="w-text">Nombre de messages: </h4>
+                    <h4 class="number-context">Nombre de messages: </h4>
                     <br>
-                    <p class="w-text" style="text-align: center; font-size: 20px;">
+                    <p class="number-context" style="text-align: center; font-size: 20px;">
                         {{ totalPosts }}
                     </p>
                 </div>
@@ -415,6 +415,10 @@ export default {
     padding: 0;
     margin-bottom: -10px;
     align-self: center;
+}
+
+.number-context {
+    color: white;
 }
 
 .context {

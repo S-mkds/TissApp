@@ -21,7 +21,7 @@ export const darkModeConfig = Vue.observable({
 
 function updateDarkModeClasses() {
   const elements = document.querySelectorAll(
-    "html, body, h1, h2, h3, h4, h5, h6, p, div"
+    "html, body, h1, h2, h3, h4, h5, h6, p, div, label, .w-text"
   );
 
   elements.forEach((element) => {
