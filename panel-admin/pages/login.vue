@@ -12,15 +12,7 @@ export default {
             isPasswordVisible: false,
             mounted() {
                 this.getUsers()
-                this.$darkModeConfig.initializeDarkMode();
-                this.$darkModeConfig.updateDarkModeClasses();
-
-
-            },
-            beforeMount() {
-                this.$darkModeConfig.initializeDarkMode();
-                this.$darkModeConfig.updateDarkModeClasses();
-            },
+            }
         }
     },
     methods: {

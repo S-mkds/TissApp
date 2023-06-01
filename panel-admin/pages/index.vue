@@ -1,7 +1,6 @@
 <script>
 import CustomSpinner from '../components/spinner.vue'
 import 'animate.css/animate.min.css';
-import { darkModeConfig } from '../plugins/darkModeConfig';
 
 export default {
   components: { CustomSpinner },
@@ -11,8 +10,8 @@ export default {
     }
   },
   methods: {
-    toggleDarkMode() {
-      this.$darkModeConfig.toggleDarkMode();
+    toggleLightMode() {
+      this.$lightModeConfig.toggleLightMode();
     },
     loginDirection() {
       this.showSpinner = false;
@@ -33,8 +32,8 @@ export default {
       <h1 class="mainte-title-index" @click="loginDirection(); showSpinner = true">TISSAPP</h1>
     </div>
     <p class="main-description-index">Administration</p>
-    <!-- dark mode -->
-    <button class="color-mode-index" @click="toggleDarkMode">Activer/Désactiver le mode sombre</button>
+    <!-- light mode -->
+    <button class="color-mode-index" @click="toggleLightMode">Activer/Désactiver le mode sombre</button>
   </div>
 </template>
 

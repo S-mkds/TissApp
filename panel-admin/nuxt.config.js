@@ -32,22 +32,23 @@ export default {
   plugins: [
     // ...
     { src: "~/plugins/viewtify.js", mode: "client" },
-    { src: "~/plugins/darkModeConfig.js", mode: "client" },
+    { src: "~/plugins/lightModeConfig.js", mode: "client" },
   ],
 
   hooks: {
-    // ...
     mounted() {
       this.$nextTick(() => {
-        const storedDarkMode = localStorage.getItem("darkMode");
-        if (storedDarkMode) {
-          const darkMode = JSON.parse(storedDarkMode);
-          this.$darkModeConfig.darkMode = darkMode;
+        const storedLightMode = localStorage.getItem("lightMode");
+        if (storedLightMode) {
+          const lightMode = JSON.parse(storedLightMode);
+          this.$lightModeConfig.lightMode = lightMode;
         }
-        this.$darkModeConfig.initializeDarkMode();
+        this.$lightModeConfig.initializeLightMode();
+        this.$lightModeConfig.toggleLightMode(); // Appeler la fonction toggleLightMode à chaque montée de la page
       });
     },
   },
+
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 

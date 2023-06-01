@@ -18,16 +18,16 @@ html, body {
 }
 
 /* ******************************************************************************************************************************** */
-/* Mode sombre */
-html.dark-mode, body.dark-mode {
+/* Mode lumineux */
+html.light-mode, body.light-mode {
   background-color: #ded9d9eb !important;
   color: rgb(57, 57, 57) !important;
 }
 
-h1.dark-mode, h2.dark-mode, h3.dark-mode, h4.dark-mode, h5.dark-mode, h6.dark-mode, p.dark-mode, button.dark-mode, label.dark-mode {
+h1.light-mode, h2.light-mode, h3.light-mode, h4.light-mode, h5.light-mode, h6.light-mode, p.light-mode, button.light-mode, label.light-mode {
   color: rgb(57, 57, 57) !important;
 }
 
-.w-text.dark-mode {
+.w-text.light-mode {
   color: rgb(57, 57, 57) !important;
 }
