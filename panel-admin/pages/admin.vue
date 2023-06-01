@@ -300,10 +300,19 @@ export default {
     color: rgb(52, 124, 233);
 }
 
+.title {
+    justify-content: center;
+    font-size: 1.2rem;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
 .title-admin {
     color: rgba(255, 0, 0, 0.626);
     justify-content: center;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     align-items: center;
     justify-content: center;

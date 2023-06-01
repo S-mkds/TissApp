@@ -292,7 +292,7 @@ export default {
             </h1>
             <div class="button-header">
                 <!-- user button -->
-                <button id="user-button" @click="userPanel(); showSpinner = true">User-panel</button>
+                <button id="user-button" @click="userPanel(); showSpinner = true">Utilisateurs</button>
                 <!-- logout button -->
                 <button id="logout-button" @click="logout(); showSpinner = true">Déconnexion</button>
                 <!-- spinner -->
@@ -300,7 +300,7 @@ export default {
             </div>
         </header>
         <!-- MAIN -->
-        <div>
+        <div class="container-table">
             <div class="overflow-auto post-container" style="max-height: 700px">
                 <h1 class="w-text title ">Chat Panel</h1>
                 <!-- TABLE USER -->
@@ -342,7 +342,7 @@ export default {
                 </table>
             </div>
         </div>
-        <section>
+        <section class="section-send">
             <div>
                 <form class="send-message">
                     <input v-model="setPostContent" type="text" class="input-send" placeholder="Envoyez votre message..." />
@@ -363,11 +363,11 @@ export default {
 
 .header {
     display: flex;
+    background-color: #71717176;
+    border: 2px, solid, #0F1828;
     align-items: center;
-    background-color: #423f3f54;
-    background-image: linear-gradient(120deg, #155799, #159957);
-    opacity: 0.8;
-    padding-left: 20rem;
+    justify-content: space-between;
+    padding: 10px;
 }
 
 .logo-h {
@@ -444,16 +444,21 @@ export default {
     display: flex;
     flex-direction: column;
     width: 20%;
-    margin: 20px;
     width: 95%;
 }
 
 .table {
     width: 95%;
-    margin: 20px;
     color: white;
     font-size: 1rem;
     font-weight: 600;
+}
+
+.container-table {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .post-container {
@@ -462,7 +467,8 @@ export default {
     padding: 0.2rem;
     margin: 1rem;
     box-shadow: 10px 5px 5px rgb(70, 70, 70);
-    width: 95%;
+    width: 90%;
+    min-width: 300px;
 }
 
 .h-text {
@@ -499,10 +505,10 @@ export default {
 .send-message {
     display: flex;
     align-items: center;
-    margin: 20px;
     padding: 5px;
-    width: 20%;
+    width: 35%;
     height: 100%;
+    margin-left: 1.5rem;
 }
 
 .input-send {
@@ -531,5 +537,9 @@ export default {
 .btn-send:hover {
     background-color: rgb(96, 52, 177);
     opacity: 0.8;
+}
+
+.section-send {
+    padding-bottom: 2rem;
 }
 </style>

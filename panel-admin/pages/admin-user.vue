@@ -309,7 +309,7 @@ export default {
             </h1>
             <div class="button-header">
                 <!-- chat button -->
-                <button id="chat-button" @click="chatPanel(); showSpinner = true">Chat-panel</button>
+                <button id="chat-button" @click="chatPanel(); showSpinner = true">Chat</button>
                 <!-- logout button -->
                 <button id="logout-button" @click="logout(); showSpinner = true">Déconnexion</button>
                 <!-- spinner -->
@@ -317,7 +317,7 @@ export default {
             </div>
         </header>
         <!-- SEARCH USER -->
-        <div>
+        <section class="user-list-section">
             <div class="form-group">
                 <label class="w-text label-search" for="search">Rechercher un utilisateur</label>
                 <input v-model="search" type="text" class="input-search" id="search"
@@ -370,7 +370,7 @@ export default {
                     </tbody>
                 </table>
             </div>
-        </div>
+        </section>
     </section>
 </template>
 
@@ -379,16 +379,15 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
 }
 
 .header {
     display: flex;
+    background-color: #71717176;
+    border: 2px, solid, #0F1828;
     align-items: center;
-    background-color: #423f3f54;
-    background-image: linear-gradient(120deg, #155799, #159957);
-    opacity: 0.8;
-    padding-left: 20rem;
+    justify-content: space-between;
+    padding: 10px;
 }
 
 .logo-h {
@@ -480,6 +479,7 @@ export default {
     color: white;
     font-size: 1rem;
     font-weight: 600;
+    margin-bottom: 5rem;
 }
 
 .user-container {
@@ -534,5 +534,9 @@ export default {
     display: block;
     cursor: pointer;
     border-radius: 20%;
+}
+
+.user-list-section {
+    padding-bottom: 2rem;
 }
 </style>
