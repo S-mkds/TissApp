@@ -20,15 +20,26 @@ export default {
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/Newlogo.png" }],
   },
+  body: {},
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [],
+  css: [
+    // CSS file in the project
+    "@/styles/app.css",
+  ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    // { src: '~/plugins/vue-js-dialog', ssr: false }
+    // ...
+    { src: "~/plugins/viewtify.js", mode: "client" },
+    { src: "~/plugins/darkModeConfig.js", mode: "client" },
   ],
 
+  hooks: {
+    beforeMount() {
+      this.$darkModeConfig.toggleDarkMode();
+    },
+  },
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
@@ -41,7 +52,6 @@ export default {
     "bootstrap-vue/nuxt",
     "moment",
   ],
-
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
 };

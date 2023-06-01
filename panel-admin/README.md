@@ -67,3 +67,11 @@ More information about the usage of this directory in [the documentation](https:
 This directory contains your Vuex store files. Creating a file in this directory automatically activates Vuex.
 
 More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/store).
+
+
+#### Mettre à jour les packages 
+Mettez à jour Nuxt.js et les autres dépendances :
+
+Exécutez la commande npm outdated pour vérifier les packages obsolètes.
+Mettez à jour Nuxt.js en utilisant npm update nuxt.
+Mettez à jour les autres dépendances avec npm update.

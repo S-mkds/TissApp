@@ -358,10 +358,7 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #0F1828;
-    background-image: linear-gradient(360deg, #0F1828, #272929);
-    height: 100vh;
-
+    height: 120vh;
 }
 
 .header {

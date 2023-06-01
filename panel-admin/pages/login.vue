@@ -12,6 +12,14 @@ export default {
             isPasswordVisible: false,
             mounted() {
                 this.getUsers()
+                this.$darkModeConfig.initializeDarkMode();
+                this.$darkModeConfig.updateDarkModeClasses();
+
+
+            },
+            beforeMount() {
+                this.$darkModeConfig.updateDarkModeClasses();
+                this.$darkModeConfig.initializeDarkMode();
             },
         }
     },
@@ -50,7 +58,6 @@ export default {
                     console.log(err);
                 });
         },
-
         togglePasswordVisibility() {
             this.isPasswordVisible = !this.isPasswordVisible;
             const input = document.getElementById("password");
@@ -61,71 +68,35 @@ export default {
 </script>
 
 <template>
-    <div class="main-container">
-        <header class="header">
-            <img class="logo-h" src="~/static/NewLogo.png" alt="Logo-h" />
-            <h1 class="w-text h-text">TISSAPP Admin panel</h1>
-        </header>
-        <section>
-            <div>
-                <form class="login-form">
-                    <img class="logo-img" src="~/static/NewLogo.png" alt="Logo" />
-                    <h1 class="w-text login-text">Connexion Administration</h1>
-                    <label class="w-text label-text" for="email">Email :</label>
-                    <input class="input-text" id="email" type="email" v-model="email"
-                        placeholder="Entrez votre Email Admin" />
-                    <label class="w-text label-text" for="password">Mot de passe :</label>
-                    <input class="input-text" id="password" type="password" v-model="password"
-                        placeholder="Entrez votre mot de passe" />
-                    <button class="toggle-password" @click="togglePasswordVisibility" type="button">
-                        <i class="fas fa-eye"></i>
-                    </button>
-
-                    <!-- Login Button -->
-                    <button class="button1" @click.prevent="submitLogin(); showSpinner = true">Connexion</button>
-                    <!-- spinner -->
-                    <custom-spinner v-if="showSpinner"></custom-spinner>
-                    <p class=" error-text">{{ errorMessage }}</p>
-                </form>
-            </div>
-        </section>
-    </div>
+    <section>
+        <div>
+            <form class="login-form">
+                <img class="logo-img" src="~/static/NewLogo.png" alt="Logo" />
+                <h1 class="w-text login-text">Connexion Administration</h1>
+                <label class="w-text label-text" for="email">Email :</label>
+                <input class="input-text" id="email" type="email" v-model="email" placeholder="Entrez votre Email Admin" />
+                <label class="w-text label-text" for="password">Mot de passe :</label>
+                <input class="input-text" id="password" type="password" v-model="password"
+                    placeholder="Entrez votre mot de passe" />
+                <button class="toggle-password" @click="togglePasswordVisibility" type="button">
+                    <i class="fas fa-eye"></i>
+                </button>
+                <!-- Login Button -->
+                <button class="button1" @click.prevent="submitLogin(); showSpinner = true">Connexion</button>
+                <!-- spinner -->
+                <custom-spinner v-if="showSpinner"></custom-spinner>
+                <p class=" error-text">{{ errorMessage }}</p>
+            </form>
+        </div>
+    </section>
 </template>
 
 <style scoped>
-.main-container {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: #0F1828;
-    background-image: linear-gradient(360deg, #0F1828, #272929);
-}
-
-.header {
-    display: flex;
-    align-items: center;
-    background-color: #423f3f54;
-    background-image: linear-gradient(120deg, #155799, #159957);
-    opacity: 0.8;
-    padding-left: 20rem;
-}
-
-.logo-h {
-    width: 50px;
-    height: 50px;
-    margin: 10px;
-    opacity: 1;
-    object-fit: contain;
-    display: block;
-}
-
 .h-text {
     font-size: 1.5rem;
     font-weight: 600;
     justify-content: center;
-    font-family: 'Sigmar One', cursive;
-    text-shadow: 2px 2px 3px #7c7c7c;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 .w-text {
@@ -147,7 +118,6 @@ export default {
     font-size: 1.5rem;
     font-weight: 600;
     justify-content: center;
-    text-shadow: 2px 2px 3px #7c7c7c;
 }
 
 .label-text {
@@ -155,7 +125,6 @@ export default {
     font-size: 1rem;
     font-weight: 600;
     justify-content: center;
-    text-shadow: 2px 2px 3px #7c7c7c;
 }
 
 .input-text {
@@ -174,9 +143,9 @@ export default {
     align-items: center;
     justify-content: center;
     margin: auto;
-    width: 400px;
-    height: 400px;
-    padding: 20px;
+    width: 500px;
+    height: 500px;
+    padding: 2rem;
     margin-top: 100px;
     top: 5rem;
     border-radius: 10px;
@@ -195,7 +164,6 @@ export default {
     font-size: 1rem;
     font-weight: 600;
     justify-content: center;
-    text-shadow: 2px 2px 3px #7c7c7c;
     width: 60%;
 }
 
@@ -209,9 +177,8 @@ export default {
     width: 100px;
     cursor: pointer;
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 200;
     justify-content: center;
-    text-shadow: 2px 2px 3px #7c7c7c;
     width: 60%;
     opacity: 0.8;
 }
@@ -219,9 +186,8 @@ export default {
 .error-text {
     color: red;
     font-size: 0.8rem;
-    font-weight: 600;
+    font-weight: 200;
     justify-content: center;
-    text-shadow: 2px 2px 3px #7c7c7c;
     padding: 5px;
 }
 </style>

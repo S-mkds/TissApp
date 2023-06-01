@@ -1,9 +1,8 @@
 <script>
 import CustomSpinner from '../components/spinner.vue'
-import CustomModal from '../components/modal.vue'
 import Swal from 'sweetalert2'
 export default {
-    components: { CustomSpinner, CustomModal },
+    components: { CustomSpinner },
 
     data() {
         return {
@@ -148,33 +147,36 @@ export default {
         <!-- HEADER -->
         <header class="header">
             <img class="logo-h" src="~/static/NewLogo.png" alt="Logo-h" />
-            <h1 class="w-text h-text">TISSAPP Admin panel
-            </h1>
+            <h2 class="w-text h-text title">TISSAPP Admin panel
+            </h2>
+            <div>
+                <h2 class="title-admin">Administrateur: {{ setOneUser.firstName }} {{ setOneUser.lastName }}</h2>
+            </div>
             <div class="button-header">
                 <!-- user button -->
-                <button id="user-button" @click="userPanel(); showSpinner = true">User-panel</button>
+                <button id="user-button" @click="userPanel(); showSpinner = true">Utilisateurs</button>
                 <!-- chat button -->
-                <button id="chat-button" @click="chatPanel(); showSpinner = true">Chat-panel</button>
+                <button id="chat-button" @click="chatPanel(); showSpinner = true">Chat</button>
                 <!-- logout button -->
                 <button id="logout-button" @click="logout(); showSpinner = true">Déconnexion</button>
                 <!-- spinner -->
                 <custom-spinner v-if="showSpinner"></custom-spinner>
             </div>
         </header>
-        <!-- -->
-        <div>
-            <h2 class="title-admin">Administrateur: {{ setOneUser.firstName }} {{ setOneUser.lastName }}</h2>
-        </div>
         <!-- first square -->
         <div class="container">
             <div class="container-square-left">
-                <div class="square">
-                    <h4 class="w-text">Nombre d'utilisateurs: {{ totalUsers }}</h4>
+                <div class="square-user">
+                    <h4 class="w-text">Nombre d'utilisateurs: </h4>
+                    <br>
+                    <p class="w-text" style="text-align: center; font-size: 20px;">
+                        {{ totalUsers }}
+                    </p>
                 </div>
             </div>
             <div class="container-square">
                 <div class="square">
-                    <h4 class="context">Dernier utilisateur: </h4>
+                    <h4 class="title-context">Nouveau utilisateur: </h4>
                     <div class="context" v-for="users in lastFourUsers" :key="users._id">
                         {{ users.email }} -
                         {{ users.firstName }}
@@ -183,17 +185,23 @@ export default {
                 </div>
             </div>
             <div class="container-square-left">
-                <div class="square">
-                    <h4 class="w-text">Nombre de messages: {{ totalPosts }}</h4>
+                <div class="square-post">
+                    <h4 class="w-text">Nombre de messages: </h4>
+                    <br>
+                    <p class="w-text" style="text-align: center; font-size: 20px;">
+                        {{ totalPosts }}
+                    </p>
                 </div>
             </div>
             <div class="container-square">
                 <div class="square">
-                    <h4 class="context">Dernier messages:</h4>
+                    <h4 class="title-context">Nouveau message:</h4>
                     <div class="context" v-for="post in lastFourPosts" :key="post._id">
-                        {{ post.User.email }} -
-                        {{ post.User.firstName }}
-                        {{ post.User.lastName }}
+                        <p style="text-align: center;">
+                            {{ post.User.email }} -
+                            {{ post.User.firstName }}
+                            {{ post.User.lastName }}
+                        </p>
                         <br>
                         {{ post.content }}
                     </div>
@@ -206,53 +214,51 @@ export default {
 
 <style scoped>
 .main-container {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: #0F1828;
-    background-image: linear-gradient(360deg, #0F1828, #272929);
-    height: 100vh;
+    display: flex;
 }
 
 /* HEADER */
 .header {
-    display: flex;
+    background-color: #71717176;
+    border: 2px, solid, #0F1828;
     align-items: center;
-    background-color: #423f3f54;
-    background-image: linear-gradient(120deg, #155799, #159957);
-    opacity: 0.8;
-    padding-left: 20rem;
+    justify-content: space-between;
+    padding: 10px;
+    height: 100vh;
 }
 
 .logo-h {
-    width: 50px;
-    height: 50px;
-    margin: 10px;
+    display: flex;
+    width: 100px;
+    height: 100px;
     opacity: 1;
-    object-fit: contain;
-    display: block;
+    margin: auto;
+    margin-top: 50%;
 }
+
 
 .button-header {
     display: flex;
-    justify-content: flex-end;
-    align-self: flex-end;
-    margin-left: 45rem;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20%;
 }
 
 #logout-button {
     color: white;
-    background-color: red;
+    background-color: rgba(219, 15, 15, 0.699);
     background-image: linear-gradient(120deg, #fd3737, #813c2796);
-    border: none;
     padding: 10px 15px;
     font-size: 1rem;
     margin: 20px;
     border-radius: 5px;
+    width: 150px;
+    border: 1px solid #813c2796;
 }
 
 #logout-button:hover {
-    background-color: rgb(233, 52, 52);
+    background-color: rgb(79, 25, 25);
     opacity: 0.8;
     cursor: pointer;
 }
@@ -260,19 +266,19 @@ export default {
 #chat-button,
 #user-button {
     color: white;
-    background-color: rgb(96, 52, 177);
-    background-image: linear-gradient(120deg, #8637fd, #0f7074);
+    background-image: linear-gradient(120deg, #136bef, #0d3b8adb);
     border: none;
     padding: 10px 15px;
     font-size: 1rem;
     margin: 20px;
     border-radius: 5px;
-    align-self: flex-end;
+    width: 150px;
+    border: 1px solid #813c2796;
 }
 
 #chat-button:hover,
 #user-button:hover {
-    background-color: rgb(52, 124, 233);
+    background-color: rgb(48, 74, 112);
     opacity: 0.8;
     cursor: pointer;
 }
@@ -280,46 +286,37 @@ export default {
 .h-text {
     padding-top: 20px;
     font-size: 1.5rem;
-    font-weight: 600;
-    text-shadow: 2px 2px 3px #7c7c7c;
 }
 
 .w-text {
     color: white;
-    font-size: 1rem;
-    font-weight: 600;
 }
 
 .text-sucess {
     color: green;
-    font-weight: 600;
 }
 
 .text-info {
     color: rgb(52, 124, 233);
-    font-weight: 600;
+}
+
+.title-admin {
+    color: rgba(255, 0, 0, 0.626);
+    justify-content: center;
+    font-size: 1.1rem;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-top: 10%;
 }
 
 /* BODY */
-.title-admin {
-    margin: 20px;
-    margin-bottom: 20px;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    opacity: 0.8;
-    font-size: 1.5rem;
-    font-weight: 600;
-    text-shadow: 2px 2px 3px #7c7c7c;
-}
-
 .container {
     display: grid;
     align-items: center;
     justify-content: center;
     grid-template-columns: repeat(2, 2fr);
-    max-width: 50%;
-    opacity: 0.8;
 }
 
 .container-square {
@@ -330,14 +327,12 @@ export default {
     max-width: 55%;
 }
 
-
-.square {
+.square-user {
     background-color: #242323;
-    background-image: linear-gradient(360deg, #202f49, #245050);
+    background-image: linear-gradient(to right, #872806c3, #e80c0ce1);
     border: 1px solid rgb(46, 42, 42);
     border-radius: 5%;
     opacity: 0.9;
-    box-shadow: 10px 10px #0F1828;
     padding: 1rem;
     margin: 10px;
     overflow-y: auto;
@@ -346,15 +341,82 @@ export default {
     max-height: 35vh;
     min-height: 10vh;
     transition: all 0.5s;
+    font-size: small;
+}
+
+.square-post {
+    background-color: #242323;
+    background-image: linear-gradient(to right, #0d429d, #1b4d4d);
+    border: 1px solid rgb(46, 42, 42);
+    border-radius: 5%;
+    opacity: 0.9;
+    padding: 1rem;
+    margin: 10px;
+    overflow-y: auto;
+    word-wrap: break-word;
+    word-break: break-all;
+    max-height: 25vh;
+    min-height: 10vh;
+    transition: all 0.5s;
+    font-size: small;
+}
+
+.square {
+    background-color: #242323;
+    background-image: linear-gradient(to right, #6e9a9ab7, #128d8d);
+    border: 1px solid rgb(46, 42, 42);
+    border-radius: 5%;
+    opacity: 0.9;
+    padding: 1rem;
+    margin: 10px;
+    overflow-y: auto;
+    word-wrap: break-word;
+    word-break: break-all;
+    max-height: 40vh;
+    min-height: 10vh;
+    transition: all 0.5s;
+    font-size: small;
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+}
+
+.container-square-left::-webkit-scrollbar {
+    width: 8px;
+}
+
+.container-square-left::-webkit-scrollbar-thumb {
+    background-color: transparent;
+}
+
+.container-square-left::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+
+.title-context {
+    justify-content: center;
+    font-size: 1.2rem;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.title-context-user {
+    font-size: 1rem;
+    padding: 0;
+    margin-bottom: -10px;
+    align-self: center;
 }
 
 .context {
-    border-bottom: 1px solid rgb(134, 133, 133);
-    opacity: 0.9;
-    margin: 2px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    margin: 10px;
     padding: 5px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #fff;
+    color: white;
+    border: 2px solid rgb(46, 42, 42);
+    border-radius: 5px;
+    background-color: #24232363;
+    opacity: 1;
+    transition: all 0.5s;
 }
 </style>

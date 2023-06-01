@@ -10,7 +10,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 2;
+    z-index: 1;
 }
 
 .spinner {
@@ -20,7 +20,7 @@
     /* plus grand */
     border: 6px solid #f3f3f3;
     /* plus épais */
-    border-top: 6px solid #3498db;
+    border-top: 10px solid #3498db;
     /* plus épais */
     border-radius: 50%;
     animation: spin 1.5s linear infinite;

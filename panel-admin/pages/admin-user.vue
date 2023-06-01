@@ -1,10 +1,9 @@
 <script>
 import CustomSpinner from '../components/spinner.vue'
-import CustomModal from '../components/modal.vue'
 import Swal from 'sweetalert2'
 import moment from 'moment'
 export default {
-    components: { CustomSpinner, CustomModal },
+    components: { CustomSpinner },
 
     data() {
         return {
@@ -256,22 +255,27 @@ export default {
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Oui, supprimer!',
                 cancelButtonText: 'Annuler'
-            }).then((result) => {
-                if (result.value) {
-                    this.deleteUser(userId);
-                }
-                else {
-                    Swal.fire({
-                        title: 'Erreur!',
-                        text: 'Une erreur est survenue lors l\'envoi de la requête!',
-                        icon: 'error',
-                        color: '#fff',
-                        background: '#0F1828',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'Ok'
-                    })
-                }
             })
+                .then((result) => {
+                    if (result.value) {
+                        this.deleteUser(userId);
+                    }
+                    // Si l'utilisateur a annulé, ne faites rien
+                    else if (result.dismiss === Swal.DismissReason.cancel) {
+                        return;
+                    }
+                    else {
+                        Swal.fire({
+                            title: 'Erreur!',
+                            text: 'Une erreur est survenue lors de l\'envoi de la requête!',
+                            icon: 'error',
+                            color: '#fff',
+                            background: '#0F1828',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Ok'
+                        })
+                    }
+                })
         },
         // Formatage de la date
         formatDate(date) {
@@ -375,9 +379,6 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #0F1828;
-    background-image: linear-gradient(360deg, #0F1828, #272929);
-    height: 100vh;
 
 }
 

@@ -1,7 +1,8 @@
-
 <script>
 import CustomSpinner from '../components/spinner.vue'
 import 'animate.css/animate.min.css';
+import { darkModeConfig } from '../plugins/darkModeConfig';
+
 export default {
   components: { CustomSpinner },
   data() {
@@ -9,59 +10,64 @@ export default {
       showSpinner: false, //Spinner
     }
   },
+  computed: {
+    darkMode() {
+      return this.$darkModeConfig.darkMode;
+    },
+  },
   methods: {
+    toggleDarkMode() {
+      this.$darkModeConfig.toggleDarkMode();
+    },
     loginDirection() {
       this.showSpinner = false;
       setTimeout(() => {
         this.showSpinner = true;
         this.$router.push({ path: '/login' });
       }, 1000);
-    }
+    },
   },
-
 }
-
 </script>
 
-
-
 <template>
-  <section class="main-container">
-
-    <div class="stars">
-      <div class="star" v-for="n in 12"></div>
-    </div>
-
-    <div class="title-container animate__animated animate__fadeInLeft">
+  <div class="index-container">
+    <div class="title-index animate__animated animate__fadeInLeft">
       <CustomSpinner v-if="showSpinner"></CustomSpinner>
-      <img class="logo-img" src="~/static/NewLogo.png" alt="Logo" />
-      <h1 class="main-title" @click="loginDirection(); showSpinner = true">TISSAPP</h1>
-      <p class="main-description">AdminPanel</p>
+      <img class="logo-index" src="~/static/NewLogo.png" alt="Logo" />
+      <h1 class="mainte-title-index" @click="loginDirection(); showSpinner = true">TISSAPP</h1>
     </div>
-  </section>
+    <p class="main-description-index">Administration</p>
+    <!-- dark mode -->
+    <button class="color-mode-index" @click="toggleDarkMode">Activer/Désactiver le mode sombre</button>
+  </div>
 </template>
 
-<style scoped>
-.main-container {
+<style>
+.index-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #0F1828;
-  background-image: linear-gradient(120deg, #155799, #159957);
-  height: 100vh;
+  /* Utilise 100% de la largeur de la fenêtre */
+  height: 100% !important;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
-.title-container {
+.title-index {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: #fff;
 }
 
-.logo-img {
+.logo-index {
   width: 100px;
   height: 100px;
   margin-right: 5px;
@@ -72,7 +78,7 @@ export default {
   padding: 0;
 }
 
-.main-title {
+.mainte-title-index {
   background-clip: text;
   -webkit-background-clip: text;
   background-image: linear-gradient(120deg, #155799, #159957);
@@ -80,126 +86,36 @@ export default {
   font-weight: 700;
   margin-bottom: 0;
   cursor: pointer;
-  font-family: 'Sigmar One', cursive;
-  text-shadow: 2px 2px 3px #7c7c7c;
+  font-family: 'trebuchet ms', sans-serif;
+  color: white
 }
 
-.main-title:hover {
+.mainte-title-index:hover {
   opacity: 0.8;
-
 }
 
-.main-descrition {
-  height: 5px;
-  background-color: #fff;
-  color: #fff;
-  font-family: 'Sigmar One', cursive;
-  text-shadow: 2px 2px 3px #7c7c7c;
+.main-description-index {
+  font-size: 1rem;
+  justify-content: center;
+  font-family: 'trebuchet ms', sans-serif;
+  color: white
 }
 
-/* STARS */
-.stars {
+.color-mode-index {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
+  bottom: 0;
+  right: 0;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: #19426c;
+  color: white;
+  cursor: pointer;
+  font-family: 'trebuchet ms', sans-serif;
 }
 
-.star {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  background-color: rgb(255, 174, 0);
-  border-radius: 50%;
-  animation: twinkle 1s ease-in-out infinite;
-}
-
-.star:nth-child(1) {
-  top: 25%;
-  left: 40%;
-}
-
-.star:nth-child(2) {
-  top: 30%;
-  left: 80%;
-}
-
-.star:nth-child(3) {
-  top: 50%;
-  left: 75%;
-}
-
-.star:nth-child(4) {
-  top: 75%;
-  left: 20%;
-  background-color: rgba(179, 255, 0, 0.836);
-}
-
-.star:nth-child(5) {
-  top: 90%;
-  left: 70%;
-  background-color: rgba(212, 0, 255, 0.137);
-}
-
-.star:nth-child(6) {
-  top: 75%;
-  left: 80%;
-  background-color: rgb(255, 187, 0);
-}
-
-.star:nth-child(7) {
-  top: 50%;
-  left: 60%;
-  background-color: rgba(255, 0, 0, 0.836);
-}
-
-.star:nth-child(8) {
-  top: 20%;
-  left: 80%;
-  background-color: rgb(0, 225, 255);
-}
-
-.star:nth-child(9) {
-  top: 10%;
-  left: 50%;
-  background-color: rgba(255, 0, 0, 0.836);
-}
-
-.star:nth-child(10) {
-  top: 30%;
-  left: 20%;
-  background-color: rgba(255, 0, 0, 0.836);
-}
-
-.star:nth-child(11) {
-  top: 50%;
-  left: 10%;
-  background-color: rgba(255, 0, 0, 0.836);
-}
-
-.star:nth-child(12) {
-  top: 80%;
-  left: 30%;
-  background-color: rgba(255, 0, 0, 0.836);
-}
-
-
-@keyframes twinkle {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-
-  20% {
-    transform: scale(.5);
-    opacity: .5;
-  }
-
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
+.color-mode-index:hover {
+  opacity: 0.8;
 }
 </style>

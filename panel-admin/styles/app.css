@@ -1,0 +1,20 @@
+/* styles/app.css */
+
+/* Styles par défaut */
+html, body, h1, h2, h3, h4, h5, h6, p, button {
+  color: #fff;
+}
+
+html, body {
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif, cursive !important;
+  background-color: #0F1828 !important;
+}
+
+/* Mode sombre */
+html.dark-mode, body.dark-mode, h1.dark-mode, h2.dark-mode, h3.dark-mode, h4.dark-mode, h5.dark-mode, h6.dark-mode, p.dark-mode, button.dark-mode {
+  background-color: #ded9d9eb !important;
+  color: rgb(57, 57, 57) !important;
+}
