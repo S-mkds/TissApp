@@ -10,11 +10,6 @@ export default {
       showSpinner: false, //Spinner
     }
   },
-  computed: {
-    darkMode() {
-      return this.$darkModeConfig.darkMode;
-    },
-  },
   methods: {
     toggleDarkMode() {
       this.$darkModeConfig.toggleDarkMode();

@@ -36,8 +36,16 @@ export default {
   ],
 
   hooks: {
-    beforeMount() {
-      this.$darkModeConfig.toggleDarkMode();
+    // ...
+    mounted() {
+      this.$nextTick(() => {
+        const storedDarkMode = localStorage.getItem("darkMode");
+        if (storedDarkMode) {
+          const darkMode = JSON.parse(storedDarkMode);
+          this.$darkModeConfig.darkMode = darkMode;
+        }
+        this.$darkModeConfig.initializeDarkMode();
+      });
     },
   },
   // Auto import components: https://go.nuxtjs.dev/config-components

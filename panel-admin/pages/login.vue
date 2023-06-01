@@ -63,7 +63,14 @@ export default {
             const input = document.getElementById("password");
             input.type = this.isPasswordVisible ? "text" : "password";
         },
-    }
+        indexPanel() {
+            this.showSpinner = false;
+            setTimeout(() => {
+                this.showSpinner = true;
+                this.$router.push({ path: '/' });
+            }, 1000);
+        },
+    },
 }
 </script>
 
@@ -71,7 +78,7 @@ export default {
     <section>
         <div>
             <form class="login-form">
-                <img class="logo-img" src="~/static/NewLogo.png" alt="Logo" />
+                <img class="logo-img" src="~/static/NewLogo.png" alt="Logo" @click="indexPanel(); showSpinner = true" />
                 <h1 class="w-text login-text">Connexion Administration</h1>
                 <label class="w-text label-text" for="email">Email :</label>
                 <input class="input-text" id="email" type="email" v-model="email" placeholder="Entrez votre Email Admin" />
@@ -112,6 +119,7 @@ export default {
     display: block;
     margin: 0;
     padding: 0;
+    cursor: pointer;
 }
 
 .login-text {

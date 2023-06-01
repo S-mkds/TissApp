@@ -5,8 +5,12 @@ export const darkModeConfig = Vue.observable({
   toggleDarkMode() {
     this.darkMode = !this.darkMode;
     if (process.client) {
-      localStorage.setItem("darkMode", JSON.stringify(this.darkMode));
-      updateDarkModeClasses(); // Appel à updateDarkModeClasses() après avoir modifié le mode sombre
+      if (this.darkMode) {
+        localStorage.setItem("darkMode", JSON.stringify(this.darkMode));
+      } else {
+        localStorage.removeItem("darkMode");
+      }
+      updateDarkModeClasses();
     }
   },
 
@@ -21,8 +25,9 @@ export const darkModeConfig = Vue.observable({
 
 function updateDarkModeClasses() {
   const elements = document.querySelectorAll(
-    "html, body, h1, h2, h3, h4, h5, h6, p, div, label, .w-text"
+    "h1, h2, h3, h4, h5, h6, p, div, label"
   );
+  const classes = document.querySelectorAll(".w-text");
 
   elements.forEach((element) => {
     if (darkModeConfig.darkMode) {
@@ -31,17 +36,41 @@ function updateDarkModeClasses() {
       element.classList.remove("dark-mode");
     }
   });
+
+  classes.forEach((classElement) => {
+    if (darkModeConfig.darkMode) {
+      classElement.classList.add("dark-mode");
+    } else {
+      classElement.classList.remove("dark-mode");
+    }
+  });
+
+  const html = document.documentElement;
+  const body = document.body;
+
+  if (darkModeConfig.darkMode) {
+    html.classList.add("dark-mode");
+    body.classList.add("dark-mode");
+  } else {
+    html.classList.remove("dark-mode");
+    body.classList.remove("dark-mode");
+  }
 }
 
-export default ({ app }, inject) => {
-  if (process.client) {
-    const storedDarkMode = localStorage.getItem("darkMode");
-    if (storedDarkMode) {
-      const darkMode = JSON.parse(storedDarkMode);
-      darkModeConfig.darkMode = darkMode;
-    }
-    darkModeConfig.initializeDarkMode();
+if (process.client) {
+  const storedDarkMode = localStorage.getItem("darkMode");
+  if (storedDarkMode) {
+    const darkMode = JSON.parse(storedDarkMode);
+    darkModeConfig.darkMode = darkMode;
   }
+  darkModeConfig.initializeDarkMode();
+}
 
-  inject("darkModeConfig", darkModeConfig);
-};
+export default darkModeConfig;
+
+Vue.mixin({
+  beforeCreate() {
+    this.$options.darkModeConfig = darkModeConfig;
+    this.$darkModeConfig = darkModeConfig;
+  },
+});
