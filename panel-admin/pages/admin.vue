@@ -149,7 +149,7 @@ export default {
         <!-- HEADER -->
         <header class="header">
             <img class="logo-h" src="~/static/NewLogo.png" alt="Logo-h" />
-            <h2 class="w-text h-text title">TISSAPP Admin panel
+            <h2 class="h-text title">TISSAPP Admin panel
             </h2>
             <div>
                 <h2 class="title-admin">Administrateur: {{ setOneUser.firstName }} {{ setOneUser.lastName }}</h2>
@@ -312,7 +312,7 @@ export default {
 }
 
 .title-admin {
-    color: rgba(255, 0, 0, 0.626);
+    color: rgba(255, 0, 0, 0.626) !important;
     justify-content: center;
     font-size: 1rem;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
@@ -410,6 +410,7 @@ export default {
     align-items: center;
     justify-content: center;
     text-align: center;
+    color: rgba(230, 6, 6, 0.914) !important;
 }
 
 .title-context-user {
@@ -420,7 +421,7 @@ export default {
 }
 
 .number-context {
-    color: white;
+    color: white !important;
 }
 
 .context {

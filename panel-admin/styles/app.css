@@ -33,3 +33,8 @@ h1.light-mode, h2.light-mode, h3.light-mode, h4.light-mode, h5.light-mode, h6.li
 .w-text.light-mode * {
   color: rgb(57, 57, 57) !important;
 }
+/* Styles spécifiques pour les éléments td en mode clair */
+html.light-mode td.w-text,
+html.light-mode td.w-text * {
+  color: rgb(57, 57, 57) !important;
+}

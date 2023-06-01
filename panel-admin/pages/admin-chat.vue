@@ -305,7 +305,7 @@ export default {
         <!-- MAIN -->
         <div class="container-table">
             <div class="overflow-auto post-container" style="max-height: 700px">
-                <h1 class="w-text title ">Chat Panel</h1>
+                <h1 class="w-text title ">Chat Administration</h1>
                 <!-- TABLE USER -->
                 <table class="table">
                     <thead>
@@ -450,7 +450,7 @@ export default {
 }
 
 .table {
-    width: 95%;
+    width: 100%;
     color: white;
     font-size: 1rem;
     font-weight: 600;
@@ -464,28 +464,33 @@ export default {
 }
 
 .post-container {
-    border: 1px solid rgb(96, 97, 97);
+    border: 2px solid rgb(102, 86, 86);
     border-radius: 20px;
-    padding: 0.2rem;
     margin: 1rem;
-    box-shadow: 10px 5px 5px rgb(70, 70, 70);
     width: 90%;
     min-width: 300px;
 }
+
+td,
+th {
+    border-bottom: 2px solid rgb(102, 86, 86) !important;
+    border-right: 2px solid rgb(102, 86, 86) !important;
+    border-radius: 20px;
+}
+
 
 .h-text {
     padding-top: 20px;
     font-size: 1.5rem;
     font-weight: 600;
-    text-shadow: 2px 2px 3px #7c7c7c;
 }
 
 .title {
     font-size: 2rem;
     font-weight: 600;
     justify-content: center;
-    text-shadow: 2px 2px 3px #7c7c7c;
     padding: 15px;
+    text-align: center;
 }
 
 .w-text {
@@ -518,8 +523,8 @@ export default {
     height: 100%;
     padding: 10px;
     border-radius: 5px;
-    border: 1px solid rgb(96, 97, 97);
-    background-color: rgb(96, 97, 97);
+    border: 1px solid rgb(54, 55, 55);
+    background-color: rgb(157, 159, 159);
     color: white;
     font-size: 1rem;
     font-weight: 600;

@@ -328,7 +328,7 @@ export default {
             </div>
             <div class="overflow-auto user-container" style="max-height: 600px">
                 <!-- TABLE USER -->
-                <h1 class="w-text title ">User Panel</h1>
+                <h1 class="w-text title ">Utilisateurs Administration</h1>
                 <table class="table">
                     <thead>
                         <tr>
@@ -356,11 +356,11 @@ export default {
                                 <p class="text-info" v-if="user.admin === false">Utilisateur</p>
                             </td>
                             <td class="w-text">{{ formatDate(user.createdAt) }}</td>
-                            <td>
+                            <td class="bordered-cell">
                                 <p class="text-sucess" v-if="user.isOnline === true">En-ligne 🟢</p>
                                 <p class="text-danger" v-if="user.isOnline === false">Hors-ligne 🔴</p>
                             </td>
-                            <td v-if="user.admin === false">
+                            <td v-if="user.admin === false" class="bordered-cell">
                                 <!-- EDIT USER -->
                                 <button class="btn btn-primary" @click="confirmEdit(user.id)">Modifier</button>
                                 <!-- DELETE USER -->
@@ -448,12 +448,12 @@ export default {
 }
 
 .input-search {
-    width: 100%;
+    width: 110%;
     height: 100%;
     padding: 10px;
     border-radius: 5px;
-    border: 1px solid rgb(96, 97, 97);
-    background-color: rgb(96, 97, 97);
+    border: 1px solid rgb(54, 55, 55) !important;
+    background-color: rgb(157, 159, 159) !important;
     color: white;
     font-size: 1rem;
     font-weight: 600;
@@ -464,8 +464,8 @@ export default {
     font-size: 2rem;
     font-weight: 600;
     justify-content: center;
-    text-shadow: 2px 2px 3px #7c7c7c;
     padding: 15px;
+    text-align: center;
 }
 
 .form-group {
@@ -476,27 +476,29 @@ export default {
 }
 
 .table {
-    width: 95%;
-    margin: 20px;
-    color: white;
+    width: 100%;
     font-size: 1rem;
     font-weight: 600;
     margin-bottom: 5rem;
 }
 
+td,
+th {
+    border-bottom: 2px solid rgb(102, 86, 86);
+    text-align: center;
+}
+
 .user-container {
-    border: 1px solid rgb(96, 97, 97);
+    border: 2px solid rgb(102, 86, 86);
     border-radius: 20px;
     padding: 0.2rem;
     margin: 1rem;
-    box-shadow: 10px 5px 5px rgb(70, 70, 70);
 }
 
 .h-text {
     padding-top: 20px;
     font-size: 1.5rem;
     font-weight: 600;
-    text-shadow: 2px 2px 3px #7c7c7c;
 }
 
 .label-search {
@@ -504,7 +506,6 @@ export default {
     font-size: 1rem;
     font-weight: 600;
     justify-content: center;
-    text-shadow: 2px 2px 3px #7c7c7c;
 }
 
 .w-text {
@@ -514,12 +515,12 @@ export default {
 }
 
 .text-sucess {
-    color: green;
+    color: rgb(5, 183, 5) !important;
     font-weight: 600;
 }
 
 .text-info {
-    color: rgb(52, 124, 233);
+    color: rgb(56, 172, 255);
     font-weight: 600;
 }
 
