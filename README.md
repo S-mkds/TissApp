@@ -1,6 +1,6 @@
 # TISSAPP - Application Mobile de Chat
 
-![Logo TISSAPP](./script/logo.png)
+![Logo TISSAPP](./script/Logo.png)
 
 ## Introduction
 TISSAPP est une application de chat mobile développée avec React Native. Elle est accompagnée d'un back-end Node.js avec Sequelize comme ORM et d'un panneau d'administration construit avec Nuxt.js. L'application permet aux utilisateurs de discuter en temps réel, de créer des groupes de discussion et d'envoyer des messages.
