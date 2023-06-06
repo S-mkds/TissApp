@@ -3,6 +3,7 @@
 <div align="center">
   <img src="./script/Logo.png" alt="Logo TISSAPP">
 </div>
+
 ## Introduction
 TISSAPP est une application de chat mobile développée avec React Native. Elle est accompagnée d'un back-end Node.js avec Sequelize comme ORM et d'un panneau d'administration construit avec Nuxt.js. L'application permet aux utilisateurs de discuter en temps réel, de créer des groupes de discussion et d'envoyer des messages.
 
@@ -25,7 +26,7 @@ Si vous ne souhaitez pas utiliser XAMPP ou WAMP et préférez installer MySQL di
    ```bash
    mysql.server start
 
-## Lancement de phpMyAdmin
+### Lancement de phpMyAdmin
 1. Ouvrez une nouvelle fenêtre de terminal ou de console.
 2. Accédez au répertoire où vous avez installé phpMyAdmin.
 3. Lancez le serveur intégré de phpMyAdmin avec la commande suivante :
