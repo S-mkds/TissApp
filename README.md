@@ -1,7 +1,7 @@
 # TISSAPP - Application Mobile de Chat
 
 <div align="center">
-  <img src="./script/Logo.png" alt="Logo TISSAPP">
+  <img src="./script/utils/Logo.png" alt="Logo TISSAPP">
 </div>
 
 ## Introduction
@@ -68,6 +68,6 @@ Suivez les étapes ci-dessous pour installer et lancer le projet TISSAPP.
 
 Merci d'avoir choisi TISSAPP ! N'hésitez pas à nous contacter en cas de besoin.
 
-![TISSAPP](./script/TissApp.png)
+![TISSAPP](./script/utils/TissApp.png)
 
-![Construction-DB](./script/Construction%20DB.png)
+![Construction-DB](./script/utils/Construction%20DB.png)
