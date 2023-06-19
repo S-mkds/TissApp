@@ -4,7 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "server": "nodemon app.js"
+    "server": "nodemon app.js",
+    "test": "jest --watchAll --verbose"
   },
   "author": "Mokaddem Samir",
   "license": "ISC",
@@ -22,6 +23,7 @@
     "socket.io": "^4.5.4"
   },
   "devDependencies": {
+    "jest": "^29.5.0",
     "sequelize-cli": "^6.5.2"
   }
 }
