@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity, BackHandler } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import io from 'socket.io-client';
 import { format, set } from 'date-fns';
 import frLocale from 'date-fns/locale/fr';
@@ -105,6 +105,19 @@ const handleDeleteMessage = async (messageId, userId) => {
         const date = new Date(dateString);
         return format(date, "EEEE d MMMM yyyy 'à' HH:mm:ss", { locale: frLocale });
     };
+
+    // BackHandler
+    useFocusEffect(
+        React.useCallback(() => {
+          const onBackPress = () => {
+            return true; // Bloquer le retour en arrière
+          };
+    
+          BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    
+          return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        }, [])
+      );
 
     return (
         <View style={styles.container}>
@@ -225,6 +238,8 @@ const styles = StyleSheet.create({
         width: '80%',
         margin: 10,
         paddingRight: 10,
+        
+
     },
     messageUsername: {
         fontWeight: 'bold',
@@ -238,11 +253,14 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     messageImage: {
-        width: 200,
-        height: 200,
+        width: '100%',
+        height: 200, // ou une autre valeur en pixels ou en pourcentage
         borderRadius: 20,
         alignSelf: 'center',
-    },
+        overflow: 'hidden',
+        objectFit: 'cover',
+        marginRight: 15,
+      },
     messageCreatedAt: {
         margin: 2,
         fontSize: 8,

@@ -260,11 +260,14 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     messageImage: {
-        width: 200,
-        height: 200,
+        width: '100%',
+        height: 200, // ou une autre valeur en pixels ou en pourcentage
         borderRadius: 20,
         alignSelf: 'center',
-    },
+        overflow: 'hidden',
+        objectFit: 'cover',
+        marginRight: 15,
+      },
     messageCreatedAt: {
         margin: 2,
         fontSize: 8,
