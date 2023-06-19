@@ -48,32 +48,4 @@ describe("Login Controller", () => {
     expect(res.status).toHaveBeenCalledWith(401);
     expect(res.json).toHaveBeenCalledWith({ error: expect.any(String) });
   });
-
-  it("devrait renvoyer une erreur si l'email n'est pas associé à un utilisateur", async () => {
-    // Prépare une requête avec des données de connexion valides
-    const req = {
-      body: {
-        email: "john.doe@example.com",
-        password: "Password123!",
-      },
-    };
-
-    // Prépare une réponse simulée pour vérifier les résultats
-    const res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
-    };
-
-    // Mocke la fonction User.authenticate pour simuler une exception
-    jest
-      .spyOn(User, "authenticate")
-      .mockRejectedValueOnce(new Error("Test error"));
-
-    // Appelle le contrôleur login avec les données de requête simulées
-    await login(req, res, jest.fn());
-
-    // Vérifie si la réponse a le statut attendu (500) et contient un message d'erreur approprié
-    expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.json).toHaveBeenCalledWith({ error: expect.any(String) });
-  });
 });

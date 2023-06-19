@@ -46,6 +46,14 @@ Suivez les étapes ci-dessous pour installer et lancer le projet TISSAPP.
 1. Ouvrez PowerShell dans le répertoire du projet.
 2. Exécutez la commande `./script/launch.bat` pour lancer les scripts du projet.
 
+### PowerShell fixture User DB
+1. Ouvrez PowerShell dans le répertoire du projet.
+2. Exécutez la commande `./script/fixtureUser.bat` pour lancer les scripts du projet.
+
+### PowerShell truncate all table DB
+1. Ouvrez PowerShell dans le répertoire du projet.
+2. Exécutez la commande `./script/truncateDb.bat` pour lancer les scripts du projet.
+
 ### Git Bash install project
 1. Ouvrez Git Bash dans le répertoire du projet.
 2. Exécutez la commande `./script/install.sh` pour installer les packages du projet.

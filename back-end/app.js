@@ -70,4 +70,4 @@ app.use("/api/instantPosts", instantPostsRoutes);
 app.use("/api/like", likeRoute);
 app.use("/api/comment", commentRoute);
 
-console.trace();
+// console.trace();

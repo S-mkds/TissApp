@@ -34,7 +34,7 @@ describe("Signup Controller", () => {
   });
 
   // Teste le renvoi d'une erreur si l'email est déjà utilisé
-  it("should return an error if email is already used", async () => {
+  it("devrait renvoyer une erreur si l'email est déjà utilisé", async () => {
     // Prépare une requête avec un email déjà utilisé par un autre utilisateur
     const req = {
       body: {
