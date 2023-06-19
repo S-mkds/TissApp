@@ -77,6 +77,7 @@ npm install --save-dev sequelize-cli
 Jest est un package de test JavaScript largement utilisé pour exécuter des tests unitaires, d'intégration et de bout en bout dans des projets JavaScript. Il fournit un ensemble d'outils et de fonctionnalités pour écrire, exécuter et analyser les résultats des tests de manière efficace.
 
 Pour exécuter les tests de votre projet, vous pouvez utiliser les commandes suivantes "script test -> package.json" :
+- `cd .\back-end`
 
 - `npm run test`
   Cette commande permet d'exécuter les tests une fois et affiche les résultats dans la console.
@@ -86,7 +87,7 @@ Pour exécuter les tests de votre projet, vous pouvez utiliser les commandes sui
 - `npm run test -- --coverage`
   Cette commande permet de générer un rapport de couverture de code (code coverage report) en plus d'exécuter les tests. Le rapport de couverture indique quelle partie de votre code est couverte par les tests, ce qui peut être utile pour identifier les zones non testées.
 
-- `cd ..\coverage\lcov-report\back-end`
+- `cd .\coverage\lcov-report\back-end`
 - `explorer "index.html"`
   La commande `explorer` est utilisée pour ouvrir le fichier index.html dans le navigateur par défaut. En utilisant cette séquence de commandes, vous devriez pouvoir accéder au répertoire contenant le rapport de couverture de code généré et ouvrir le fichier index.html dans le navigateur.
 
