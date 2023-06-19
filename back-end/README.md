@@ -79,16 +79,17 @@ Jest est un package de test JavaScript largement utilisé pour exécuter des tes
 Pour exécuter les tests de votre projet, vous pouvez utiliser les commandes suivantes "script test -> package.json" :
 
 - `npm run test`
-
   Cette commande permet d'exécuter les tests une fois et affiche les résultats dans la console.
 
 - `npm run test --watchAll --verbose`
-
   Cette commande permet de lancer les tests en mode de surveillance (watch mode) pour détecter les modifications dans les fichiers et les réexécuter automatiquement. L'option `--verbose` affiche des informations détaillées sur les tests.
-
 - `npm run test -- --coverage`
-
   Cette commande permet de générer un rapport de couverture de code (code coverage report) en plus d'exécuter les tests. Le rapport de couverture indique quelle partie de votre code est couverte par les tests, ce qui peut être utile pour identifier les zones non testées.
+
+- `cd ..\coverage\lcov-report\back-end`
+- `explorer "index.html"`
+  La commande `explorer` est utilisée pour ouvrir le fichier index.html dans le navigateur par défaut. En utilisant cette séquence de commandes, vous devriez pouvoir accéder au répertoire contenant le rapport de couverture de code généré et ouvrir le fichier index.html dans le navigateur.
+
 
 N'hésitez pas à ajuster ces commandes en fonction des besoins spécifiques de votre projet.
 
