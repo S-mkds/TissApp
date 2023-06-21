@@ -313,7 +313,7 @@ export default {
                         <tr>
                             <th class="w-text">ID</th>
                             <th class="w-text">Nom d'utilisateur</th>
-                            <th class="w-text">Avatar</th>
+                            <th class="w-text">Image</th>
                             <th class="w-text">Message</th>
                             <th class="w-text">Date de création</th>
                             <th class="w-text">Action</th>
@@ -348,7 +348,8 @@ export default {
         <section class="section-send">
             <div>
                 <form class="send-message">
-                    <input v-model="setPostContent" type="text" class="input-send" placeholder="Envoyez votre message..." />
+                    <input v-model="setPostContent" type="text" class="input-send w-text"
+                        placeholder="Envoyez votre message..." />
                     <button class="btn-send" type="submit" @click.prevent="ModalSend()">Envoyer</button>
                 </form>
             </div>
@@ -532,7 +533,6 @@ th {
     border-radius: 5px;
     border: 1px solid rgb(54, 55, 55);
     background-color: rgb(157, 159, 159);
-    color: white;
     font-size: 1rem;
     font-weight: 600;
     margin: 5px;

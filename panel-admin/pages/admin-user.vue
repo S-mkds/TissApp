@@ -323,7 +323,7 @@ export default {
         <section class="user-list-section">
             <div class="form-group">
                 <label class="w-text label-search" for="search">Rechercher un utilisateur</label>
-                <input v-model="search" type="text" class="input-search" id="search"
+                <input v-model="search" type="text" class="input-search w-text" id="search"
                     placeholder="Entrer un nom d'utilisateur..." @input.prevent="getUsers" />
                 <label class="w-text" for="totalUsers">Nombre d'utilisateurs total : {{ totalUsers }}</label>
             </div>
@@ -353,8 +353,8 @@ export default {
                             <td class="w-text">{{ user.firstName }} {{ user.lastName }}</td>
                             <td class="w-text">{{ user.email }} </td>
                             <td>
-                                <p class="text-sucess" v-if="user.admin === true">Administrateur</p>
-                                <p class="text-info" v-if="user.admin === false">Utilisateur</p>
+                                <p class="text-admin" v-if="user.admin === true">Administrateur</p>
+                                <p class="text-user" v-if="user.admin === false">Utilisateur</p>
                             </td>
                             <td class="w-text">{{ formatDate(user.createdAt) }}</td>
                             <td class="bordered-cell">
@@ -455,7 +455,6 @@ export default {
     border-radius: 5px;
     border: 1px solid rgb(54, 55, 55) !important;
     background-color: rgb(157, 159, 159) !important;
-    color: white;
     font-size: 1rem;
     font-weight: 600;
     margin: 5px;
@@ -516,16 +515,21 @@ th {
 }
 
 .text-sucess {
-    color: rgb(6, 158, 6) !important;
+    color: rgb(28, 132, 28) !important;
 }
 
-.text-info {
-    color: rgb(5, 12, 107);
-    font-weight: 900;
+.text-admin {
+    color: rgb(200, 1, 1) !important;
+    font-weight: 600;
+}
+
+.text-user {
+    color: rgb(44, 18, 212) !important;
+    font-weight: 600;
 }
 
 .text-danger {
-    color: red !important;
+    color: rgb(200, 1, 1) !important;
     font-weight: 600;
 }
 

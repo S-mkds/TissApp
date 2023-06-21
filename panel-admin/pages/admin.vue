@@ -410,7 +410,8 @@ export default {
     align-items: center;
     justify-content: center;
     text-align: center;
-    color: rgba(230, 6, 6, 0.914) !important;
+    color: rgb(199, 37, 37) !important;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 .title-context-user {
