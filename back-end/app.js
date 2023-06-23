@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
+const helmet = require("helmet");
 
 // Create server
 const http = require("http").createServer(app);
@@ -31,6 +32,9 @@ io.on("connection", (socket) => {
   });
 });
 module.exports = io;
+
+// Sécurité: Helmet aide à sécuriser les applications Express à l'aide de divers en-têtes HTTP.
+app.use(helmet());
 
 // CORS
 app.use((req, res, next) => {
