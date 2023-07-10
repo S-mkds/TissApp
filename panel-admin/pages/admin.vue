@@ -247,44 +247,6 @@ export default {
     margin-top: 20%;
 }
 
-#logout-button {
-    color: white;
-    background-color: rgba(219, 15, 15, 0.699);
-    background-image: linear-gradient(120deg, #fd3737, #813c2796);
-    padding: 10px 15px;
-    font-size: 1rem;
-    margin: 20px;
-    border-radius: 5px;
-    width: 150px;
-    border: 1px solid #813c2796;
-}
-
-#logout-button:hover {
-    background-color: rgb(79, 25, 25);
-    opacity: 0.8;
-    cursor: pointer;
-}
-
-#chat-button,
-#user-button {
-    color: white;
-    background-image: linear-gradient(120deg, #136bef, #0d3b8adb);
-    border: none;
-    padding: 10px 15px;
-    font-size: 1rem;
-    margin: 20px;
-    border-radius: 5px;
-    width: 150px;
-    border: 1px solid #813c2796;
-}
-
-#chat-button:hover,
-#user-button:hover {
-    background-color: rgb(48, 74, 112);
-    opacity: 0.8;
-    cursor: pointer;
-}
-
 .h-text {
     padding-top: 20px;
     font-size: 1.5rem;
@@ -305,17 +267,19 @@ export default {
 .title {
     justify-content: center;
     font-size: 1.2rem;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
     align-items: center;
     justify-content: center;
     text-align: center;
 }
 
 .title-admin {
-    color: red !important;
+    color: #5f18eb !important;
     justify-content: center;
     font-size: 1rem;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
     align-items: center;
     justify-content: center;
     text-align: center;
@@ -330,103 +294,16 @@ export default {
     grid-template-columns: repeat(2, 2fr);
 }
 
-.container-square {
-    max-width: 100%;
-}
-
-.container-square-left {
-    max-width: 55%;
-}
-
-.square-user {
-    background-color: #242323;
-    background-image: linear-gradient(to right, #872806c3, #e80c0ce1);
-    border: 1px solid rgb(46, 42, 42);
-    border-radius: 5%;
-    opacity: 0.9;
-    padding: 1rem;
-    margin: 10px;
-    overflow-y: auto;
-    word-wrap: break-word;
-    word-break: break-all;
-    max-height: 35vh;
-    min-height: 10vh;
-    transition: all 0.5s;
-    font-size: small;
-}
-
-.square-post {
-    background-color: #242323;
-    background-image: linear-gradient(to right, #0d429d, #1b4d4d);
-    border: 1px solid rgb(46, 42, 42);
-    border-radius: 5%;
-    opacity: 0.9;
-    padding: 1rem;
-    margin: 10px;
-    overflow-y: auto;
-    word-wrap: break-word;
-    word-break: break-all;
-    max-height: 25vh;
-    min-height: 10vh;
-    transition: all 0.5s;
-    font-size: small;
-}
-
-.square {
-    background-color: #242323;
-    background-image: linear-gradient(to right, #6e9a9ab7, #128d8d);
-    border: 1px solid rgb(46, 42, 42);
-    border-radius: 5%;
-    opacity: 0.9;
-    padding: 1rem;
-    margin: 10px;
-    overflow-y: auto;
-    word-wrap: break-word;
-    word-break: break-all;
-    max-height: 40vh;
-    min-height: 10vh;
-    transition: all 0.5s;
-    font-size: small;
-    scrollbar-width: thin;
-    scrollbar-color: transparent transparent;
-}
-
-.container-square-left::-webkit-scrollbar {
-    width: 8px;
-}
-
-.container-square-left::-webkit-scrollbar-thumb {
-    background-color: transparent;
-}
-
-.container-square-left::-webkit-scrollbar-track {
-    background-color: transparent;
-}
 
 
-.title-context {
-    justify-content: center;
-    font-size: 1.2rem;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: rgb(199, 37, 37) !important;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-}
 
-.title-context-user {
-    font-size: 1rem;
-    padding: 0;
-    margin-bottom: -10px;
-    align-self: center;
-}
 
 .number-context {
     color: white !important;
 }
 
 .context {
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     margin: 10px;
     padding: 5px;
     color: white;

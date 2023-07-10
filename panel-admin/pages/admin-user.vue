@@ -307,7 +307,7 @@ export default {
         <header class="header">
             <img @click="adminPanel(); showSpinner = true" class="logo-h" src="~/static/NewLogo.png" alt="Logo-h" />
             <h1 class="w-text h-text">TISSAPP Admin panel
-                <p class="text-danger" style="color: red !important;">Administrateur: {{ setOneUser.firstName }} {{
+                <p class="text-danger">Administrateur: {{ setOneUser.firstName }} {{
                     setOneUser.lastName }}</p>
             </h1>
             <div class="button-header">
@@ -411,50 +411,13 @@ export default {
 }
 
 
-#logout-button {
-    color: white;
-    background-color: red;
-    background-image: linear-gradient(120deg, #fd3737, #813c2796);
-    border: none;
-    padding: 10px 15px;
-    font-size: 1rem;
-    margin: 20px;
-    border-radius: 5px;
-}
-
-#logout-button:hover {
-    background-color: rgb(233, 52, 52);
-    opacity: 0.8;
-    cursor: pointer;
-}
-
-#chat-button,
-#user-button {
-    color: white;
-    background-color: rgb(96, 52, 177);
-    background-image: linear-gradient(120deg, #8637fd, #0f7074);
-    border: none;
-    padding: 10px 15px;
-    font-size: 1rem;
-    margin: 20px;
-    border-radius: 5px;
-    align-self: flex-end;
-}
-
-#chat-button:hover,
-#user-button:hover {
-    background-color: rgb(52, 124, 233);
-    opacity: 0.8;
-    cursor: pointer;
-}
-
 .input-search {
     width: 110%;
     height: 100%;
     padding: 10px;
     border-radius: 5px;
-    border: 1px solid rgb(54, 55, 55) !important;
-    background-color: rgb(157, 159, 159) !important;
+    border: none;
+    background-color: #5f18eb;
     font-size: 1rem;
     font-weight: 600;
     margin: 5px;
@@ -484,12 +447,12 @@ export default {
 
 td,
 th {
-    border-bottom: 2px solid rgb(102, 86, 86);
+    border-bottom: 2px solid #0F1828;
     text-align: center;
 }
 
 .user-container {
-    border: 2px solid rgb(102, 86, 86);
+    border: 2px solid #0F1828;
     border-radius: 20px;
     padding: 0.2rem;
     margin: 1rem;
@@ -511,25 +474,6 @@ th {
 .w-text {
     color: white;
     font-size: 1rem;
-    font-weight: 600;
-}
-
-.text-sucess {
-    color: rgb(28, 132, 28) !important;
-}
-
-.text-admin {
-    color: rgb(200, 1, 1) !important;
-    font-weight: 600;
-}
-
-.text-user {
-    color: rgb(44, 18, 212) !important;
-    font-weight: 600;
-}
-
-.text-danger {
-    color: rgb(200, 1, 1) !important;
     font-weight: 600;
 }
 

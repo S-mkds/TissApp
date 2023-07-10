@@ -1,7 +1,18 @@
 /* styles/app.css */
 
 /* Styles par défaut */
-html, body, h1, h2, h3, h4, h5, h6, p, button, label, div {
+html,
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+button,
+label,
+div {
   color: #fff !important;
 }
 
@@ -10,22 +21,32 @@ html, body, h1, h2, h3, h4, h5, h6, p, button, label, div {
   color: #fff !important;
 }
 
-html, body {
+html,
+body {
   height: 100% !important;
   margin: 0 !important;
   padding: 0 !important;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif, cursive !important;
+  font-family: 'Roboto', sans-serif, cursive !important;
   background-color: #0F1828 !important;
 }
 
 /* ******************************************************************************************************************************** */
 /* Mode lumineux */
-html.light-mode, body.light-mode {
-  background-color: #9f9e9eeb !important;
-  color: rgb(57, 57, 57) !important;
+html.light-mode,
+body.light-mode {
+  background-color: #e8e2e2eb !important;
+  color: #0F1828 !important;
 }
 
-h1.light-mode, h2.light-mode, h3.light-mode, h4.light-mode, h5.light-mode, h6.light-mode, p.light-mode, button.light-mode, label.light-mode {
+h1.light-mode,
+h2.light-mode,
+h3.light-mode,
+h4.light-mode,
+h5.light-mode,
+h6.light-mode,
+p.light-mode,
+button.light-mode,
+label.light-mode {
   color: rgb(57, 57, 57) !important;
 }
 
@@ -33,6 +54,7 @@ h1.light-mode, h2.light-mode, h3.light-mode, h4.light-mode, h5.light-mode, h6.li
 .w-text.light-mode * {
   color: rgb(57, 57, 57) !important;
 }
+
 /* Styles spécifiques pour les éléments td en mode clair */
 html.light-mode td.w-text,
 html.light-mode td.w-text *,
@@ -53,6 +75,166 @@ html.light-mode p.w-text *,
 html.light-mode button.w-text,
 html.light-mode button.w-text *,
 html.light-mode label.w-text,
-html.light-mode label.w-text *{
+html.light-mode label.w-text * {
   color: rgb(57, 57, 57) !important;
+}
+
+
+/* Header */
+
+
+/* LOGOUT BTN */
+
+#logout-button {
+  color: white;
+  background-color: #FF6B6B;
+  /* background-image: linear-gradient(120deg, #fd3737, #813c2796); */
+  padding: 10px 15px;
+  font-size: 1rem;
+  margin: 20px;
+  border-radius: 5px;
+  width: 150px;
+  border: none;
+}
+
+#logout-button:hover {
+  background-color: #ea5151;
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+/* button chat & user */
+
+#chat-button,
+#user-button {
+  color: white;
+  background-color: #5f18eb;
+  border: none;
+  padding: 10px 15px;
+  font-size: 1rem;
+  margin: 20px;
+  border-radius: 5px;
+  width: 150px;
+
+}
+
+#chat-button:hover,
+#user-button:hover {
+  background-color: #5f18eb;
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+/* accueil admin */
+
+.title-context {
+  justify-content: center;
+  font-size: 1.2rem;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #fff !important;
+  font-family: 'Roboto', sans-serif;
+}
+
+.title-context-user {
+  font-size: 1rem;
+  padding: 0;
+  margin-bottom: -10px;
+  align-self: center;
+}
+
+
+.container-square {
+  max-width: 100%;
+}
+
+.container-square-left {
+  max-width: 55%;
+}
+
+.square-user {
+  background-color: #242323;
+  background-image: linear-gradient(to right, #FF6B6B, #FF6B6B);
+  border: none;
+  border-radius: 5%;
+  opacity: 0.9;
+  padding: 1rem;
+  margin: 10px;
+  overflow-y: auto;
+  word-wrap: break-word;
+  word-break: break-all;
+  max-height: 35vh;
+  min-height: 10vh;
+  transition: all 0.5s;
+  font-size: small;
+}
+
+.square-post {
+  background-color: #242323;
+  background-image: linear-gradient(to right, #FF6B6B, #FF6B6B);
+  border: none;
+  border-radius: 5%;
+  opacity: 0.9;
+  padding: 1rem;
+  margin: 10px;
+  overflow-y: auto;
+  word-wrap: break-word;
+  word-break: break-all;
+  max-height: 25vh;
+  min-height: 10vh;
+  transition: all 0.5s;
+  font-size: small;
+}
+
+.square {
+  background-color: #242323;
+  background-image: linear-gradient(to right, #5f18eb, #9264c7);
+  border: none;
+  border-radius: 5%;
+  opacity: 0.9;
+  padding: 1rem;
+  margin: 10px;
+  overflow-y: auto;
+  word-wrap: break-word;
+  word-break: break-all;
+  max-height: 40vh;
+  min-height: 10vh;
+  transition: all 0.5s;
+  font-size: small;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.container-square-left::-webkit-scrollbar {
+  width: 8px;
+}
+
+.container-square-left::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+.container-square-left::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+/* Text message */
+
+.text-sucess {
+  color: rgb(28, 132, 28) !important;
+}
+
+.text-admin {
+  color: rgb(200, 1, 1) !important;
+  font-weight: 600;
+}
+
+.text-user {
+  color: #5f18eb !important;
+  font-weight: 600;
+}
+
+.text-danger {
+  color: #5f18eb !important;
+  font-weight: 600;
 }
