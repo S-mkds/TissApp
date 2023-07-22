@@ -6,8 +6,6 @@ Création d'un chat mobile avec React Native NodeJS, Express et Mysql
 
 ## Commencer par cloner le projet
 
-https://github.com/Tchessi/app-mobile-chat.git
-
 
 ## Back-end
 
