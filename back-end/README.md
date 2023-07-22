@@ -6,7 +6,7 @@ Création d'un chat mobile avec React Native NodeJS, Express et Mysql
 
 ## Commencer par cloner le projet
 
-https://github.com/Tchessi/app-mobile-chat.git
+https://github.com/S-mkds/TissApp.git
 
 
 ## Back-end
@@ -46,7 +46,7 @@ Migrations uniquement :
 npx sequelize-cli migration:generate --name migration_name_here --model User --generate-migration
 ```
 
-# Pour installer sequilize CLI
+# Pour installer sequelize CLI
 
 ```
 npm install --save-dev sequelize-cli

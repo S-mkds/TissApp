@@ -291,7 +291,7 @@ export default {
         <header class="header">
             <img @click="adminPanel(); showSpinner = true" class="logo-h" src="~/static/NewLogo.png" alt="Logo-h" />
             <h1 class="w-text h-text">TISSAPP Admin panel
-                <p class="w-text text-danger" style="color: red !important;">Administrateur: {{ setOneUser.firstName }} {{
+                <p class="text-danger">Administrateur: {{ setOneUser.firstName }} {{
                     setOneUser.lastName }}</p>
             </h1>
             <div class="button-header">
@@ -401,43 +401,6 @@ export default {
     border-radius: 20%;
 }
 
-#logout-button {
-    color: white;
-    background-color: red;
-    background-image: linear-gradient(120deg, #fd3737, #813c2796);
-    border: none;
-    padding: 10px 15px;
-    font-size: 1rem;
-    margin: 20px;
-    border-radius: 5px;
-}
-
-#logout-button:hover {
-    background-color: rgb(233, 52, 52);
-    opacity: 0.8;
-    cursor: pointer;
-}
-
-#chat-button,
-#user-button {
-    color: white;
-    background-color: rgb(96, 52, 177);
-    background-image: linear-gradient(120deg, #8637fd, #0f7074);
-    border: none;
-    padding: 10px 15px;
-    font-size: 1rem;
-    margin: 20px;
-    border-radius: 5px;
-    align-self: flex-end;
-}
-
-#chat-button:hover,
-#user-button:hover {
-    background-color: rgb(52, 124, 233);
-    opacity: 0.8;
-    cursor: pointer;
-}
-
 #td-msge {
     max-width: 250px;
     overflow-x: auto;
@@ -466,7 +429,7 @@ export default {
 }
 
 .post-container {
-    border: 2px solid rgb(102, 86, 86);
+    border: 2px solid #0F1828;
     border-radius: 20px;
     margin: 1rem;
     width: 90%;
@@ -476,8 +439,8 @@ export default {
 
 td,
 th {
-    border-bottom: 2px solid rgb(102, 86, 86) !important;
-    border-right: 2px solid rgb(102, 86, 86) !important;
+    border-bottom: 2px solid #0F1828;
+    border-right: 2px solid #0F1828;
     border-radius: 20px;
 }
 
@@ -512,10 +475,10 @@ th {
     font-weight: 600;
 }
 
-.text-danger {
+/* .text-danger {
     color: red !important;
     font-weight: 600;
-}
+} */
 
 .send-message {
     display: flex;
@@ -540,8 +503,8 @@ th {
 
 .btn-send {
     color: white;
-    background-color: rgb(96, 52, 177);
-    background-image: linear-gradient(80deg, #3b1c6d, #2ca087);
+    background-color: #5f18eb;
+    /* background-image: linear-gradient(80deg, #3b1c6d, #2ca087); */
     border: none;
     padding: 10px 15px;
     font-size: 1rem;
@@ -549,7 +512,7 @@ th {
 }
 
 .btn-send:hover {
-    background-color: rgb(96, 52, 177);
+    background-color: #5f18eb;
     opacity: 0.8;
 }
 
