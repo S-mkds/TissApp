@@ -1,6 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 
+// Hash et regex du mot de passe
 const {
   ensurePasswordIsStrongEnough,
   addHashOn,
@@ -39,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           isEmail: true,
-          //utilisation d'une méthode pour pouvoir afficher un message d'erreur customisé
+          // Afficher un message d'erreur
           async ensureEmailIsUnique(email) {
             if (await User.findOne({ where: { email } }))
               throw new Error(

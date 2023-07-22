@@ -7,7 +7,9 @@ npm start = lancement du projet front
 npx react-native run-android --variant=release = création du build apk pour déployé le projet
 
 ### create apk tuto
-npm i -g eas-cli
+npm i -g eas-cli 
+
+powershell -ExecutionPolicy Bypass -Command "eas build -p android" 
 
 ### entrez l'id et mdp de votre compte expo 
 eas build -p android 
@@ -37,3 +39,9 @@ eas build -p android
 ### continue on terminal create apk android or emulator
 
 eas build -p android --profile preview
+
+powershell -ExecutionPolicy Bypass -Command "eas build -p android --profile preview"
+
+### Lien de l'APK à télécharger
+
+https://expo.dev/artifacts/eas/35LzyJyXJAo8mDchJporoT.apk
