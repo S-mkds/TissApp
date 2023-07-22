@@ -169,9 +169,9 @@ export default {
         <div class="container">
             <div class="container-square-left">
                 <div class="square-user">
-                    <h4 class="number-context">Nombre d'utilisateurs: </h4>
+                    <h4 class="text-count">Nombre d'utilisateurs: </h4>
                     <br>
-                    <p class="number-context" style="text-align: center; font-size: 20px;">
+                    <p class="text-count" style="text-align: center; font-size: 20px;">
                         {{ totalUsers }}
                     </p>
                 </div>
@@ -188,9 +188,9 @@ export default {
             </div>
             <div class="container-square-left">
                 <div class="square-post">
-                    <h4 class="number-context">Nombre de messages: </h4>
+                    <h4 class="text-count">Nombre de messages: </h4>
                     <br>
-                    <p class="number-context" style="text-align: center; font-size: 20px;">
+                    <p class="text-count" style="text-align: center; font-size: 20px;">
                         {{ totalPosts }}
                     </p>
                 </div>
@@ -283,13 +283,30 @@ export default {
     justify-content: center;
     grid-template-columns: repeat(2, 2fr);
 }
-
-
-
-
-
-.number-context {
+.text-count {
     color: white !important;
+}
+
+
+.title-context {
+  justify-content: center;
+  font-size: 1.2rem;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #fff !important;
+  font-family: 'Roboto', sans-serif;
+}
+.title-admin {
+  color: red !important;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: bold;
+  font-family: 'Roboto', sans-serif;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 10%;
 }
 
 .context {

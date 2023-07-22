@@ -127,15 +127,6 @@ html.light-mode label.w-text * {
 
 /* accueil admin */
 
-.title-context {
-  justify-content: center;
-  font-size: 1.2rem;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: #fff !important;
-  font-family: 'Roboto', sans-serif;
-}
 
 .title-context-user {
   font-size: 1rem;
@@ -237,15 +228,4 @@ html.light-mode label.w-text * {
 .text-danger {
   color: #f50606 !important;
   font-weight: 600;
-}
-.title-admin {
-  color: red !important;
-  justify-content: center;
-  font-size: 1rem;
-  font-weight: bold;
-  font-family: 'Roboto', sans-serif;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  margin-top: 10%;
 }
