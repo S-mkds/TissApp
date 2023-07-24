@@ -3,9 +3,12 @@ const Sequelize = db.Sequelize;
 const jwt = require("jsonwebtoken");
 const { User } = db.sequelize.models;
 
+
 const newToken = (user) => {
+// Le payload du token contient l'ID de l'utilisateur (userId) pour l'identifier. (Aucune information sensible.)
+// La clé secrète "RANDOM_TOKEN_SECRET" est utilisée pour signer le token.
   token = jwt.sign({ userId: user.id }, "RANDOM_TOKEN_SECRET", {
-    expiresIn: "24h",
+    expiresIn: "24h", // Le token expirera après 24 heures.
   });
   return { user, token };
 };
