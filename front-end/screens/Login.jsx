@@ -4,6 +4,8 @@ import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import BaseUrl from '../services/BaseUrl';
+import DOMPurify from 'dompurify';
+
 const API_URL = BaseUrl
 
 // const token = await AsyncStorage.getItem('token'); // récupérer le token des données stockées en local (AsyncStorage) pour l'envoyer dans les headers de la requête axios
@@ -26,11 +28,14 @@ const Login = ({ navigation }) => {
     // le password doit contenir au moins 8 Caractères, 1 Maj, 1 Min, 1 Chiffre, 1 Caractère spécial
 
     const handleLogin = async () => {
-        // console.log(email, password);
-        if (!emailRegex.test(email)) {
-            setEmailError("L'adresse e-mail n'est pas valide");
-        } else if (!passwordRegex.test(password)) {
-            setPasswordError("Le mot de passe n'est pas valide");
+        // Nettoyer les entrées utilisateur avant de les utiliser
+        const sanitizedEmail = DOMPurify.sanitize(email);
+        const sanitizedPassword = DOMPurify.sanitize(password);
+    
+        if (!emailRegex.test(sanitizedEmail)) {
+          setEmailError("L'adresse e-mail n'est pas valide");
+        } else if (!passwordRegex.test(sanitizedPassword)) {
+          setPasswordError("Le mot de passe n'est pas valide");
         } else {
             // requête axios here localhost3000/login
             try {
