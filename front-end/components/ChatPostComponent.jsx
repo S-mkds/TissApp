@@ -27,10 +27,10 @@ export default function ImageUploadMessage() {
     // Demande les permissions pour accéder à la caméra et à la galerie
     const getPermissionsAsync = async () => {
         const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA);
-        if (status !== 'granted') {
-            alert('Vous devez autoriser l\'accès à la caméra et à la galerie pour utiliser cette fonctionnalité.');
-            Linking.openSettings();
-        }
+        // if (status !== 'granted') {
+        //     alert('Vous devez autoriser l\'accès à la caméra et à la galerie pour utiliser cette fonctionnalité.');
+        //     Linking.openSettings();
+        // }
     };
     // console.log(props);
     const addPicture = async () => {
