@@ -28,14 +28,11 @@ const Login = ({ navigation }) => {
     // le password doit contenir au moins 8 Caractères, 1 Maj, 1 Min, 1 Chiffre, 1 Caractère spécial
 
     const handleLogin = async () => {
-        // Nettoyer les entrées utilisateur avant de les utiliser
-        const sanitizedEmail = DOMPurify.sanitize(email);
-        const sanitizedPassword = DOMPurify.sanitize(password);
-    
-        if (!emailRegex.test(sanitizedEmail)) {
-          setEmailError("L'adresse e-mail n'est pas valide");
-        } else if (!passwordRegex.test(sanitizedPassword)) {
-          setPasswordError("Le mot de passe n'est pas valide");
+        // console.log(email, password);
+        if (!emailRegex.test(email)) {
+            setEmailError("L'adresse e-mail n'est pas valide");
+        } else if (!passwordRegex.test(password)) {
+            setPasswordError("Le mot de passe n'est pas valide");
         } else {
             // requête axios here localhost3000/login
             try {
